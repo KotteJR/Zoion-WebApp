@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useQuery, useLazyQuery } from '@apollo/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AppSidebar } from '@/components/app-sidebar';
@@ -11,7 +11,7 @@ import { GET_ALL_BREEDS, SEARCH_PETS } from '@/lib/graphql/queries';
 import { useSearchStore } from '@/store/search-store';
 import { Breed } from '@/types/search';
 
-export default function AdvancedFiltersPage() {
+function AdvancedFiltersPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { filter, setFilter } = useSearchStore();
@@ -270,5 +270,13 @@ export default function AdvancedFiltersPage() {
         </div>
       </SidebarInset>
     </SidebarProvider>
+  );
+}
+
+export default function AdvancedFiltersPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <AdvancedFiltersPageContent />
+    </Suspense>
   );
 }

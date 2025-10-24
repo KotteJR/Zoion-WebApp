@@ -2,6 +2,7 @@
 
 // Legacy layout kept for pages not yet migrated to the new shell
 import TopNavBar from './TopNavBar';
+import BottomNavBar from './BottomNavBar';
 
 interface MainLayoutProps {
   children: React.ReactNode;
