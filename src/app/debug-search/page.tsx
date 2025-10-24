@@ -5,7 +5,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { SEARCH_PETS, GET_ALL_BREEDS } from '@/lib/graphql/queries';
+import { SEARCH_PETS, GET_ALL_BREEDS } from '../../lib/graphql/queries';
 
 export default function DebugSearchPage() {
   // Test search with no filters (should return all pets)

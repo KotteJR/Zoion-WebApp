@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { GET_FAMILY_TREE } from '@/lib/graphql/queries';
+import { GET_FAMILY_TREE } from '../../../../lib/graphql/queries';
 import { PetPedigree } from '@/types/pet';
 
 interface PetNodeProps {

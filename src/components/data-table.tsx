@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { SEARCH_PETS } from '@/lib/graphql/queries';
+import { SEARCH_PETS } from '../lib/graphql/queries';
 import Link from 'next/link';
 
 export function DataTable({ data }: { data?: any }) {

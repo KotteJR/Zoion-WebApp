@@ -7,7 +7,7 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import PetCard from '@/components/pet/PetCard';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { SEARCH_PETS } from '@/lib/graphql/queries';
+import { SEARCH_PETS } from '../../../lib/graphql/queries';
 import { useSearchStore } from '@/store/search-store';
 import { Pet } from '@/types/pet';
 

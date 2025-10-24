@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { READY_TO_BREED_FEED } from '@/lib/graphql/queries';
+import { READY_TO_BREED_FEED } from '../lib/graphql/queries';
 
 export function SectionCards() {
   const { data } = useQuery(READY_TO_BREED_FEED, { variables: { limit: 10 } });

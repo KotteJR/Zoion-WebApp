@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { GET_PET_TROPHIES, GET_PET_DETAILS } from '@/lib/graphql/queries';
+import { GET_PET_TROPHIES, GET_PET_DETAILS } from '../../../../lib/graphql/queries';
 import { formatDateShort } from '@/utils/date-helpers';
 
 export default function PetTrophiesPage() {

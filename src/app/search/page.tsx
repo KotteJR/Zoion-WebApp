@@ -7,7 +7,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { GET_ALL_BREEDS, SEARCH_PETS } from '@/lib/graphql/queries';
+import { GET_ALL_BREEDS, SEARCH_PETS } from '../../lib/graphql/queries';
 import { useSearchStore } from '@/store/search-store';
 import { Breed } from '@/types/search';
 

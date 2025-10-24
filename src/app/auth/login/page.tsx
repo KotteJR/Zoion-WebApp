@@ -9,7 +9,7 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuthStore } from '@/store/auth-store';
-import { getApolloClient } from '@/lib/apollo-client';
+import { getApolloClient } from '../../../lib/apollo-client';
 
 export default function LoginPage() {
   const router = useRouter();

@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import PetCard from '@/components/pet/PetCard';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { SEARCH_PETS } from '@/lib/graphql/queries';
+import { SEARCH_PETS } from '../../lib/graphql/queries';
 import { Pet } from '@/types/pet';
 import { Send } from 'lucide-react';
 

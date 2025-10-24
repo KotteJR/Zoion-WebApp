@@ -10,7 +10,7 @@ import { SiteHeader } from '@/components/site-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { GET_PET_DETAILS, GET_FAMILY_TREE } from '@/lib/graphql/queries';
+import { GET_PET_DETAILS, GET_FAMILY_TREE } from '../../../lib/graphql/queries';
 import { getPetProfileImage, getPetTags } from '@/utils/pet-helpers';
 import { getAgeString, formatDateShort } from '@/utils/date-helpers';
 

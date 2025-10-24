@@ -7,7 +7,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import PetCard from '@/components/pet/PetCard';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { FETCH_USER_BY_ID } from '@/lib/graphql/queries';
+import { FETCH_USER_BY_ID } from '../../../lib/graphql/queries';
 import { Pet } from '@/types/pet';
 
 export default function BreederProfilePage() {
