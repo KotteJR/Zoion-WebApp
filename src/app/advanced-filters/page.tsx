@@ -1,135 +1,22 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
-import { useQuery, useLazyQuery } from '@apollo/client';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { GET_ALL_BREEDS, SEARCH_PETS } from '../../lib/graphql/queries';
-import { useSearchStore } from '@/store/search-store';
-import { Breed } from '@/types/search';
 
 function AdvancedFiltersPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { filter, setFilter } = useSearchStore();
-  const [selectedBreeds, setSelectedBreeds] = useState<string[]>(filter.breeds || []);
-  const [selectedSex, setSelectedSex] = useState<'male' | 'female' | null>(filter.sex || null);
-  const [readyToBreed, setReadyToBreed] = useState(filter.readyToBreed || false);
-  const [pregnant, setPregnant] = useState(filter.pregnant || false);
-  const [hasFrozenSperm, setHasFrozenSperm] = useState(filter.hasFrozenSperm || false);
+  const [selectedBreeds, setSelectedBreeds] = useState<string[]>([]);
+  const [selectedSex, setSelectedSex] = useState<'male' | 'female' | null>(null);
+  const [readyToBreed, setReadyToBreed] = useState(false);
+  const [pregnant, setPregnant] = useState(false);
+  const [hasFrozenSperm, setHasFrozenSperm] = useState(false);
 
-  const { data: breedsData, loading: breedsLoading } = useQuery(GET_ALL_BREEDS);
-  const [searchPets, { loading: searchLoading }] = useLazyQuery(SEARCH_PETS);
-
-  const breeds: Breed[] = breedsData?.breeds || [];
-
-  // Load AI search filters from session storage
-  useEffect(() => {
-    const aiFilters = sessionStorage.getItem('aiSearchFilters');
-    // Also accept filters via URL (?ai=base64json) for reliability
-    const aiParam = searchParams?.get('ai');
-    if (aiFilters) {
-      try {
-        const parsedFilters = JSON.parse(aiFilters);
-        
-        // Pre-fill the form with AI search filters
-        if (parsedFilters.breeds) {
-          setSelectedBreeds(parsedFilters.breeds);
-        }
-        if (parsedFilters.sex) {
-          setSelectedSex(parsedFilters.sex);
-        }
-        if (parsedFilters.readyToBreed) {
-          setReadyToBreed(parsedFilters.readyToBreed);
-        }
-        if (parsedFilters.pregnant) {
-          setPregnant(parsedFilters.pregnant);
-        }
-        if (parsedFilters.hasFrozenSperm) {
-          setHasFrozenSperm(parsedFilters.hasFrozenSperm);
-        }
-        
-        // Clear the session storage after loading
-        sessionStorage.removeItem('aiSearchFilters');
-      } catch (error) {
-        console.error('Error parsing AI search filters:', error);
-      }
-    } else if (aiParam) {
-      try {
-        const json = typeof window !== 'undefined' ? atob(aiParam) : '';
-        if (json) {
-          const parsedFilters = JSON.parse(json);
-          if (parsedFilters.breeds) setSelectedBreeds(parsedFilters.breeds);
-          if (parsedFilters.sex !== undefined) setSelectedSex(parsedFilters.sex);
-          if (parsedFilters.readyToBreed !== undefined) setReadyToBreed(parsedFilters.readyToBreed);
-          if (parsedFilters.pregnant !== undefined) setPregnant(parsedFilters.pregnant);
-          if (parsedFilters.hasFrozenSperm !== undefined) setHasFrozenSperm(parsedFilters.hasFrozenSperm);
-        }
-      } catch (e) {
-        console.error('Failed to read ai filters from URL', e);
-      }
-    }
-  }, []);
-
-  const handleBreedToggle = (breed: string) => {
-    setSelectedBreeds(prev => 
-      prev.includes(breed) 
-        ? prev.filter(b => b !== breed)
-        : [...prev, breed]
-    );
-  };
-
-  const handleSearch = async () => {
-    const searchFilter = {
-      breeds: selectedBreeds,
-      sex: selectedSex,
-      readyToBreed,
-      pregnant,
-      hasFrozenSperm,
-    };
-
-    setFilter(searchFilter);
-
-    // Build the where clause for GraphQL
-    const whereClause: any = {};
-
-    if (selectedBreeds.length > 0) {
-      whereClause.breed = { _in: selectedBreeds };
-    }
-
-    if (selectedSex) {
-      whereClause.sex = { _eq: selectedSex };
-    }
-
-    if (readyToBreed) {
-      whereClause.ready_to_breed = { _eq: true };
-    }
-
-    if (pregnant) {
-      whereClause.pregnant = { _eq: true };
-    }
-
-    if (hasFrozenSperm) {
-      whereClause.has_frozen_sperm = { _eq: true };
-    }
-
-    try {
-      const { data } = await searchPets({
-        variables: {
-          where: whereClause,
-          limit: 50,
-        },
-      });
-
-      if (data?.pets) {
-        router.push('/advanced-filters/results');
-      }
-    } catch (error) {
-      console.error('Search error:', error);
-    }
+  const handleSearch = () => {
+    router.push('/advanced-filters/results');
   };
 
   const clearFilters = () => {
@@ -156,36 +43,11 @@ function AdvancedFiltersPageContent() {
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg font-medium mb-3">Breed</h3>
-                  {breedsLoading ? (
-                    <LoadingSpinner />
-                  ) : (
-                    <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-lg">
-                      <div className="divide-y divide-gray-100">
-                        {breeds.map((breed) => {
-                          const selected = selectedBreeds.includes(breed.name);
-                          return (
-                            <button
-                              type="button"
-                              key={breed.id}
-                              onClick={() => handleBreedToggle(breed.name)}
-                              className={`w-full text-left px-3 py-2 flex items-center justify-between transition-colors ${
-                                selected
-                                  ? 'bg-[#e8f3f0] text-[#175c51]'
-                                  : 'hover:bg-gray-50'
-                              }`}
-                            >
-                              <span className="text-sm">{breed.name}</span>
-                              <span
-                                className={`ml-3 inline-block h-4 w-4 rounded border ${
-                                  selected ? 'bg-[#3d7c6f] border-[#3d7c6f]' : 'border-gray-300'
-                                }`}
-                              />
-                            </button>
-                          );
-                        })}
-                      </div>
+                  <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-lg">
+                    <div className="p-4 text-center text-gray-500">
+                      Breed selection will be available here
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
 
@@ -252,17 +114,10 @@ function AdvancedFiltersPageContent() {
 
             {/* Action Buttons */}
             <div className="flex gap-3 pt-4 border-t">
-              <Button 
-                onClick={handleSearch} 
-                disabled={searchLoading}
-              >
-                {searchLoading ? 'Searching...' : 'Search'}
+              <Button onClick={handleSearch}>
+                Search
               </Button>
-              <Button 
-                onClick={clearFilters} 
-                variant="outline"
-                disabled={searchLoading}
-              >
+              <Button onClick={clearFilters} variant="outline">
                 Clear Filters
               </Button>
             </div>

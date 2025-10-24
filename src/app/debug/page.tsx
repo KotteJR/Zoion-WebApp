@@ -1,25 +1,6 @@
 'use client';
 
-import { useQuery } from '@apollo/client';
-import { gql } from '@apollo/client';
-
-const TEST_QUERY = gql`
-  query TestQuery {
-    pets(limit: 3) {
-      id
-      name
-      breed
-      sex
-    }
-  }
-`;
-
 export default function DebugPage() {
-  const { data, loading, error } = useQuery(TEST_QUERY, {
-    errorPolicy: 'all',
-    notifyOnNetworkStatusChange: true,
-  });
-
   const testDirectFetch = async () => {
     try {
       const response = await fetch('https://api.zoion.biz/v1/graphql', {
@@ -52,31 +33,6 @@ export default function DebugPage() {
             GRAPHQL_URL: process.env.NEXT_PUBLIC_GRAPHQL_HTTP_URL,
             HASURA_SECRET: process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET ? 'SET' : 'NOT SET',
           }, null, 2)}
-        </pre>
-      </div>
-
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold">Query Status:</h2>
-        <p>Loading: {loading ? 'Yes' : 'No'}</p>
-        <p>Error: {error ? JSON.stringify(error, null, 2) : 'None'}</p>
-        {error && (
-          <div className="mt-2">
-            <h3 className="font-semibold">Error Details:</h3>
-            <pre className="bg-red-100 p-2 rounded text-sm">
-              {JSON.stringify({
-                message: error.message,
-                networkError: error.networkError,
-                graphQLErrors: error.graphQLErrors,
-              }, null, 2)}
-            </pre>
-          </div>
-        )}
-      </div>
-
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold">Data:</h2>
-        <pre className="bg-gray-100 p-2 rounded text-sm">
-          {JSON.stringify(data, null, 2)}
         </pre>
       </div>
 

@@ -8,17 +8,22 @@ export default function ProfilePage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-      <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-      <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4 text-center">
-            <div className="text-6xl">👤</div>
-            <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
-            <p className="text-muted-foreground">This feature is coming soon!</p>
-            <p className="text-sm text-muted-foreground">Login and profile management will be available in a future update.</p>
+        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
+          <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-2xl font-semibold tracking-tight">Profile</h2>
+              <p className="text-sm text-muted-foreground">User profile placeholder</p>
+            </div>
+
+            <div className="text-center py-12">
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Profile</h3>
+              <p className="text-gray-600 mb-4">
+                This is a placeholder for profile functionality.
+              </p>
+            </div>
           </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
   );
 }
-
-
