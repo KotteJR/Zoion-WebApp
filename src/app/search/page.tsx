@@ -1,22 +1,29 @@
 'use client';
 
 import { useState } from 'react';
+import { useQuery, useLazyQuery } from '@apollo/client';
+import { useRouter } from 'next/navigation';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { GET_ALL_BREEDS, SEARCH_PETS } from '@/lib/graphql/queries';
+import { useSearchStore } from '@/store/search-store';
+import { Breed } from '@/types/search';
 
 export default function SearchPage() {
-  const [selectedBreeds, setSelectedBreeds] = useState<string[]>([]);
-  const [selectedSex, setSelectedSex] = useState<'male' | 'female' | null>(null);
-  const [readyToBreed, setReadyToBreed] = useState(false);
-  const [pregnant, setPregnant] = useState(false);
-  const [hasFrozenSperm, setHasFrozenSperm] = useState(false);
+  const router = useRouter();
+  const { filter, setFilter } = useSearchStore();
+  const [selectedBreeds, setSelectedBreeds] = useState<string[]>(filter.breeds || []);
+  const [selectedSex, setSelectedSex] = useState<'male' | 'female' | null>(filter.sex || null);
+  const [readyToBreed, setReadyToBreed] = useState(filter.readyToBreed || false);
+  const [pregnant, setPregnant] = useState(filter.pregnant || false);
+  const [hasFrozenSperm, setHasFrozenSperm] = useState(filter.hasFrozenSperm || false);
 
-  // Mock breeds data
-  const breeds = [
-    'Golden Retriever', 'German Shepherd', 'Labrador', 'Border Collie', 
-    'Beagle', 'Poodle', 'Bulldog', 'Rottweiler', 'Siberian Husky', 'Dachshund'
-  ];
+  const { data: breedsData, loading: breedsLoading } = useQuery(GET_ALL_BREEDS);
+  const [searchPets, { loading: searchLoading }] = useLazyQuery(SEARCH_PETS);
+
+  const breeds: Breed[] = breedsData?.breeds || [];
 
   const toggleBreed = (breedName: string) => {
     setSelectedBreeds((prev) =>
@@ -24,8 +31,54 @@ export default function SearchPage() {
     );
   };
 
-  const handleSearch = () => {
-    alert('Search functionality will be implemented here');
+  const handleSearch = async () => {
+    // Build the where clause for GraphQL
+    const whereConditions: any[] = [];
+    
+    if (selectedBreeds.length > 0) {
+      whereConditions.push({ breed: { _in: selectedBreeds } });
+    }
+    
+    if (selectedSex) {
+      whereConditions.push({ sex: { _eq: selectedSex } });
+    }
+    
+    if (readyToBreed) {
+      whereConditions.push({ ready_to_breed: { _eq: true } });
+    }
+    
+    if (pregnant) {
+      whereConditions.push({ pregnant: { _eq: true } });
+    }
+    
+    if (hasFrozenSperm) {
+      whereConditions.push({ has_frozen_sperm: { _eq: true } });
+    }
+
+    const searchFilter = {
+      breeds: selectedBreeds.length > 0 ? selectedBreeds : undefined,
+      sex: selectedSex || undefined,
+      readyToBreed: readyToBreed || undefined,
+      pregnant: pregnant || undefined,
+      hasFrozenSperm: hasFrozenSperm || undefined,
+    };
+
+    setFilter(searchFilter);
+
+    try {
+      const { data } = await searchPets({
+        variables: {
+          limit: 50,
+          where: whereConditions.length > 0 ? { _and: whereConditions } : {},
+        },
+      });
+
+      if (data?.pets) {
+        router.push('/search/results');
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+    }
   };
 
   const handleReset = () => {
@@ -40,8 +93,8 @@ export default function SearchPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-          <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
+      <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
+        <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
             <div className="flex flex-col gap-2">
               <h2 className="text-2xl font-semibold tracking-tight">Search</h2>
               <p className="text-sm text-muted-foreground">Find the perfect breeding partner for your pet</p>
@@ -83,19 +136,23 @@ export default function SearchPage() {
                     <span className="text-sm text-muted-foreground">{selectedBreeds.length} selected</span>
                   )}
                 </div>
-                <div className="grid max-h-[300px] grid-cols-2 gap-2 overflow-auto rounded-md border p-3 md:grid-cols-3 lg:grid-cols-4">
-                  {breeds.map((breed) => (
-                    <Button
-                      key={breed}
-                      variant={selectedBreeds.includes(breed) ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => toggleBreed(breed)}
-                      className="justify-start text-xs"
-                    >
-                      {breed}
-                    </Button>
-                  ))}
-                </div>
+                {breedsLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <div className="grid max-h-[300px] grid-cols-2 gap-2 overflow-auto rounded-md border p-3 md:grid-cols-3 lg:grid-cols-4">
+                    {breeds.map((breed) => (
+                      <Button
+                        key={breed.id}
+                        variant={selectedBreeds.includes(breed.name) ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => toggleBreed(breed.name)}
+                        className="justify-start text-xs"
+                      >
+                        {breed.name}
+                      </Button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Additional Filters */}
@@ -143,8 +200,8 @@ export default function SearchPage() {
                 <Button onClick={handleReset} variant="outline" className="flex-1">
                   Reset
                 </Button>
-                <Button onClick={handleSearch} className="flex-1">
-                  Search
+                <Button onClick={handleSearch} disabled={searchLoading} className="flex-1">
+                  {searchLoading ? 'Searching...' : 'Search'}
                 </Button>
               </div>
             </div>
