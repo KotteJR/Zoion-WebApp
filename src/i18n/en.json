@@ -1,0 +1,95 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Log Out",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "back": "Back",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "forgotPassword": "Forgot password?",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "resetPassword": "Reset Password",
+    "newPassword": "New Password",
+    "verifyEmail": "Verify Email",
+    "verificationCode": "Verification Code",
+    "resendCode": "Resend Code"
+  },
+  "navigation": {
+    "home": "Home",
+    "search": "Search",
+    "feed": "Feed",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "pet": {
+    "name": "Name",
+    "breed": "Breed",
+    "age": "Age",
+    "sex": "Sex",
+    "male": "Male",
+    "female": "Female",
+    "color": "Color",
+    "weight": "Weight",
+    "readyToBreed": "Ready to Breed",
+    "pregnant": "Pregnant",
+    "hasFrozenSperm": "Has Frozen Sperm",
+    "vaccinated": "Vaccinated",
+    "competitions": "Competitions",
+    "trophies": "Trophies",
+    "familyTree": "Family Tree",
+    "addPet": "Add Pet",
+    "myPets": "My Pets",
+    "petProfile": "Pet Profile",
+    "owner": "Owner"
+  },
+  "search": {
+    "searchPets": "Search Pets",
+    "filters": "Filters",
+    "breeds": "Breeds",
+    "selectBreeds": "Select Breeds",
+    "additionalFilters": "Additional Filters",
+    "searchResults": "Search Results",
+    "noResults": "No pets found matching your criteria",
+    "foundResults": "Found {count} pet(s)",
+    "reset": "Reset"
+  },
+  "profile": {
+    "editProfile": "Edit Profile",
+    "myProfile": "My Profile",
+    "bio": "Bio",
+    "address": "Address",
+    "phoneNumber": "Phone Number",
+    "preferredBreeds": "Preferred Breeds",
+    "noPets": "You haven't added any pets yet",
+    "addFirstPet": "Add Your First Pet"
+  },
+  "settings": {
+    "settings": "Settings",
+    "preferences": "Preferences",
+    "privacyPolicy": "Privacy Policy",
+    "termsAndConditions": "Terms & Conditions",
+    "reportProblem": "Report a Problem",
+    "language": "Language",
+    "about": "About"
+  }
+}
+
+

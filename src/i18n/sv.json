@@ -1,0 +1,95 @@
+{
+  "common": {
+    "welcome": "Välkommen",
+    "login": "Logga in",
+    "register": "Registrera",
+    "logout": "Logga ut",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "delete": "Ta bort",
+    "edit": "Redigera",
+    "search": "Sök",
+    "back": "Tillbaka",
+    "loading": "Laddar...",
+    "error": "Fel",
+    "success": "Framgång"
+  },
+  "auth": {
+    "signIn": "Logga in",
+    "signUp": "Registrera dig",
+    "email": "E-post",
+    "password": "Lösenord",
+    "confirmPassword": "Bekräfta lösenord",
+    "firstName": "Förnamn",
+    "lastName": "Efternamn",
+    "forgotPassword": "Glömt lösenordet?",
+    "dontHaveAccount": "Har du inget konto?",
+    "alreadyHaveAccount": "Har du redan ett konto?",
+    "resetPassword": "Återställ lösenord",
+    "newPassword": "Nytt lösenord",
+    "verifyEmail": "Verifiera e-post",
+    "verificationCode": "Verifieringskod",
+    "resendCode": "Skicka kod igen"
+  },
+  "navigation": {
+    "home": "Hem",
+    "search": "Sök",
+    "feed": "Flöde",
+    "notifications": "Notiser",
+    "profile": "Profil",
+    "settings": "Inställningar"
+  },
+  "pet": {
+    "name": "Namn",
+    "breed": "Ras",
+    "age": "Ålder",
+    "sex": "Kön",
+    "male": "Hane",
+    "female": "Tik",
+    "color": "Färg",
+    "weight": "Vikt",
+    "readyToBreed": "Redo att para",
+    "pregnant": "Dräktig",
+    "hasFrozenSperm": "Har fryst sperma",
+    "vaccinated": "Vaccinerad",
+    "competitions": "Tävlingar",
+    "trophies": "Troféer",
+    "familyTree": "Stamtavla",
+    "addPet": "Lägg till husdjur",
+    "myPets": "Mina husdjur",
+    "petProfile": "Husdjursprofil",
+    "owner": "Ägare"
+  },
+  "search": {
+    "searchPets": "Sök husdjur",
+    "filters": "Filter",
+    "breeds": "Raser",
+    "selectBreeds": "Välj raser",
+    "additionalFilters": "Ytterligare filter",
+    "searchResults": "Sökresultat",
+    "noResults": "Inga husdjur hittades som matchar dina kriterier",
+    "foundResults": "Hittade {count} husdjur",
+    "reset": "Återställ"
+  },
+  "profile": {
+    "editProfile": "Redigera profil",
+    "myProfile": "Min profil",
+    "bio": "Biografi",
+    "address": "Adress",
+    "phoneNumber": "Telefonnummer",
+    "preferredBreeds": "Föredragna raser",
+    "noPets": "Du har inte lagt till några husdjur än",
+    "addFirstPet": "Lägg till ditt första husdjur"
+  },
+  "settings": {
+    "settings": "Inställningar",
+    "preferences": "Preferenser",
+    "privacyPolicy": "Integritetspolicy",
+    "termsAndConditions": "Villkor",
+    "reportProblem": "Rapportera ett problem",
+    "language": "Språk",
+    "about": "Om"
+  }
+}
+
+
