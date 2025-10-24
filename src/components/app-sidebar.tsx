@@ -82,7 +82,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 alt="Zoion" 
                 width={120} 
                 height={40}
-                className="h-6 px-2 w-auto"
+                className="h-5 px-2 w-auto"
               />
             </div>
           </SidebarMenuItem>
