@@ -9,6 +9,9 @@ const nextConfig = {
     ],
   },
   reactStrictMode: true,
+  experimental: {
+    esmExternals: 'loose',
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -18,6 +21,13 @@ const nextConfig = {
         tls: false,
       };
     }
+    
+    // Ensure proper module resolution
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': require('path').resolve(__dirname, 'src'),
+    };
+    
     return config;
   },
 };
