@@ -10,9 +10,4 @@ export interface SearchFilter {
   readyToBreed?: boolean;
   pregnant?: boolean;
   hasFrozenSperm?: boolean;
-  location?: string;
-  ageRange?: {
-    min: number;
-    max: number;
-  };
 }
