@@ -9,9 +9,6 @@ const nextConfig = {
     ],
   },
   reactStrictMode: true,
-  experimental: {
-    esmExternals: 'loose',
-  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -27,6 +24,9 @@ const nextConfig = {
       ...config.resolve.alias,
       '@': require('path').resolve(__dirname, 'src'),
     };
+    
+    // Add extensions for better module resolution
+    config.resolve.extensions = ['.tsx', '.ts', '.jsx', '.js', '.json'];
     
     return config;
   },
