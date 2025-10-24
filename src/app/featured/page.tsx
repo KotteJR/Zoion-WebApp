@@ -12,7 +12,7 @@ export default function FeaturedPetsPage() {
           <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
             <div className="flex flex-col gap-2">
               <h2 className="text-2xl font-semibold tracking-tight">Featured Pets</h2>
-              <p className="text-sm text-muted-foreground">Discover featured pets</p>
+              <p className="text-sm text-muted-foreground">Browse featured pets available for breeding</p>
             </div>
 
             <div className="text-center py-12">

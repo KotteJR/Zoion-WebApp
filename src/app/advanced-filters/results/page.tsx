@@ -14,20 +14,6 @@ export default function AdvancedFiltersResultsPage() {
       <SidebarInset>
         <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
           <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
-            {/* Back Button */}
-            <div className="mb-4">
-              <Button
-                onClick={() => router.push('/advanced-filters')}
-                variant="outline"
-                className="flex items-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Back to Filters
-              </Button>
-            </div>
-
             <div className="flex flex-col gap-2">
               <h2 className="text-2xl font-semibold tracking-tight">Search Results</h2>
               <p className="text-sm text-muted-foreground">
@@ -40,6 +26,15 @@ export default function AdvancedFiltersResultsPage() {
               <p className="text-gray-600 mb-4">
                 This is a placeholder for search results functionality.
               </p>
+            </div>
+
+            <div className="flex gap-3 pt-4 border-t">
+              <Button onClick={() => router.push('/advanced-filters')}>
+                New Search
+              </Button>
+              <Button onClick={() => router.back()} variant="outline">
+                Go Back
+              </Button>
             </div>
           </div>
         </div>
