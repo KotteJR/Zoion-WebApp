@@ -1,57 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Send } from 'lucide-react';
-
-interface ConversationMessage {
-  id: string;
-  text: string;
-  isUser: boolean;
-  timestamp: Date;
-}
+import { Card, CardContent } from '@/components/ui/card';
 
 export default function HomePage() {
-  const router = useRouter();
-  const [messages, setMessages] = useState<ConversationMessage[]>([
-    {
-      id: '1',
-      text: 'Hello! I\'m your AI assistant. How can I help you find the perfect pet today?',
-      isUser: false,
-      timestamp: new Date(),
-    },
-  ]);
-  const [inputText, setInputText] = useState('');
-
-  const handleSendMessage = () => {
-    if (!inputText.trim()) return;
-
-    const newMessage: ConversationMessage = {
-      id: Date.now().toString(),
-      text: inputText,
-      isUser: true,
-      timestamp: new Date(),
-    };
-
-    setMessages(prev => [...prev, newMessage]);
-    setInputText('');
-
-    // Simulate AI response
-    setTimeout(() => {
-      const aiResponse: ConversationMessage = {
-        id: (Date.now() + 1).toString(),
-        text: 'Thank you for your message! This is a placeholder response. The AI functionality will be implemented here.',
-        isUser: false,
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, aiResponse]);
-    }, 1000);
-  };
-
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -59,45 +13,52 @@ export default function HomePage() {
         <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
           <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-semibold tracking-tight">AI Pet Assistant</h2>
-              <p className="text-sm text-muted-foreground">Chat with our AI to find your perfect pet</p>
+              <h2 className="text-2xl font-semibold tracking-tight">Welcome to Zoion</h2>
+              <p className="text-sm text-muted-foreground">Your pet breeding platform</p>
             </div>
 
-            <div className="flex-1 flex flex-col">
-              <div className="flex-1 overflow-y-auto space-y-4 mb-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div
-                      className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                        message.isUser
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-gray-100 text-gray-900'
-                      }`}
-                    >
-                      <p className="text-sm">{message.text}</p>
-                      <p className="text-xs opacity-70 mt-1">
-                        {message.timestamp.toLocaleTimeString()}
-                      </p>
-                    </div>
+            <div className="grid gap-6">
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Button onClick={() => window.location.href = '/search'} className="h-20">
+                      <div className="text-center">
+                        <div className="text-2xl mb-2">🔍</div>
+                        <div>Search Pets</div>
+                      </div>
+                    </Button>
+                    <Button onClick={() => window.location.href = '/featured'} variant="outline" className="h-20">
+                      <div className="text-center">
+                        <div className="text-2xl mb-2">⭐</div>
+                        <div>Featured Pets</div>
+                      </div>
+                    </Button>
+                    <Button onClick={() => window.location.href = '/advanced-filters'} variant="outline" className="h-20">
+                      <div className="text-center">
+                        <div className="text-2xl mb-2">🎯</div>
+                        <div>Advanced Filters</div>
+                      </div>
+                    </Button>
+                    <Button onClick={() => window.location.href = '/profile'} variant="outline" className="h-20">
+                      <div className="text-center">
+                        <div className="text-2xl mb-2">👤</div>
+                        <div>Profile</div>
+                      </div>
+                    </Button>
                   </div>
-                ))}
-              </div>
+                </CardContent>
+              </Card>
 
-              <div className="flex gap-2">
-                <Input
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Ask about pets, breeds, or anything else..."
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  className="flex-1"
-                />
-                <Button onClick={handleSendMessage} size="icon">
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">About Zoion</h3>
+                  <p className="text-gray-600">
+                    Zoion is a platform for pet owners to find breeding partners for their pets. 
+                    Browse through our database of registered pets and connect with other breeders.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>

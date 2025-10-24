@@ -1,22 +1,33 @@
 'use client';
 
-import { useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 
-function AdvancedFiltersPageContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+export default function AdvancedFiltersPage() {
   const [selectedBreeds, setSelectedBreeds] = useState<string[]>([]);
   const [selectedSex, setSelectedSex] = useState<'male' | 'female' | null>(null);
   const [readyToBreed, setReadyToBreed] = useState(false);
   const [pregnant, setPregnant] = useState(false);
   const [hasFrozenSperm, setHasFrozenSperm] = useState(false);
 
+  // Mock breeds data
+  const breeds = [
+    'Golden Retriever', 'German Shepherd', 'Labrador', 'Border Collie', 
+    'Beagle', 'Poodle', 'Bulldog', 'Rottweiler', 'Siberian Husky', 'Dachshund'
+  ];
+
+  const handleBreedToggle = (breed: string) => {
+    setSelectedBreeds(prev => 
+      prev.includes(breed) 
+        ? prev.filter(b => b !== breed)
+        : [...prev, breed]
+    );
+  };
+
   const handleSearch = () => {
-    router.push('/advanced-filters/results');
+    alert('Search functionality will be implemented here');
   };
 
   const clearFilters = () => {
@@ -44,8 +55,29 @@ function AdvancedFiltersPageContent() {
                 <div>
                   <h3 className="text-lg font-medium mb-3">Breed</h3>
                   <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-lg">
-                    <div className="p-4 text-center text-gray-500">
-                      Breed selection will be available here
+                    <div className="divide-y divide-gray-100">
+                      {breeds.map((breed) => {
+                        const selected = selectedBreeds.includes(breed);
+                        return (
+                          <button
+                            type="button"
+                            key={breed}
+                            onClick={() => handleBreedToggle(breed)}
+                            className={`w-full text-left px-3 py-2 flex items-center justify-between transition-colors ${
+                              selected
+                                ? 'bg-[#e8f3f0] text-[#175c51]'
+                                : 'hover:bg-gray-50'
+                            }`}
+                          >
+                            <span className="text-sm">{breed}</span>
+                            <span
+                              className={`ml-3 inline-block h-4 w-4 rounded border ${
+                                selected ? 'bg-[#3d7c6f] border-[#3d7c6f]' : 'border-gray-300'
+                              }`}
+                            />
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -125,13 +157,5 @@ function AdvancedFiltersPageContent() {
         </div>
       </SidebarInset>
     </SidebarProvider>
-  );
-}
-
-export default function AdvancedFiltersPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
-      <AdvancedFiltersPageContent />
-    </Suspense>
   );
 }
