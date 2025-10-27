@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { ChevronDown, ChevronUp, Users, Maximize2, Minimize2 } from 'lucide-react';
 
 interface FamilyMember {
   name: string;
@@ -20,47 +20,106 @@ interface FamilyTreeProps {
   petId: string;
 }
 
+interface TreeNode {
+  id: string;
+  name: string;
+  code: string;
+  generation: number;
+  x: number;
+  y: number;
+  children: TreeNode[];
+  parents: TreeNode[];
+}
+
 export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTreeProps) {
   const [showFullTree, setShowFullTree] = useState(false);
-  const [expandedGenerations, setExpandedGenerations] = useState<Set<string>>(new Set(['32', '16']));
+  const [zoom, setZoom] = useState(1);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   const parsedData = useMemo(() => {
     if (!familyTreeData) return null;
     
     try {
-      return JSON.parse(familyTreeData) as FamilyTreeData;
+      const parsed = JSON.parse(familyTreeData);
+      return parsed as FamilyTreeData;
     } catch (error) {
       console.error('Error parsing family tree data:', error);
       return null;
     }
   }, [familyTreeData]);
 
-  const generations = useMemo(() => {
-    if (!parsedData) return [];
-    
-    // Sort generations by number (descending - most recent first)
-    return Object.entries(parsedData)
-      .map(([gen, members]) => ({
-        generation: parseInt(gen),
-        members: members.filter(member => member.name && member.name !== 'ingen uppgift')
-      }))
-      .sort((a, b) => b.generation - a.generation);
+  const treeNodes = useMemo(() => {
+    if (!parsedData || typeof parsedData !== 'object') return [];
+
+    const nodes: TreeNode[] = [];
+    const nodeMap = new Map<string, TreeNode>();
+
+    // Create nodes for each generation
+    Object.entries(parsedData).forEach(([gen, members]) => {
+      const generation = parseInt(gen);
+      if (Array.isArray(members)) {
+        members.forEach((member, index) => {
+          if (member && typeof member === 'object' && member.name && member.name !== 'ingen uppgift') {
+            const nodeId = `${generation}-${index}`;
+            const node: TreeNode = {
+              id: nodeId,
+              name: member.name,
+              code: member.code || '',
+              generation,
+              x: 0,
+              y: 0,
+              children: [],
+              parents: []
+            };
+            nodes.push(node);
+            nodeMap.set(nodeId, node);
+          }
+        });
+      }
+    });
+
+    // Sort by generation (ascending for proper tree structure)
+    return nodes.sort((a, b) => a.generation - b.generation);
   }, [parsedData]);
 
-  const displayGenerations = showFullTree ? generations : generations.slice(0, 4);
+  const displayNodes = useMemo(() => {
+    if (!showFullTree) {
+      // Show only the first 4 generations
+      const maxGeneration = Math.min(...treeNodes.map(n => n.generation)) + 3;
+      return treeNodes.filter(node => node.generation <= maxGeneration);
+    }
+    return treeNodes;
+  }, [treeNodes, showFullTree]);
 
-  const toggleGeneration = (generation: number) => {
-    const genStr = generation.toString();
-    setExpandedGenerations(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(genStr)) {
-        newSet.delete(genStr);
-      } else {
-        newSet.add(genStr);
+  const positionedNodes = useMemo(() => {
+    if (displayNodes.length === 0) return [];
+
+    // Group nodes by generation
+    const generations = new Map<number, TreeNode[]>();
+    displayNodes.forEach(node => {
+      if (!generations.has(node.generation)) {
+        generations.set(node.generation, []);
       }
-      return newSet;
+      generations.get(node.generation)!.push(node);
     });
-  };
+
+    const generationArray = Array.from(generations.entries()).sort((a, b) => a[0] - b[0]);
+    const positioned: TreeNode[] = [];
+
+    generationArray.forEach(([gen, nodes], genIndex) => {
+      const y = genIndex * 120; // Vertical spacing between generations
+      const totalWidth = (nodes.length - 1) * 150; // Horizontal spacing
+      const startX = -totalWidth / 2;
+
+      nodes.forEach((node, nodeIndex) => {
+        node.x = startX + nodeIndex * 150;
+        node.y = y;
+        positioned.push(node);
+      });
+    });
+
+    return positioned;
+  }, [displayNodes]);
 
   const getGenerationLabel = (generation: number) => {
     switch (generation) {
@@ -74,7 +133,50 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
     }
   };
 
-  if (!parsedData || generations.length === 0) {
+  const getConnectingLines = () => {
+    const lines: JSX.Element[] = [];
+    
+    // Create lines between generations (simplified - connecting each node to nodes in the next generation)
+    const generations = new Map<number, TreeNode[]>();
+    positionedNodes.forEach(node => {
+      if (!generations.has(node.generation)) {
+        generations.set(node.generation, []);
+      }
+      generations.get(node.generation)!.push(node);
+    });
+
+    const generationArray = Array.from(generations.entries()).sort((a, b) => a[0] - b[0]);
+    
+    for (let i = 0; i < generationArray.length - 1; i++) {
+      const currentGen = generationArray[i][1];
+      const nextGen = generationArray[i + 1][1];
+      
+      // Connect each node to the next generation (simplified tree structure)
+      currentGen.forEach((parentNode, parentIndex) => {
+        const childIndex = Math.floor((parentIndex / currentGen.length) * nextGen.length);
+        const childNode = nextGen[childIndex];
+        
+        if (childNode) {
+          lines.push(
+            <line
+              key={`line-${parentNode.id}-${childNode.id}`}
+              x1={parentNode.x}
+              y1={parentNode.y + 30}
+              x2={childNode.x}
+              y2={childNode.y - 30}
+              stroke="#3d7c6f"
+              strokeWidth="2"
+              markerEnd="url(#arrowhead)"
+            />
+          );
+        }
+      });
+    }
+
+    return lines;
+  };
+
+  if (!parsedData || treeNodes.length === 0) {
     return (
       <Card>
         <CardContent className="p-6">
@@ -87,6 +189,9 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
     );
   }
 
+  const svgWidth = 800;
+  const svgHeight = Math.max(400, positionedNodes.length * 40 + 200);
+
   return (
     <Card>
       <CardHeader>
@@ -95,85 +200,145 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
             <Users className="w-5 h-5" />
             Family Tree
           </CardTitle>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowFullTree(!showFullTree)}
-            className="flex items-center gap-2"
-          >
-            {showFullTree ? (
-              <>
-                <ChevronUp className="w-4 h-4" />
-                Show Less
-              </>
-            ) : (
-              <>
-                <ChevronDown className="w-4 h-4" />
-                Show Full Tree
-              </>
-            )}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setZoom(prev => Math.min(prev + 0.2, 2))}
+            >
+              <Maximize2 className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setZoom(prev => Math.max(prev - 0.2, 0.5))}
+            >
+              <Minimize2 className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowFullTree(!showFullTree)}
+              className="flex items-center gap-2"
+            >
+              {showFullTree ? (
+                <>
+                  <ChevronUp className="w-4 h-4" />
+                  Show Less
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="w-4 h-4" />
+                  Show Full Tree
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="p-6">
-        <div className="space-y-6">
-          {displayGenerations.map(({ generation, members }) => (
-            <div key={generation} className="border rounded-lg p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="font-semibold text-lg">{getGenerationLabel(generation)}</h4>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => toggleGeneration(generation)}
-                  className="flex items-center gap-1"
+        <div className="overflow-auto">
+          <div className="inline-block min-w-full">
+            <svg
+              ref={svgRef}
+              width={svgWidth}
+              height={svgHeight}
+              viewBox={`-400 -100 ${svgWidth} ${svgHeight}`}
+              className="border rounded-lg bg-gray-50"
+              style={{ transform: `scale(${zoom})` }}
+            >
+              {/* Arrow marker definition */}
+              <defs>
+                <marker
+                  id="arrowhead"
+                  markerWidth="10"
+                  markerHeight="7"
+                  refX="9"
+                  refY="3.5"
+                  orient="auto"
                 >
-                  {expandedGenerations.has(generation.toString()) ? (
-                    <ChevronUp className="w-4 h-4" />
-                  ) : (
-                    <ChevronDown className="w-4 h-4" />
-                  )}
-                  {expandedGenerations.has(generation.toString()) ? 'Collapse' : 'Expand'}
-                </Button>
-              </div>
-              
-              {expandedGenerations.has(generation.toString()) ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
-                  {members.map((member, index) => (
-                    <div
-                      key={`${generation}-${index}`}
-                      className="text-center p-3 bg-gray-50 rounded-lg border hover:bg-gray-100 transition-colors"
+                  <polygon
+                    points="0 0, 10 3.5, 0 7"
+                    fill="#3d7c6f"
+                  />
+                </marker>
+              </defs>
+
+              {/* Connecting lines */}
+              {getConnectingLines()}
+
+              {/* Generation labels */}
+              {Array.from(new Set(positionedNodes.map(n => n.generation))).map(gen => {
+                const genNodes = positionedNodes.filter(n => n.generation === gen);
+                const avgY = genNodes.reduce((sum, n) => sum + n.y, 0) / genNodes.length;
+                return (
+                  <text
+                    key={`label-${gen}`}
+                    x={-380}
+                    y={avgY}
+                    className="text-sm font-medium fill-gray-600"
+                    textAnchor="start"
+                  >
+                    {getGenerationLabel(gen)}
+                  </text>
+                );
+              })}
+
+              {/* Nodes */}
+              {positionedNodes.map(node => (
+                <g key={node.id}>
+                  {/* Node circle */}
+                  <circle
+                    cx={node.x}
+                    cy={node.y}
+                    r="25"
+                    fill="white"
+                    stroke="#3d7c6f"
+                    strokeWidth="2"
+                    className="hover:fill-gray-100 transition-colors cursor-pointer"
+                  />
+                  
+                  {/* Node initial */}
+                  <text
+                    x={node.x}
+                    y={node.y + 5}
+                    textAnchor="middle"
+                    className="text-sm font-bold fill-gray-700"
+                  >
+                    {node.name.split(' ')[0][0]}
+                  </text>
+                  
+                  {/* Node name */}
+                  <text
+                    x={node.x}
+                    y={node.y + 45}
+                    textAnchor="middle"
+                    className="text-xs font-medium fill-gray-800"
+                  >
+                    {node.name.length > 12 ? node.name.substring(0, 12) + '...' : node.name}
+                  </text>
+                  
+                  {/* Node code */}
+                  {node.code && (
+                    <text
+                      x={node.x}
+                      y={node.y + 60}
+                      textAnchor="middle"
+                      className="text-xs fill-gray-500"
                     >
-                      <div className="w-12 h-12 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-bold text-gray-600">
-                          {member.name.split(' ')[0][0]}
-                        </span>
-                      </div>
-                      <p className="text-xs font-medium text-gray-900 truncate" title={member.name}>
-                        {member.name}
-                      </p>
-                      {member.code && (
-                        <p className="text-xs text-gray-500 truncate" title={member.code}>
-                          {member.code}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span>{members.length} ancestor{members.length !== 1 ? 's' : ''}</span>
-                  <span>•</span>
-                  <span>Click to expand</span>
-                </div>
-              )}
-            </div>
-          ))}
+                      {node.code}
+                    </text>
+                  )}
+                </g>
+              ))}
+            </svg>
+          </div>
         </div>
         
-        {!showFullTree && generations.length > 4 && (
+        {!showFullTree && treeNodes.length > displayNodes.length && (
           <div className="mt-4 text-center">
             <p className="text-sm text-muted-foreground">
-              Showing 4 generations. Click "Show Full Tree" to see all {generations.length} generations.
+              Showing {displayNodes.length} ancestors. Click "Show Full Tree" to see all {treeNodes.length} ancestors.
             </p>
           </div>
         )}
