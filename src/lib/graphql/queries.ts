@@ -345,6 +345,7 @@ export const GET_PET_DETAILS = gql`
         id
         location
       }
+      family_tree
       favorites {
         id
       }

@@ -10,9 +10,10 @@ import { SiteHeader } from '@/components/site-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { GET_PET_DETAILS, GET_FAMILY_TREE } from '@/lib/graphql/queries';
+import { GET_PET_DETAILS } from '@/lib/graphql/queries';
 import { getPetProfileImage, getPetTags } from '@/utils/pet-helpers';
 import { getAgeString, formatDateShort } from '@/utils/date-helpers';
+import FamilyTree from '@/components/pet/FamilyTree';
 
 export default function PetProfilePage() {
   const params = useParams();
@@ -22,10 +23,6 @@ export default function PetProfilePage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const { data, loading, error } = useQuery(GET_PET_DETAILS, {
-    variables: { petId },
-  });
-
-  const { data: treeData } = useQuery(GET_FAMILY_TREE, {
     variables: { petId },
   });
 
@@ -284,45 +281,12 @@ export default function PetProfilePage() {
               </div>
             </div>
 
-            {/* Family Tree (inline) */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Family Tree</h3>
-                  <Button variant="outline" onClick={() => router.push(`/pet/${encodeURIComponent(petId)}/family-tree`)}>Open Full View</Button>
-                </div>
-                {treeData?.pets?.[0] || treeData?.pets_by_pk ? (
-                  <div className="grid grid-cols-3 gap-4 items-start">
-                    {/* Father */}
-                    <div className="text-center">
-                      <p className="text-sm text-muted-foreground mb-2">Father</p>
-                      <div className="relative w-24 h-24 mx-auto rounded-full overflow-hidden border">
-                        <Image src={treeData.pets_by_pk?.father?.images_pets?.[0]?.location || treeData.pets?.[0]?.father?.images_pets?.[0]?.location || '/assets/images/svg/default_picture.svg'} alt="Father" fill className="object-cover" unoptimized />
-                      </div>
-                      <p className="mt-2 text-sm font-medium">{treeData.pets_by_pk?.father?.name || treeData.pets?.[0]?.father?.name || '—'}</p>
-                    </div>
-                    {/* Pet */}
-                    <div className="text-center">
-                      <p className="text-sm text-muted-foreground mb-2">Pet</p>
-                      <div className="relative w-24 h-24 mx-auto rounded-full overflow-hidden border">
-                        <Image src={currentImage} alt={pet.name} fill className="object-cover" unoptimized />
-                      </div>
-                      <p className="mt-2 text-sm font-medium">{pet.name}</p>
-                    </div>
-                    {/* Mother */}
-                    <div className="text-center">
-                      <p className="text-sm text-muted-foreground mb-2">Mother</p>
-                      <div className="relative w-24 h-24 mx-auto rounded-full overflow-hidden border">
-                        <Image src={treeData.pets_by_pk?.mother?.images_pets?.[0]?.location || treeData.pets?.[0]?.mother?.images_pets?.[0]?.location || '/assets/images/svg/default_picture.svg'} alt="Mother" fill className="object-cover" unoptimized />
-                      </div>
-                      <p className="mt-2 text-sm font-medium">{treeData.pets_by_pk?.mother?.name || treeData.pets?.[0]?.mother?.name || '—'}</p>
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground">No family tree data available.</p>
-                )}
-              </CardContent>
-            </Card>
+            {/* Family Tree */}
+            <FamilyTree 
+              familyTreeData={pet.family_tree} 
+              petName={pet.name} 
+              petId={petId} 
+            />
           </div>
         </div>
       </SidebarInset>
