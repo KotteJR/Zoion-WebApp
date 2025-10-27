@@ -158,6 +158,29 @@ function AdvancedFiltersContent() {
     // Build the where clause for GraphQL
     const andConditions: any[] = [];
 
+    // If searching by Pet ID, make it exact match and limit to 1 result
+    if (id) {
+      andConditions.push({ id: { _eq: petId } });
+      
+      // Execute search with only ID filter for exact match
+      try {
+        const { data } = await searchPets({
+          variables: {
+            where: { _and: andConditions },
+            limit: 1,
+          },
+        });
+
+        if (data?.pets) {
+          router.push('/advanced-filters/results');
+        }
+        return;
+      } catch (error) {
+        console.error('Search error:', error);
+        return;
+      }
+    }
+
     if (selectedBreeds.length > 0) {
       const breedLikeConditions = selectedBreeds.flatMap(breed => {
         const normalizedBreed = breed.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove diacritics

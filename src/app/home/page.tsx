@@ -452,7 +452,8 @@ export default function HomePage() {
       }
 
       if (filters.petId) {
-        andConditions.push({ id: { _ilike: `%${filters.petId}%` } });
+        // For Pet ID, use exact match and limit to 1 result
+        andConditions.push({ id: { _eq: filters.petId } });
       }
 
       // Age: convert years to date boundaries (same logic we used earlier)
@@ -483,7 +484,7 @@ export default function HomePage() {
       const { data } = await searchPets({
         variables: {
           where: whereClause,
-          limit: 12,
+          limit: filters.petId ? 1 : 12, // Limit to 1 result when searching by Pet ID
         },
       });
 
@@ -499,8 +500,12 @@ export default function HomePage() {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
         content: finalPets.length > 0 
-          ? `First ${finalPets.length} pets matching your criteria:`
-          : `No pets found matching your criteria.`,
+          ? (filters.petId 
+              ? `Found pet with ID ${filters.petId}:`
+              : `First ${finalPets.length} pets matching your criteria:`)
+          : (filters.petId 
+              ? `No pet found with ID ${filters.petId}.`
+              : `No pets found matching your criteria.`),
         pets: finalPets,
         filters: filters,
         timestamp: new Date(),
