@@ -36,6 +36,9 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
   const [zoom, setZoom] = useState(1);
   const svgRef = useRef<SVGSVGElement>(null);
 
+  // Debug logging
+  console.log('FamilyTree component received:', { familyTreeData, petName, petId });
+
   const parsedData = useMemo(() => {
     if (!familyTreeData) return null;
     

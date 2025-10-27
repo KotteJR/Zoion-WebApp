@@ -48,6 +48,11 @@ export default function PetProfilePage() {
 
   const pet = data?.pets?.[0];
 
+  // Debug logging
+  console.log('Pet data:', pet);
+  console.log('Family tree data:', pet?.family_tree);
+  console.log('Raw GraphQL response:', data);
+
   if (!pet && !loading) {
     return (
       <SidebarProvider>
