@@ -62,7 +62,7 @@ function VerifyContent() {
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-[#3d7c6f] rounded-lg flex items-center justify-center mx-auto mb-6">
               <Image
-                src="/assets/images/svg/zoionLogo.svg"
+                src="/assets/images/png/zoionplatform.png"
                 alt="Zoion Logo"
                 width={32}
                 height={32}
@@ -138,7 +138,7 @@ export default function VerifyPage() {
             <div className="text-center">
               <div className="w-16 h-16 bg-[#3d7c6f] rounded-lg flex items-center justify-center mx-auto mb-6">
                 <Image
-                  src="/assets/images/svg/zoionLogo.svg"
+                  src="/assets/images/png/zoionplatform.png"
                   alt="Zoion Logo"
                   width={32}
                   height={32}

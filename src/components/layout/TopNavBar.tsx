@@ -34,7 +34,7 @@ export default function TopNavBar({
             ) : (
               <Link href="/home" className="flex items-center">
                 <Image
-                  src="/assets/images/svg/zoionLogo.svg"
+                  src="/assets/images/png/zoionplatform.png"
                   alt="Zoion"
                   width={120}
                   height={28}

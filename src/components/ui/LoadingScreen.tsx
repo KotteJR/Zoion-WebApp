@@ -7,7 +7,7 @@ export function LoadingScreen() {
       {/* Zoion Logo at the top */}
       <div className="mb-12">
         <Image 
-          src="/assets/images/svg/zoionLogo.svg" 
+          src="/assets/images/png/zoionplatform.png" 
           alt="Zoion" 
           width={120} 
           height={40}

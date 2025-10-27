@@ -60,7 +60,7 @@ export default function LoginPage() {
           <div className="text-center mb-8">
             <div className="w-auto h-14 rounded-lg flex items-center justify-center mx-auto mb-4">
               <Image
-                src="/assets/images/svg/zoionLogo.svg"
+                src="/assets/images/png/zoionplatform.png"
                 alt="Zoion Logo"
                 width={32}
                 height={32}

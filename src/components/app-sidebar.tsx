@@ -71,7 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <div className="flex h-12 items-center px-2 pointer-events-none">
               <Image 
-                src="/assets/images/svg/zoionLogo.svg" 
+                src="/assets/images/png/zoionplatform.png" 
                 alt="Zoion" 
                 width={120} 
                 height={40}
