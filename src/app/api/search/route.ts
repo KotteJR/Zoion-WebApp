@@ -43,7 +43,7 @@ Strict output schema (keys and values are CASE-SENSITIVE):
   "weight": { "operator": "less" | "greater" | "equal", "value": number } | undefined
 }
 
-Mapping rules to our filters:
+Mapping rules to our filters (exact database column names):
 - sex -> maps to GraphQL 'sex' with values 'male' or 'female'
 - readyToBreed -> GraphQL 'ready_to_breed' boolean
 - pregnant -> GraphQL 'pregnant' boolean
@@ -53,6 +53,7 @@ Mapping rules to our filters:
 - inbreedRate.value is PERCENT (number). Use operator (<, >, =) semantics.
 - age expressions ("under 3 years" / "over 2" / "2-4 years") -> fill ageRange with MIN/MAX in YEARS.
 - weight in kg (same operator mapping) -> fill weight with number (kg).
+- color -> GraphQL 'colour' (note: 'colour' with 'u', not 'color')
 
 Normalization:
 - Accept typos or variants (e.g., 'bichon frise', 'bichon frisè') and keep the cleaned breed name string provided by user; do NOT fabricate unknown breed names.

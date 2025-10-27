@@ -52,6 +52,7 @@ function AdvancedFiltersContent() {
   const [kennelName, setKennelName] = useState<string>('');
   const [nameContains, setNameContains] = useState<string>('');
   const [petId, setPetId] = useState<string>('');
+  const [id, setId] = useState<string>('');
 
   const { data: breedsData, loading: breedsLoading } = useQuery(GET_ALL_BREEDS);
   const [searchPets, { loading: searchLoading }] = useLazyQuery(SEARCH_PETS);
@@ -151,6 +152,7 @@ function AdvancedFiltersContent() {
       kennelName,
       nameContains,
       petId,
+      id,
     };
 
     setFilter(searchFilter);
@@ -160,7 +162,7 @@ function AdvancedFiltersContent() {
 
     // If searching by Pet ID, make it exact match and limit to 1 result
     if (id) {
-      andConditions.push({ id: { _eq: petId } });
+      andConditions.push({ id: { _eq: id } });
       
       // Execute search with only ID filter for exact match
       try {
@@ -303,6 +305,7 @@ function AdvancedFiltersContent() {
     setKennelName('');
     setNameContains('');
     setPetId('');
+    setId('');
   };
 
   const handleInbreedRateOperatorChange = (operator: 'less' | 'greater' | 'equal') => {
@@ -584,7 +587,18 @@ function AdvancedFiltersContent() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-medium mb-2">Pet ID</h3>
+                  <h3 className="text-base font-medium mb-2">Pet ID (Exact)</h3>
+                  <input
+                    type="text"
+                    placeholder="Exact Pet ID"
+                    value={id}
+                    onChange={(e) => setId(e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-200 rounded text-xs"
+                  />
+                </div>
+
+                <div>
+                  <h3 className="text-base font-medium mb-2">Pet ID (Contains)</h3>
                   <input
                     type="text"
                     placeholder="Pet ID contains"
