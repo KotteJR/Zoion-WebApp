@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import Input from '@/components/ui/input';
 
 function VerifyContent() {
   const router = useRouter();

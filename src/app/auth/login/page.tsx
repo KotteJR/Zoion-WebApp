@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { signIn } from 'aws-amplify/auth';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import Input from '@/components/ui/input';
 import { useAuthStore } from '@/store/auth-store';
 import { getApolloClient } from '@/lib/apollo-client';
 

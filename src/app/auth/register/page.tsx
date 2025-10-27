@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { signUp } from 'aws-amplify/auth';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import Input from '@/components/ui/input';
 
 export default function RegisterPage() {
   const router = useRouter();
