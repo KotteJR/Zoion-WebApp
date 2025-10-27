@@ -218,26 +218,20 @@ function AdvancedFiltersContent() {
     }
 
     if (inbreedRate) {
-      const op = inbreedRate.operator;
-      const numericClause =
-        op === 'less'
-          ? { inbreed_rate: { _lt: inbreedRate.value } }
-          : op === 'greater'
-          ? { inbreed_rate: { _gt: inbreedRate.value } }
-          : { inbreed_rate: { _eq: inbreedRate.value } };
-
-      const stringClause =
-        op === 'less'
-          ? { inbreed_rate_string: { _ilike: `%${inbreedRate.value - 0.0001}%` } }
-          : op === 'greater'
-          ? { inbreed_rate_string: { _ilike: `%${inbreedRate.value + 0.0001}%` } }
-          : { inbreed_rate_string: { _ilike: `%${inbreedRate.value}%` } };
-
-      andConditions.push({ _or: [numericClause, stringClause] });
+      // inbreed_rate is stored as a STRING like '0,0 %' or '2,5 %'
+      // We need to search it as a string
+      const rateStr = inbreedRate.value.toString().replace('.', ','); // Convert decimal point to comma
+      andConditions.push({ inbreed_rate: { _ilike: `${rateStr}%` } });
     }
 
     if (color) {
-      andConditions.push({ colour: { _ilike: `%${color}%` } });
+      // Search both 'color' and 'colour' fields
+      andConditions.push({ 
+        _or: [
+          { color: { _ilike: `%${color}%` } },
+          { colour: { _ilike: `%${color}%` } }
+        ]
+      });
     }
 
     if (kennelName) {
@@ -270,7 +264,10 @@ function AdvancedFiltersContent() {
     if (weight) {
       const weightValue = weight.value;
       const operator = weight.operator;
-      andConditions.push({ weight: { [`_${operator}`]: weightValue } });
+      // Map 'less'/'greater'/'equal' to GraphQL operators '_lt'/'_gt'/'_eq'
+      const opMap: { [key: string]: string } = { less: '_lt', greater: '_gt', equal: '_eq' };
+      const graphQLOp = opMap[operator];
+      andConditions.push({ weight: { [graphQLOp]: weightValue } });
     }
 
     const whereClause = andConditions.length > 0 ? { _and: andConditions } : {};

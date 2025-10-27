@@ -415,28 +415,19 @@ export default function HomePage() {
       }
 
       if (filters.inbreedRate) {
-        const op = filters.inbreedRate.operator;
-        // inbreed_rate might be stored as number OR string (e.g., "0.0 %"). Build tolerant OR clause.
-        const numericClause =
-          op === 'less'
-            ? { inbreed_rate: { _lt: filters.inbreedRate.value } }
-            : op === 'greater'
-            ? { inbreed_rate: { _gt: filters.inbreedRate.value } }
-            : { inbreed_rate: { _eq: filters.inbreedRate.value } };
-
-        const stringClause =
-          op === 'less'
-            ? { inbreed_rate_string: { _ilike: `%${filters.inbreedRate.value - 0.0001}%` } }
-            : op === 'greater'
-            ? { inbreed_rate_string: { _ilike: `%${filters.inbreedRate.value + 0.0001}%` } }
-            : { inbreed_rate_string: { _ilike: `%${filters.inbreedRate.value}%` } };
-
-        andConditions.push({ _or: [numericClause, stringClause] });
+        // inbreed_rate is stored as a STRING like '0,0 %' or '2,5 %'
+        const rateStr = filters.inbreedRate.value.toString().replace('.', ',');
+        andConditions.push({ inbreed_rate: { _ilike: `${rateStr}%` } });
       }
 
       if (filters.color) {
-        // DB uses 'colour'
-        andConditions.push({ colour: { _ilike: `%${filters.color}%` } });
+        // Search both 'color' and 'colour' fields
+        andConditions.push({ 
+          _or: [
+            { color: { _ilike: `%${filters.color}%` } },
+            { colour: { _ilike: `%${filters.color}%` } }
+          ]
+        });
       }
 
       if (filters.kennelName) {
