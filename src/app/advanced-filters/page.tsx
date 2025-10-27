@@ -341,15 +341,15 @@ function AdvancedFiltersContent() {
         <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
           <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-semibold tracking-tight">Advanced Filters</h2>
-              <p className="text-sm text-muted-foreground">Use specific filters to find exactly what you're looking for</p>
+              <h2 className="text-2xl font-semibold tracking-tight">Avancerade Filter</h2>
+              <p className="text-sm text-muted-foreground">Använd specifika filter för att hitta exakt vad du letar efter</p>
             </div>
 
             {/* Compact Grid Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {/* Left Column - Breed Selection */}
               <div className="space-y-3">
-                <h3 className="text-base font-medium">Breed</h3>
+                <h3 className="text-base font-medium">Ras</h3>
                 {breedsLoading ? (
                   <LoadingSpinner />
                 ) : (
@@ -385,12 +385,12 @@ function AdvancedFiltersContent() {
               {/* Middle Column - Basic Filters */}
               <div className="space-y-3">
                 <div>
-                  <h3 className="text-base font-medium mb-2">Sex</h3>
+                  <h3 className="text-base font-medium mb-2">Kön</h3>
                   <div className="flex gap-1">
                     {[
-                      { key: 'male', label: 'Male' },
-                      { key: 'female', label: 'Female' },
-                      { key: null, label: 'Any' },
+                      { key: 'male', label: 'Hane' },
+                      { key: 'female', label: 'Tik' },
+                      { key: null, label: 'Alla' },
                     ].map((opt) => (
                       <button
                         key={String(opt.key)}
@@ -418,7 +418,7 @@ function AdvancedFiltersContent() {
                         readyToBreed ? 'bg-[#e8f3f0] border-[#3d7c6f] text-[#175c51]' : 'bg-gray-50 border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      Ready to Breed
+                      Redo att para
                     </button>
                     <button
                       type="button"
@@ -427,7 +427,7 @@ function AdvancedFiltersContent() {
                         pregnant ? 'bg-[#e8f3f0] border-[#3d7c6f] text-[#175c51]' : 'bg-gray-50 border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      Pregnant
+                      Dräktig
                     </button>
                     <button
                       type="button"
@@ -436,7 +436,7 @@ function AdvancedFiltersContent() {
                         hasFrozenSperm ? 'bg-[#e8f3f0] border-[#3d7c6f] text-[#175c51]' : 'bg-gray-50 border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      Has Frozen Sperm
+                      Har fryst sperma
                     </button>
                   </div>
                 </div>
@@ -445,9 +445,9 @@ function AdvancedFiltersContent() {
                   <h3 className="text-base font-medium mb-2">Vaccination</h3>
                   <div className="flex gap-1">
                     {[
-                      { key: true, label: 'Vaccinated' },
-                      { key: false, label: 'Not Vaccinated' },
-                      { key: null, label: 'Any' },
+                      { key: true, label: 'Vaccinerad' },
+                      { key: false, label: 'Ej vaccinerad' },
+                      { key: null, label: 'Alla' },
                     ].map((opt) => (
                       <button
                         key={String(opt.key)}
@@ -469,13 +469,13 @@ function AdvancedFiltersContent() {
               {/* Right Column - Advanced Filters */}
               <div className="space-y-3">
                 <div>
-                  <h3 className="text-base font-medium mb-2">Inbreed Rate</h3>
+                  <h3 className="text-base font-medium mb-2">Inavelsgrad</h3>
                   <div className="space-y-1">
                     <div className="flex gap-1">
                       {[
-                        { key: 'less', label: 'Less' },
-                        { key: 'greater', label: 'Greater' },
-                        { key: 'equal', label: 'Equal' },
+                        { key: 'less', label: 'Mindre' },
+                        { key: 'greater', label: 'Större' },
+                        { key: 'equal', label: 'Lika' },
                       ].map((opt) => (
                         <button
                           key={opt.key}
@@ -495,7 +495,7 @@ function AdvancedFiltersContent() {
                       <input
                         type="number"
                         step="0.1"
-                        placeholder="Value"
+                        placeholder="Värde"
                         value={inbreedRate?.value || ''}
                         onChange={(e) => handleInbreedRateValueChange(parseFloat(e.target.value) || 0)}
                         className="px-2 py-1 border border-gray-200 rounded text-xs flex-1"
@@ -506,13 +506,13 @@ function AdvancedFiltersContent() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-medium mb-2">Weight</h3>
+                  <h3 className="text-base font-medium mb-2">Vikt</h3>
                   <div className="space-y-1">
                     <div className="flex gap-1">
                       {[
-                        { key: 'less', label: 'Less' },
-                        { key: 'greater', label: 'Greater' },
-                        { key: 'equal', label: 'Equal' },
+                        { key: 'less', label: 'Mindre' },
+                        { key: 'greater', label: 'Större' },
+                        { key: 'equal', label: 'Lika' },
                       ].map((opt) => (
                         <button
                           key={opt.key}
@@ -532,7 +532,7 @@ function AdvancedFiltersContent() {
                       <input
                         type="number"
                         step="0.1"
-                        placeholder="Weight"
+                        placeholder="Vikt"
                         value={weight?.value || ''}
                         onChange={(e) => handleWeightValueChange(parseFloat(e.target.value) || 0)}
                         className="px-2 py-1 border border-gray-200 rounded text-xs flex-1"
@@ -543,7 +543,7 @@ function AdvancedFiltersContent() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-medium mb-2">Age Range</h3>
+                  <h3 className="text-base font-medium mb-2">Åldersintervall</h3>
                   <div className="flex gap-1">
                     <input
                       type="number"
@@ -559,15 +559,15 @@ function AdvancedFiltersContent() {
                       onChange={(e) => setAgeRange(prev => ({ ...prev, max: parseInt(e.target.value) || undefined }))}
                       className="px-2 py-1 border border-gray-200 rounded text-xs flex-1"
                     />
-                    <span className="text-xs text-gray-500 self-center">yrs</span>
+                    <span className="text-xs text-gray-500 self-center">år</span>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-base font-medium mb-2">Color</h3>
+                  <h3 className="text-base font-medium mb-2">Färg</h3>
                   <input
                     type="text"
-                    placeholder="Color"
+                    placeholder="Färg"
                     value={color}
                     onChange={(e) => setColor(e.target.value)}
                     className="w-full px-2 py-1 border border-gray-200 rounded text-xs"
@@ -578,7 +578,7 @@ function AdvancedFiltersContent() {
                   <h3 className="text-base font-medium mb-2">Kennel</h3>
                   <input
                     type="text"
-                    placeholder="Kennel name"
+                    placeholder="Kennelnamn"
                     value={kennelName}
                     onChange={(e) => setKennelName(e.target.value)}
                     className="w-full px-2 py-1 border border-gray-200 rounded text-xs"
@@ -586,10 +586,10 @@ function AdvancedFiltersContent() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-medium mb-2">Name</h3>
+                  <h3 className="text-base font-medium mb-2">Namn</h3>
                   <input
                     type="text"
-                    placeholder="Name contains"
+                    placeholder="Namn innehåller"
                     value={nameContains}
                     onChange={(e) => setNameContains(e.target.value)}
                     className="w-full px-2 py-1 border border-gray-200 rounded text-xs"
@@ -597,10 +597,10 @@ function AdvancedFiltersContent() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-medium mb-2">Pet ID (Exact)</h3>
+                  <h3 className="text-base font-medium mb-2">Hund-ID (Exakt)</h3>
                   <input
                     type="text"
-                    placeholder="Exact Pet ID"
+                    placeholder="Exakt Hund-ID"
                     value={id}
                     onChange={(e) => setId(e.target.value)}
                     className="w-full px-2 py-1 border border-gray-200 rounded text-xs"
@@ -608,10 +608,10 @@ function AdvancedFiltersContent() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-medium mb-2">Pet ID (Contains)</h3>
+                  <h3 className="text-base font-medium mb-2">Hund-ID (Innehåller)</h3>
                   <input
                     type="text"
-                    placeholder="Pet ID contains"
+                    placeholder="Hund-ID innehåller"
                     value={petId}
                     onChange={(e) => setPetId(e.target.value)}
                     className="w-full px-2 py-1 border border-gray-200 rounded text-xs"
@@ -626,14 +626,14 @@ function AdvancedFiltersContent() {
                 onClick={handleSearch} 
                 disabled={searchLoading}
               >
-                {searchLoading ? 'Searching...' : 'Search'}
+                {searchLoading ? 'Söker...' : 'Sök'}
               </Button>
               <Button 
                 onClick={clearFilters} 
                 variant="outline"
                 disabled={searchLoading}
               >
-                Clear Filters
+                Rensa filter
               </Button>
             </div>
           </div>
