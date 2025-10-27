@@ -19,7 +19,6 @@ export const FAVORITE_PETS = gql`
         vaccinated
         has_frozen_sperm
         ready_to_breed
-        next_breeding_date
         pregnant
         competitions_aggregate {
           aggregate {
@@ -57,7 +56,6 @@ export const READY_TO_BREED_FEED = gql`
       vaccinated
       has_frozen_sperm
       ready_to_breed
-      next_breeding_date
       pregnant
       owner: user {
         id
@@ -114,7 +112,6 @@ export const READY_TO_BREED_FEED_SUGGESTIONS = gql`
       vaccinated
       has_frozen_sperm
       ready_to_breed
-      next_breeding_date
       pregnant
       owner: user {
         id
@@ -166,7 +163,6 @@ export const FEED_SUGGESTED_DOGS = gql`
       vaccinated
       has_frozen_sperm
       ready_to_breed
-      next_breeding_date
       pregnant
       owner: user {
         id
@@ -310,7 +306,6 @@ export const GET_PET_DETAILS = gql`
       vaccinated
       has_frozen_sperm
       ready_to_breed
-      next_breeding_date
       pregnant
       pregnant_expecting_puppies_count
       chip_id
@@ -455,7 +450,6 @@ export const SEARCH_PETS = gql`
       vaccinated
       has_frozen_sperm
       ready_to_breed
-      next_breeding_date
       pregnant
       owner: user {
         id
