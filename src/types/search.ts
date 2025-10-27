@@ -22,6 +22,7 @@ export interface SearchFilter {
   color?: string;
   kennelName?: string;
   nameContains?: string;
+  petId?: string;
   city?: string;
 }
 

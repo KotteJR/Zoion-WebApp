@@ -51,6 +51,7 @@ function AdvancedFiltersContent() {
   const [color, setColor] = useState<string>('');
   const [kennelName, setKennelName] = useState<string>('');
   const [nameContains, setNameContains] = useState<string>('');
+  const [petId, setPetId] = useState<string>('');
 
   const { data: breedsData, loading: breedsLoading } = useQuery(GET_ALL_BREEDS);
   const [searchPets, { loading: searchLoading }] = useLazyQuery(SEARCH_PETS);
@@ -149,6 +150,7 @@ function AdvancedFiltersContent() {
       color,
       kennelName,
       nameContains,
+      petId,
     };
 
     setFilter(searchFilter);
@@ -224,6 +226,10 @@ function AdvancedFiltersContent() {
       andConditions.push({ name: { _ilike: `%${nameContains}%` } });
     }
 
+    if (petId) {
+      andConditions.push({ id: { _ilike: `%${petId}%` } });
+    }
+
     if (ageRange) {
       const currentDate = new Date();
       if (ageRange.max !== undefined) {
@@ -273,6 +279,7 @@ function AdvancedFiltersContent() {
     setColor('');
     setKennelName('');
     setNameContains('');
+    setPetId('');
   };
 
   const handleInbreedRateOperatorChange = (operator: 'less' | 'greater' | 'equal') => {
@@ -549,6 +556,17 @@ function AdvancedFiltersContent() {
                     placeholder="Name contains"
                     value={nameContains}
                     onChange={(e) => setNameContains(e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-200 rounded text-xs"
+                  />
+                </div>
+
+                <div>
+                  <h3 className="text-base font-medium mb-2">Pet ID</h3>
+                  <input
+                    type="text"
+                    placeholder="Pet ID contains"
+                    value={petId}
+                    onChange={(e) => setPetId(e.target.value)}
                     className="w-full px-2 py-1 border border-gray-200 rounded text-xs"
                   />
                 </div>

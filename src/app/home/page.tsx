@@ -46,6 +46,7 @@ interface ParsedFilters {
   color?: string; // maps to DB field 'colour'
   kennelName?: string; // maps to DB field 'kennel_name' (and kennel.name fallback)
   nameContains?: string; // maps to DB field 'name'
+  petId?: string; // maps to DB field 'id'
 }
 
 // Natural language query parser
@@ -95,6 +96,13 @@ function parseNaturalLanguageQuery(query: string): ParsedFilters {
     filters.sex = 'female';
   } else if (/\b(male|boy|he|him|his)\b/.test(queryLower)) {
     filters.sex = 'male';
+  }
+
+  // Pet ID detection - look for patterns like "SE12149/2015" or "NO37204/14"
+  const idPattern = /\b[A-Z]{2}\d{5}\/\d{4}\b|\b[A-Z]{2}\d{5}\/\d{2}\b|\b[A-Z]{2}\d{4}\/\d{4}\b|\b[A-Z]{2}\d{4}\/\d{2}\b/;
+  const idMatch = query.match(idPattern);
+  if (idMatch) {
+    filters.petId = idMatch[0];
   }
   
   // Ready to breed
@@ -441,6 +449,10 @@ export default function HomePage() {
 
       if (filters.nameContains) {
         andConditions.push({ name: { _ilike: `%${filters.nameContains}%` } });
+      }
+
+      if (filters.petId) {
+        andConditions.push({ id: { _ilike: `%${filters.petId}%` } });
       }
 
       // Age: convert years to date boundaries (same logic we used earlier)
