@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { confirmResetPassword } from 'aws-amplify/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-export default function NewPasswordPage() {
+function NewPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
@@ -52,24 +52,26 @@ export default function NewPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-primary-dark px-4">
+    <div className="min-h-screen flex items-center justify-center bg-sidebar px-4">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="bg-white rounded-xl border border-gray-200/50 shadow-sm p-8">
           <div className="text-center mb-8">
-            <Image
-              src="/assets/icons/zoionAppIcon.png"
-              alt="Zoion Logo"
-              width={80}
-              height={80}
-              className="mx-auto rounded-xl mb-4"
-            />
-            <h1 className="text-3xl font-bold text-gray-800">New Password</h1>
+            <div className="w-16 h-16 bg-[#3d7c6f] rounded-lg flex items-center justify-center mx-auto mb-6">
+              <Image
+                src="/assets/images/svg/zoionLogo.svg"
+                alt="Zoion Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8"
+              />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900">New Password</h1>
             <p className="text-gray-600 mt-2">Enter the code and your new password</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-2">
                 Verification Code
               </label>
               <Input
@@ -79,11 +81,12 @@ export default function NewPasswordPage() {
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 required
+                className="w-full"
               />
             </div>
 
             <div>
-              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
                 New Password
               </label>
               <Input
@@ -94,12 +97,13 @@ export default function NewPasswordPage() {
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
                 autoComplete="new-password"
+                className="w-full"
               />
               <p className="text-xs text-gray-500 mt-1">Minimum 8 characters with uppercase, lowercase, number and special character</p>
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                 Confirm Password
               </label>
               <Input
@@ -110,6 +114,7 @@ export default function NewPasswordPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 autoComplete="new-password"
+                className="w-full"
               />
             </div>
 
@@ -119,13 +124,40 @@ export default function NewPasswordPage() {
               </div>
             )}
 
-            <Button type="submit" disabled={isLoading} className="w-full">
+            <Button type="submit" disabled={isLoading} className="w-full bg-black hover:bg-gray-800">
               {isLoading ? 'Resetting...' : 'Reset Password'}
             </Button>
           </form>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function NewPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-sidebar px-4">
+        <div className="w-full max-w-md">
+          <div className="bg-white rounded-xl border border-gray-200/50 shadow-sm p-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#3d7c6f] rounded-lg flex items-center justify-center mx-auto mb-6">
+                <Image
+                  src="/assets/images/svg/zoionLogo.svg"
+                  alt="Zoion Logo"
+                  width={32}
+                  height={32}
+                  className="w-8 h-8"
+                />
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900">Loading...</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    }>
+      <NewPasswordContent />
+    </Suspense>
   );
 }
 
