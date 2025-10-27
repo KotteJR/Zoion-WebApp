@@ -130,14 +130,14 @@ export default function AdvancedFiltersResultsPage() {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                Back to Filters
+                Tillbaka till filter
               </Button>
             </div>
 
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-semibold tracking-tight">Search Results</h2>
+              <h2 className="text-2xl font-semibold tracking-tight">Sökresultat</h2>
               <p className="text-sm text-muted-foreground">
-                Found {pets.length} pets matching your criteria
+                Hittade {pets.length} hundar som matchar dina kriterier
               </p>
             </div>
 
@@ -151,14 +151,14 @@ export default function AdvancedFiltersResultsPage() {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-lg font-medium">No pets found</p>
-                <p className="text-sm text-muted-foreground">Try adjusting your search criteria</p>
+                <p className="text-lg font-medium">Inga hundar hittades</p>
+                <p className="text-sm text-muted-foreground">Försök justera dina sökkriterier</p>
                 <Button 
                   onClick={() => router.push('/advanced-filters')} 
                   variant="outline" 
                   className="mt-4"
                 >
-                  Modify Search
+                  Ändra sökning
                 </Button>
               </div>
             )}
