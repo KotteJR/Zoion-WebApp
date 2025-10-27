@@ -165,14 +165,14 @@ function AdvancedFiltersContent() {
     // If searching by Pet ID, make it exact match and limit to 1 result
     if (id) {
       console.log('✅ Using EXACT ID search for:', id);
-      andConditions.push({ id: { _eq: id } });
+      const exactIdWhere = { id: { _eq: id } };
       
       // Execute search with only ID filter for exact match
       try {
-        console.log('📡 GraphQL query:', { where: { _and: andConditions }, limit: 1 });
+        console.log('📡 GraphQL query:', { where: exactIdWhere, limit: 1 });
         const { data } = await searchPets({
           variables: {
-            where: { _and: andConditions },
+            where: exactIdWhere,
             limit: 1,
           },
         });
