@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Pet } from '@/types/pet';
 import { getPetProfileImage, getPetTags } from '@/utils/pet-helpers';
 import { getAgeString } from '@/utils/date-helpers';
@@ -22,6 +23,7 @@ export default function PetCard({ pet, onFavoriteChange }: PetCardProps) {
   const profileImage = getPetProfileImage(pet);
   const tags = getPetTags(pet);
   const ageString = pet.date_born ? getAgeString(pet.date_born) : 'Age unknown';
+  const [imageError, setImageError] = useState(false);
 
   const handleCardClick = () => {
     const encodedId = encodeURIComponent(pet.id);
@@ -45,13 +47,27 @@ export default function PetCard({ pet, onFavoriteChange }: PetCardProps) {
       <Card className="overflow-hidden pet-card-hover">
         <CardHeader className="p-0">
           <div className="relative h-48">
-            <Image
-              src={profileImage}
-              alt={pet.name || 'Pet'}
-              fill
-              className="object-cover object-top"
-              unoptimized
-            />
+            {!imageError ? (
+              <Image
+                src={profileImage}
+                alt={pet.name || 'Pet'}
+                fill
+                className="object-cover object-top"
+                unoptimized
+                onError={() => setImageError(true)}
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
+                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <p className="text-xs text-gray-500">No image</p>
+                </div>
+              </div>
+            )}
             
             {/* Gender Badge */}
             {pet.sex && (

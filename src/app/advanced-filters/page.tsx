@@ -312,7 +312,7 @@ function AdvancedFiltersContent() {
                 ) : (
                   <div className="max-h-32 overflow-y-auto border border-gray-200 rounded-lg">
                     <div className="divide-y divide-gray-100">
-                      {breeds.slice(0, 8).map((breed) => {
+                      {breeds.map((breed) => {
                         const selected = selectedBreeds.includes(breed.name);
                         return (
                           <button
