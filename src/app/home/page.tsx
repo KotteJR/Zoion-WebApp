@@ -537,12 +537,66 @@ export default function HomePage() {
   };
 
   const exampleQueries = [
-    "Visa alla hundar",
-    "Visa alla raser",
-    "Tikar",
-    "Hanar", 
-    "Redo att para",
-    "Golden retrievers"
+    {
+      title: "Visa alla hundar",
+      description: "Hitta alla tillgängliga hundar i systemet",
+      query: "Visa alla hundar",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      )
+    },
+    {
+      title: "Visa alla raser",
+      description: "Utforska hundraser från A till Ö",
+      query: "Visa alla hundraser",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+      )
+    },
+    {
+      title: "Tikar",
+      description: "Hitta kvinnliga hundar redo för avel",
+      query: "Visa tikar som är redo att para",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+      )
+    },
+    {
+      title: "Hanar",
+      description: "Hitta manliga hundar för avel",
+      query: "Visa hanar som är redo att para",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+      )
+    },
+    {
+      title: "Redo att para",
+      description: "Hundar som är redo för avel just nu",
+      query: "Visa hundar som är redo att para",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      )
+    },
+    {
+      title: "Golden Retrievers",
+      description: "Populära familjehundar med guldgul päls",
+      query: "Visa Golden Retrievers",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      )
+    }
   ];
 
   return (
@@ -587,14 +641,29 @@ export default function HomePage() {
                 {/* Example Queries */}
                 <div className="w-full max-w-4xl">
                   <p className="text-sm text-gray-500 mb-4">Prova dessa exempel:</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {exampleQueries.map((example, index) => (
                       <button
                         key={index}
-                        onClick={() => setSearchQuery(example)}
-                        className="text-left p-4 rounded-lg border border-gray-200 hover:border-[#3d7c6f] hover:bg-[#3d7c6f]/5 transition-colors"
+                        onClick={() => {
+                          setSearchQuery(example.query);
+                          handleSearchSubmit();
+                        }}
+                        className="p-4 text-left border border-gray-200 rounded-lg hover:border-[#3d7c6f] hover:bg-gray-50 transition-all duration-200 hover:shadow-sm group"
                       >
-                        <p className="text-sm text-gray-700">{example}</p>
+                        <div className="flex items-start gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-[#3d7c6f] group-hover:text-[#2d5a4f] transition-colors">
+                            {example.icon}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-medium text-gray-900 group-hover:text-[#3d7c6f] transition-colors">
+                              {example.title}
+                            </h3>
+                            <p className="text-sm text-gray-500 mt-1">
+                              {example.description}
+                            </p>
+                          </div>
+                        </div>
                       </button>
                     ))}
                   </div>
