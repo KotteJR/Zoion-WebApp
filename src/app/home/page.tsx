@@ -647,7 +647,7 @@ export default function HomePage() {
                         key={index}
                         onClick={() => {
                           setSearchQuery(example.query);
-                          handleSearchSubmit();
+                          handleSearch();
                         }}
                         className="p-4 text-left border border-gray-200 rounded-lg hover:border-[#3d7c6f] hover:bg-gray-50 transition-all duration-200 hover:shadow-sm group"
                       >
