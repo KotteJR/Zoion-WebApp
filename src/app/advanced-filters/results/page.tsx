@@ -15,11 +15,26 @@ export default function AdvancedFiltersResultsPage() {
   const router = useRouter();
   const { filter } = useSearchStore();
   
-  // Build the where clause for GraphQL
+  // Build the where clause for GraphQL - must match exact logic from search page
   const whereConditions: any[] = [];
   
+  // EXACT ID SEARCH - highest priority
+  if (filter.id) {
+    whereConditions.push({ id: { _eq: filter.id } });
+  }
+  
+  // CONTAINS ID SEARCH
+  if (filter.petId) {
+    whereConditions.push({ id: { _ilike: `%${filter.petId}%` } });
+  }
+  
   if (filter.breeds && filter.breeds.length > 0) {
-    whereConditions.push({ breed: { _in: filter.breeds } });
+    const breedLikeConditions = filter.breeds.flatMap(breed => {
+      const normalizedBreed = breed.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const variants = [breed, breed.toLowerCase(), normalizedBreed, normalizedBreed.toLowerCase()];
+      return variants.map(v => ({ breed: { _ilike: `%${v}%` } }));
+    });
+    whereConditions.push({ _or: breedLikeConditions });
   }
   
   if (filter.sex) {
@@ -37,13 +52,63 @@ export default function AdvancedFiltersResultsPage() {
   if (filter.hasFrozenSperm) {
     whereConditions.push({ has_frozen_sperm: { _eq: true } });
   }
+  
+  if (filter.vaccinated !== null && filter.vaccinated !== undefined) {
+    whereConditions.push({ vaccinated: { _eq: filter.vaccinated } });
+  }
+  
+  if (filter.inbreedRate) {
+    const rateStr = filter.inbreedRate.value.toString().replace('.', ',');
+    whereConditions.push({ inbreed_rate: { _ilike: `${rateStr}%` } });
+  }
+  
+  if (filter.color) {
+    whereConditions.push({ 
+      _or: [
+        { color: { _ilike: `%${filter.color}%` } },
+        { colour: { _ilike: `%${filter.color}%` } }
+      ]
+    });
+  }
+  
+  if (filter.kennelName) {
+    whereConditions.push({ _or: [
+      { kennel_name: { _ilike: `%${filter.kennelName}%` } },
+      { kennel: { name: { _ilike: `%${filter.kennelName}%` } } }
+    ]});
+  }
+  
+  if (filter.nameContains) {
+    whereConditions.push({ name: { _ilike: `%${filter.nameContains}%` } });
+  }
+  
+  if (filter.ageRange) {
+    const currentDate = new Date();
+    if (filter.ageRange.max !== undefined) {
+      const minDate = new Date(currentDate.getFullYear() - filter.ageRange.max, currentDate.getMonth(), currentDate.getDate());
+      whereConditions.push({ date_born: { _lte: minDate.toISOString().split('T')[0] } });
+    }
+    if (filter.ageRange.min !== undefined) {
+      const maxDate = new Date(currentDate.getFullYear() - filter.ageRange.min, currentDate.getMonth(), currentDate.getDate());
+      whereConditions.push({ date_born: { _gte: maxDate.toISOString().split('T')[0] } });
+    }
+  }
+  
+  if (filter.weight) {
+    const opMap: { [key: string]: string } = { less: '_lt', greater: '_gt', equal: '_eq' };
+    const graphQLOp = opMap[filter.weight.operator];
+    whereConditions.push({ weight: { [graphQLOp]: filter.weight.value } });
+  }
 
   const whereClause = whereConditions.length > 0 ? { _and: whereConditions } : {};
+  
+  // Use limit 1 for exact ID search, otherwise 50
+  const searchLimit = filter.id ? 1 : 50;
 
   const { data, loading, refetch } = useQuery(SEARCH_PETS, {
     variables: {
       where: whereClause,
-      limit: 50,
+      limit: searchLimit,
     },
   });
 
