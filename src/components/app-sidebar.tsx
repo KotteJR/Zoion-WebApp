@@ -22,7 +22,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const navMain = [
     {
-      title: 'Home',
+      title: 'Hem',
       url: '/home',
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,7 +31,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       ),
     },
     {
-      title: 'Featured Pets',
+      title: 'Utvalda Hundar',
       url: '/featured',
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,7 +40,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       ),
     },
     {
-      title: 'Advanced Filters',
+      title: 'Avancerade Filter',
       url: '/advanced-filters',
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +53,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const navSecondary = [
     {
-      title: 'Settings',
+      title: 'Inställningar',
       url: '/settings',
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,8 +142,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </>
                   ) : (
                     <>
-                      <span className="truncate font-semibold">Log in</span>
-                      <span className="truncate text-xs">Sign in to your account</span>
+                      <span className="truncate font-semibold">Logga in</span>
+                      <span className="truncate text-xs">Logga in på ditt konto</span>
                     </>
                   )}
                 </div>
