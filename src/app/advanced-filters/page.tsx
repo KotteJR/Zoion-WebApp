@@ -138,6 +138,8 @@ function AdvancedFiltersContent() {
   };
 
   const handleSearch = async () => {
+    console.log('🔍 Search initiated with:', { id, petId, selectedBreeds, selectedSex });
+    
     const searchFilter = {
       breeds: selectedBreeds,
       sex: selectedSex,
@@ -162,10 +164,12 @@ function AdvancedFiltersContent() {
 
     // If searching by Pet ID, make it exact match and limit to 1 result
     if (id) {
+      console.log('✅ Using EXACT ID search for:', id);
       andConditions.push({ id: { _eq: id } });
       
       // Execute search with only ID filter for exact match
       try {
+        console.log('📡 GraphQL query:', { where: { _and: andConditions }, limit: 1 });
         const { data } = await searchPets({
           variables: {
             where: { _and: andConditions },
@@ -173,7 +177,9 @@ function AdvancedFiltersContent() {
           },
         });
 
+        console.log('📦 Received data:', data);
         if (data?.pets) {
+          console.log('✅ Found', data.pets.length, 'pet(s)');
           router.push('/advanced-filters/results');
         }
         return;
@@ -246,6 +252,7 @@ function AdvancedFiltersContent() {
     }
 
     if (petId) {
+      console.log('🔍 Using CONTAINS ID search for:', petId);
       andConditions.push({ id: { _ilike: `%${petId}%` } });
     }
 
@@ -272,6 +279,9 @@ function AdvancedFiltersContent() {
 
     const whereClause = andConditions.length > 0 ? { _and: andConditions } : {};
 
+    console.log('📡 Final GraphQL query:', { where: whereClause, limit: 50 });
+    console.log('📋 andConditions:', JSON.stringify(andConditions, null, 2));
+
     try {
       const { data } = await searchPets({
         variables: {
@@ -280,6 +290,7 @@ function AdvancedFiltersContent() {
         },
       });
 
+      console.log('📦 Received data:', data?.pets?.length, 'pets');
       if (data?.pets) {
         router.push('/advanced-filters/results');
       }
