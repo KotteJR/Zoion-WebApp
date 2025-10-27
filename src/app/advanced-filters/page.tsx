@@ -259,10 +259,12 @@ function AdvancedFiltersContent() {
     if (ageRange) {
       const currentDate = new Date();
       if (ageRange.max !== undefined) {
+        // Max age means older, so date_born should be LESS than (older than) this date
         const minDate = new Date(currentDate.getFullYear() - ageRange.max, currentDate.getMonth(), currentDate.getDate());
         andConditions.push({ date_born: { _lte: minDate.toISOString().split('T')[0] } });
       }
       if (ageRange.min !== undefined) {
+        // Min age means younger, so date_born should be GREATER than (more recent than) this date
         const maxDate = new Date(currentDate.getFullYear() - ageRange.min, currentDate.getMonth(), currentDate.getDate());
         andConditions.push({ date_born: { _gte: maxDate.toISOString().split('T')[0] } });
       }
