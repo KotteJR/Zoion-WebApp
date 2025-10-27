@@ -7,7 +7,7 @@ import { confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-function VerifyPageContent() {
+export default function VerifyPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
@@ -124,14 +124,6 @@ function VerifyPageContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function VerifyPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
-      <VerifyPageContent />
-    </Suspense>
   );
 }
 

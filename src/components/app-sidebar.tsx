@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useAuthStore } from '@/store/auth-store';
 import {
   Sidebar,
   SidebarContent,
@@ -17,6 +18,7 @@ import {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
+  const { isAuthenticated, user } = useAuthStore();
 
   const navMain = [
     {
@@ -60,15 +62,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </svg>
       ),
     },
-    {
-      title: 'Profile',
-      url: '/profile',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-      ),
-    },
   ];
 
   return (
@@ -82,19 +75,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 alt="Zoion" 
                 width={120} 
                 height={40}
-                className="h-5 px-2 w-auto"
+                className="h-6 w-auto"
               />
             </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="px-2">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
+            <SidebarMenu>
               {navMain.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="px-3" isActive={pathname.startsWith(item.url) || (item.url === '/home' && pathname === '/') }>
+                  <SidebarMenuButton asChild isActive={pathname.startsWith(item.url) || (item.url === '/home' && pathname === '/')}>
                     <Link href={item.url}>
                       {item.icon}
                       <span>{item.title}</span>
@@ -107,10 +100,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
         <SidebarGroup className="mt-auto">
           <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
+            <SidebarMenu>
               {navSecondary.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="px-3" isActive={pathname.startsWith(item.url)}>
+                  <SidebarMenuButton asChild isActive={pathname.startsWith(item.url)}>
                     <Link href={item.url}>
                       {item.icon}
                       <span>{item.title}</span>
@@ -122,17 +115,39 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="px-4 pb-2">
+      <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                <span className="text-sm font-semibold">Z</span>
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">Guest User</span>
-                <span className="truncate text-xs">guest@zoion.com</span>
-              </div>
+            <SidebarMenuButton asChild size="lg">
+              <Link href="/profile">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+                  {isAuthenticated && user ? (
+                    <span className="text-sm font-semibold">
+                      {user.firstName ? user.firstName.charAt(0).toUpperCase() : 'U'}
+                    </span>
+                  ) : (
+                    <span className="text-sm font-semibold">?</span>
+                  )}
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  {isAuthenticated && user ? (
+                    <>
+                      <span className="truncate font-semibold">
+                        {user.firstName && user.lastName 
+                          ? `${user.firstName} ${user.lastName}` 
+                          : user.email || 'User'
+                        }
+                      </span>
+                      <span className="truncate text-xs">{user.email || 'user@zoion.com'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="truncate font-semibold">Log in</span>
+                      <span className="truncate text-xs">Sign in to your account</span>
+                    </>
+                  )}
+                </div>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

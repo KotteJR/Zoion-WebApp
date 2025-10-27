@@ -1,53 +1,80 @@
 export interface Pet {
   id: string;
-  owner_id: string;
-  name: string;
-  breed: string;
-  date_born: string;
-  inbreed_rate: number;
-  sex: 'male' | 'female';
+  owner_id?: string;
+  name?: string;
+  breed?: string;
+  date_born?: string;
+  inbreed_rate?: string;
+  sex?: 'male' | 'female';
   last_period_date?: string;
-  kennel_name?: string;
-  colour?: string;
-  weight?: number;
-  vaccinated: boolean;
-  has_frozen_sperm: boolean;
-  ready_to_breed: boolean;
   next_breeding_date?: string;
-  pregnant: boolean;
+  kennel_name?: string;
+  weight?: number;
+  vaccinated?: boolean;
+  colour?: string;
+  has_frozen_sperm?: boolean;
+  ready_to_breed?: boolean;
+  pregnant?: boolean;
   pregnant_expecting_puppies_count?: number;
-  chip_id?: string;
-  owner?: {
-    id: string;
-    given_name: string;
-    family_name: string;
-    address?: string;
-    profile_picture?: string;
-  };
-  kennel?: {
-    id: string;
-    name: string;
-    address?: string;
-    post_number?: string;
-  };
-  favorites?: Array<{ id: string }>;
-  competitions_aggregate?: {
-    aggregate: {
-      count: number;
-    };
-  };
-  competitions?: Array<{
-    id: string;
-    name: string;
-    competition_date?: string;
-  }>;
-  medical_records_aggregate?: {
-    aggregate: {
-      count: number;
-    };
-  };
-  images_pets?: Array<{
-    id: string;
-    location: string;
-  }>;
+  chip_id?: number;
+  isFavorite?: boolean;
+  competitions_aggregate?: CompetitionsAggregate;
+  competitions?: Competition[];
+  images_pets?: DogImage[];
+  owner?: Owner;
+  kennel?: Breeder;
+  favorites?: { id: string }[];
 }
+
+export interface CompetitionsAggregate {
+  aggregate: {
+    count: number;
+  };
+}
+
+export interface Competition {
+  id: string;
+  name: string;
+  competitionDate?: string;
+}
+
+export interface Owner {
+  id?: string;
+  given_name?: string;
+  family_name?: string;
+  profile_picture?: string;
+  address?: string;
+}
+
+export interface DogImage {
+  id?: string;
+  dogImage?: string;
+  location?: string;
+}
+
+export interface Breeder {
+  id?: string;
+  name?: string;
+  address?: string;
+  post_number?: string;
+}
+
+export interface PetPedigree {
+  id: string;
+  name: string;
+  breed?: string;
+  sex?: string;
+  profilePicture?: string;
+  father?: PetPedigree;
+  mother?: PetPedigree;
+}
+
+export interface PetTrophy {
+  id: string;
+  name: string;
+  competitionDate?: string;
+  location?: string;
+  placement?: string;
+}
+
+

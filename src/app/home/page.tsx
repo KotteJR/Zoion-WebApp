@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { AppSidebar } from '@/components/app-sidebar';
@@ -230,8 +230,7 @@ export default function HomePage() {
   };
 
   // Restore once on mount
-  // Restore synchronously before paint to avoid brief empty UI
-  useLayoutEffect(() => {
+  useEffect(() => {
     try {
       const saved = typeof window !== 'undefined' ? sessionStorage.getItem('aiChatConversation') : null;
       if (saved) {
@@ -257,16 +256,6 @@ export default function HomePage() {
       sessionStorage.setItem('aiChatConversation', JSON.stringify(conversation));
     } catch {}
   }, [conversation]);
-
-  // Persist on unmount/navigation too
-  useEffect(() => {
-    return () => {
-      try {
-        sessionStorage.setItem('aiChatConversation', JSON.stringify(conversation));
-        sessionStorage.setItem('aiChatInput', searchQuery);
-      } catch {}
-    };
-  }, [conversation, searchQuery]);
 
   useEffect(() => {
     try {

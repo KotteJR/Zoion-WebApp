@@ -2,16 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Slightly darker sidebar/background */
 :root {
-  /* Darken sidebar and app background a touch */
-  --sidebar: 245 245 247; /* rgb(245,245,247) */
-  --background: 247 247 249; /* slightly darker than white */
-}
-
-[data-theme="light"] {
-  --sidebar: 242 242 245;
-  --background: 246 246 248;
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
 }
 
 * {

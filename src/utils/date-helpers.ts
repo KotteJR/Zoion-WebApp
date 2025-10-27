@@ -1,70 +1,54 @@
-export const getAgeString = (birthDate: string | null | undefined): string => {
-  if (!birthDate) return 'Unknown age';
-  
-  const birth = new Date(birthDate);
+export const calculateAge = (dateBorn: string): number => {
+  const birthDate = new Date(dateBorn);
   const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
   
-  const ageInYears = today.getFullYear() - birth.getFullYear();
-  const monthDiff = today.getMonth() - birth.getMonth();
-  
-  let age = ageInYears;
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-    age = ageInYears - 1;
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
   }
   
-  if (age === 0) {
-    const ageInMonths = today.getMonth() - birth.getMonth() + (12 * (today.getFullYear() - birth.getFullYear()));
-    return ageInMonths <= 1 ? 'Less than 1 month' : `${ageInMonths} months`;
-  }
-  
-  return age === 1 ? '1 year' : `${age} years`;
+  return age;
 };
 
-export const formatDateShort = (dateString: string | null | undefined): string => {
-  if (!dateString) return 'N/A';
-  
-  try {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  } catch (error) {
-    return 'Invalid date';
-  }
+export const calculateAgeInMonths = (dateBorn: string): number => {
+  const birthDate = new Date(dateBorn);
+  const today = new Date();
+  const months = (today.getFullYear() - birthDate.getFullYear()) * 12 + 
+                 (today.getMonth() - birthDate.getMonth());
+  return months;
 };
 
-export const formatDateLong = (dateString: string | null | undefined): string => {
-  if (!dateString) return 'N/A';
-  
-  try {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  } catch (error) {
-    return 'Invalid date';
-  }
-};
-
-export const isDateInPast = (dateString: string): boolean => {
+export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
-  const today = new Date();
-  return date < today;
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 };
 
-export const isDateInFuture = (dateString: string): boolean => {
+export const formatDateShort = (dateString: string): string => {
   const date = new Date(dateString);
-  const today = new Date();
-  return date > today;
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
 };
 
-export const getDaysUntilDate = (dateString: string): number => {
-  const date = new Date(dateString);
-  const today = new Date();
-  const diffTime = date.getTime() - today.getTime();
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+export const getAgeString = (dateBorn: string): string => {
+  const months = calculateAgeInMonths(dateBorn);
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+  
+  if (years === 0) {
+    return `${remainingMonths} month${remainingMonths !== 1 ? 's' : ''}`;
+  } else if (remainingMonths === 0) {
+    return `${years} year${years !== 1 ? 's' : ''}`;
+  } else {
+    return `${years} year${years !== 1 ? 's' : ''}, ${remainingMonths} month${remainingMonths !== 1 ? 's' : ''}`;
+  }
 };
+
+

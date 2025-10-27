@@ -1,22 +1,25 @@
 import { create } from 'zustand';
 import { SearchFilter } from '@/types/search';
 
-interface SearchStore {
+interface SearchState {
   filter: SearchFilter;
   setFilter: (filter: SearchFilter) => void;
-  clearFilter: () => void;
+  resetFilter: () => void;
 }
 
 const defaultFilter: SearchFilter = {
   breeds: [],
   sex: null,
   readyToBreed: false,
-  pregnant: false,
   hasFrozenSperm: false,
+  pregnant: false,
+  vaccinated: false,
 };
 
-export const useSearchStore = create<SearchStore>((set) => ({
+export const useSearchStore = create<SearchState>((set) => ({
   filter: defaultFilter,
   setFilter: (filter) => set({ filter }),
-  clearFilter: () => set({ filter: defaultFilter }),
+  resetFilter: () => set({ filter: defaultFilter }),
 }));
+
+

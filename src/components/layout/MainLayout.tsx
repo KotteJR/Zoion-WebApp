@@ -2,7 +2,6 @@
 
 // Legacy layout kept for pages not yet migrated to the new shell
 import TopNavBar from './TopNavBar';
-import BottomNavBar from './BottomNavBar';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -38,7 +37,7 @@ export default function MainLayout({
           <img src="/assets/images/svg/gradientLine.svg" alt="" className="w-full h-[2px]" />
         </div>
       )}
-      {showBottomNav && <BottomNavBar />}
+      {/* BottomNavBar removed - not needed in web version */}
     </div>
   );
 }

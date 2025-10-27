@@ -35,15 +35,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Flutter/Dart (legacy)
-lib/
-android/
-ios/
-test/
-pubspec.yaml
-pubspec.lock
-analysis_options.yaml
-devtools_options.yaml
-bitbucket-pipelines.yml
-l10n.yaml
-README.md.old
+# Legacy mobile files (removed)

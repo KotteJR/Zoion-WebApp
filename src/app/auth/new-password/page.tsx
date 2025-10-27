@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { confirmResetPassword } from 'aws-amplify/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-function NewPasswordPageContent() {
+export default function NewPasswordPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
@@ -126,14 +126,6 @@ function NewPasswordPageContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function NewPasswordPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
-      <NewPasswordPageContent />
-    </Suspense>
   );
 }
 

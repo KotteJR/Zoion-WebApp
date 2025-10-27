@@ -195,4 +195,3 @@ For support or inquiries, please reach out to the Zoion team.
 ---
 
 **Note**: This project was migrated from a Flutter mobile application to a Next.js web platform, maintaining all core functionality while optimizing for web browsers and responsive design.
-# zoionwebapptest
