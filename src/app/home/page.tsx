@@ -537,11 +537,11 @@ export default function HomePage() {
   };
 
   const exampleQueries = [
-    "Show me all dogs",
-    "Show all breeds",
-    "Female dogs",
-    "Male dogs", 
-    "Ready to breed",
+    "Visa alla hundar",
+    "Visa alla raser",
+    "Tikar",
+    "Hanar", 
+    "Redo att para",
     "Golden retrievers"
   ];
 
@@ -555,15 +555,15 @@ export default function HomePage() {
               // Initial state - ChatGPT-like interface
               <div className="flex flex-col items-center justify-center flex-1 text-center">
                 <div className="mb-8">
-                  <h2 className="text-3xl font-semibold text-gray-900 mb-2">What can I help you find?</h2>
-                  <p className="text-gray-600">Describe the perfect pet you're looking for</p>
+                  <h2 className="text-3xl font-semibold text-gray-900 mb-2">Vad kan jag hjälpa dig hitta?</h2>
+                  <p className="text-gray-600">Beskriv den perfekta hunden du letar efter</p>
                 </div>
 
                 {/* Search Input */}
                 <div className="w-full max-w-2xl mb-8">
                   <div className="relative">
                     <Input
-                      placeholder="Ask anything"
+                      placeholder="Fråga vad som helst"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={handleKeyPress}
@@ -586,7 +586,7 @@ export default function HomePage() {
 
                 {/* Example Queries */}
                 <div className="w-full max-w-4xl">
-                  <p className="text-sm text-gray-500 mb-4">Try these examples:</p>
+                  <p className="text-sm text-gray-500 mb-4">Prova dessa exempel:</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {exampleQueries.map((example, index) => (
                       <button
@@ -634,7 +634,7 @@ export default function HomePage() {
                                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                       </svg>
-                                      See More Results
+                                      Visa fler resultat
                                     </Button>
                                   </div>
                                 )}
@@ -652,7 +652,7 @@ export default function HomePage() {
                         <div className="bg-gray-100 p-4 rounded-2xl rounded-bl-md">
                           <div className="flex items-center gap-3">
                             <div className="w-4 h-4 border-2 border-[#3d7c6f] border-t-transparent rounded-full animate-spin" />
-                            <p className="text-gray-600">Searching for pets...</p>
+                            <p className="text-gray-600">Söker efter hundar...</p>
                           </div>
                         </div>
                       </div>
@@ -666,7 +666,7 @@ export default function HomePage() {
                 <div className="sticky bottom-0 bg-white pt-4">
                   <div className="relative">
                     <Input
-                      placeholder="Ask anything"
+                      placeholder="Fråga vad som helst"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={handleKeyPress}
