@@ -44,6 +44,20 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
     
     try {
       const parsed = JSON.parse(familyTreeData);
+      console.log('Parsed family tree:', parsed, 'Type:', typeof parsed, 'Is Array:', Array.isArray(parsed));
+      
+      // Handle if data is an array of objects - merge into single object
+      if (Array.isArray(parsed)) {
+        const merged: FamilyTreeData = {};
+        parsed.forEach(obj => {
+          if (obj && typeof obj === 'object') {
+            Object.assign(merged, obj);
+          }
+        });
+        console.log('Merged family tree data:', merged);
+        return merged;
+      }
+      
       return parsed as FamilyTreeData;
     } catch (error) {
       console.error('Error parsing family tree data:', error);
@@ -52,14 +66,21 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
   }, [familyTreeData]);
 
   const treeNodes = useMemo(() => {
-    if (!parsedData || typeof parsedData !== 'object') return [];
+    if (!parsedData || typeof parsedData !== 'object') {
+      console.log('❌ No parsedData or not an object');
+      return [];
+    }
 
     const nodes: TreeNode[] = [];
     const nodeMap = new Map<string, TreeNode>();
 
+    console.log('📊 Processing family tree data. Keys:', Object.keys(parsedData));
+
     // Create nodes for each generation
     Object.entries(parsedData).forEach(([gen, members]) => {
       const generation = parseInt(gen);
+      console.log(`Generation ${gen}:`, members, 'Type:', typeof members, 'Is Array:', Array.isArray(members));
+      
       if (Array.isArray(members)) {
         members.forEach((member, index) => {
           if (member && typeof member === 'object' && member.name && member.name !== 'ingen uppgift') {
@@ -76,11 +97,13 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
             };
             nodes.push(node);
             nodeMap.set(nodeId, node);
+            console.log(`✅ Created node: ${member.name} (${member.code})`);
           }
         });
       }
     });
 
+    console.log(`📦 Total nodes created: ${nodes.length}`);
     // Sort by generation (ascending for proper tree structure)
     return nodes.sort((a, b) => a.generation - b.generation);
   }, [parsedData]);
