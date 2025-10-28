@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useQuery, useMutation } from '@apollo/client';
 import { Button } from '@/components/ui/button';
@@ -11,8 +11,9 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { GET_PET_DETAILS } from '@/lib/graphql/queries';
 import { CALCULATE_INBREEDING_COEFFICIENT } from '@/lib/graphql/mutations';
 import { Pet } from '@/types/pet';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
-export default function ProvparningPage() {
+function ProvparningContent() {
   const searchParams = useSearchParams();
   const [pet1Id, setPet1Id] = useState('');
   const [pet2Id, setPet2Id] = useState('');
@@ -366,5 +367,24 @@ export default function ProvparningPage() {
         </div>
       </SidebarInset>
     </SidebarProvider>
+  );
+}
+
+export default function ProvparningPage() {
+  return (
+    <Suspense fallback={
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6">
+              <LoadingSpinner />
+            </div>
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
+    }>
+      <ProvparningContent />
+    </Suspense>
   );
 }
