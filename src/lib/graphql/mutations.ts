@@ -141,4 +141,13 @@ export const DELETE_PET_IMAGE = gql`
   }
 `;
 
+export const CALCULATE_INBREEDING_COEFFICIENT = gql`
+  mutation CalculateInbreedingCoefficient($myPet: String!, $targetPet: String!) {
+    calculateInbreedingCoefficient(my_pet: $myPet, target_pet: $targetPet) {
+      coefficient
+      percentage
+    }
+  }
+`;
+
 

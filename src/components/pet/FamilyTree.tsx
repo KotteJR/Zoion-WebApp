@@ -1,13 +1,17 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useLazyQuery } from '@apollo/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { GET_PET_DETAILS } from '@/lib/graphql/queries';
 
 interface FamilyMember {
   name: string;
   code: string;
+  id?: string; // Optional ID for dogs in database
 }
 
 interface FamilyTreeData {
@@ -22,6 +26,20 @@ interface FamilyTreeProps {
 
 export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTreeProps) {
   const [showFullTree, setShowFullTree] = useState(false);
+  const [existingDogs, setExistingDogs] = useState<Set<string>>(new Set());
+  const router = useRouter();
+  
+  const [checkPetExists] = useLazyQuery(GET_PET_DETAILS, {
+    onCompleted: (data) => {
+      if (data?.pets?.length > 0) {
+        const petId = data.pets[0].id;
+        setExistingDogs(prev => new Set([...prev, petId]));
+      }
+    },
+    onError: () => {
+      // Pet doesn't exist, don't add to existingDogs
+    }
+  });
 
   const parsedData = useMemo(() => {
     if (!familyTreeData) return null;
@@ -47,6 +65,21 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
     }
   }, [familyTreeData]);
 
+  // Check which dogs exist in the database
+  useEffect(() => {
+    if (!parsedData) return;
+    
+    const allMembers = Object.values(parsedData).flat();
+    const membersWithCodes = allMembers.filter(member => member.code && member.name !== 'ingen uppgift');
+    
+    // Check each member to see if they exist in the database
+    membersWithCodes.forEach(member => {
+      if (!existingDogs.has(member.code)) {
+        checkPetExists({ variables: { petId: member.code } });
+      }
+    });
+  }, [parsedData, checkPetExists, existingDogs]);
+
   // Sort generations from closest to furthest (32 -> 16 -> 8 -> 4 -> 2 -> 1)
   const sortedGenerations = useMemo(() => {
     if (!parsedData) return [];
@@ -63,6 +96,12 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
     if (showFullTree) return sortedGenerations;
     return sortedGenerations.slice(0, 4); // Show first 4 generations
   }, [sortedGenerations, showFullTree]);
+
+  const handleDogClick = (member: FamilyMember) => {
+    if (member.code && existingDogs.has(member.code)) {
+      router.push(`/pet/${encodeURIComponent(member.code)}`);
+    }
+  };
 
   const getGenerationLabel = (generation: number) => {
     switch (generation) {
@@ -169,8 +208,26 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
                       key={`${generation}-${memberIndex}`}
                       className="relative group"
                     >
-                      <div className="p-3 bg-white border border-gray-200 rounded-lg hover:border-[#3d7c6f] hover:shadow-md transition-all text-center">
-                        <div className="w-10 h-10 mx-auto mb-2 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 font-semibold">
+                      <div 
+                        className={`p-3 bg-white border border-gray-200 rounded-lg transition-all text-center ${
+                          member.code && existingDogs.has(member.code)
+                            ? 'hover:border-[#3d7c6f] hover:shadow-md cursor-pointer hover:bg-green-50' 
+                            : 'opacity-75'
+                        }`}
+                        onClick={() => handleDogClick(member)}
+                        title={
+                          member.code && existingDogs.has(member.code)
+                            ? `Click to view ${member.name}'s profile`
+                            : member.code 
+                              ? `${member.name} - Not in database`
+                              : `${member.name} - No ID available`
+                        }
+                      >
+                        <div className={`w-10 h-10 mx-auto mb-2 rounded-full flex items-center justify-center font-semibold ${
+                          member.code && existingDogs.has(member.code)
+                            ? 'bg-[#3d7c6f] text-white' 
+                            : 'bg-gray-100 text-gray-600'
+                        }`}>
                           {member.name.split(' ')[0][0]}
                         </div>
                         <div className="font-medium text-xs text-gray-900 truncate" title={member.name}>
@@ -179,6 +236,11 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
                         {member.code && (
                           <div className="text-xs text-gray-500 mt-1">
                             {member.code}
+                          </div>
+                        )}
+                        {member.code && existingDogs.has(member.code) && (
+                          <div className="text-xs text-[#3d7c6f] mt-1 font-medium">
+                            View Profile
                           </div>
                         )}
                       </div>

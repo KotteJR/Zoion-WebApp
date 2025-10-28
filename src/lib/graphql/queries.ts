@@ -330,11 +330,22 @@ export const GET_PET_DETAILS = gql`
         id
         name
         competition_date
+        location
+        organization
+        type
+        value
+        meaning
       }
       medical_records_aggregate {
         aggregate {
           count
         }
+      }
+      medical_records(order_by: { date: desc_nulls_last }) {
+        id
+        date
+        veterinary
+        diagnose
       }
       images_pets(order_by: { profile_picture: desc_nulls_last }) {
         id

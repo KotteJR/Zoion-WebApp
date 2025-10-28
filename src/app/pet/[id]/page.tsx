@@ -9,11 +9,13 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { GET_PET_DETAILS } from '@/lib/graphql/queries';
 import { getPetProfileImage, getPetTags } from '@/utils/pet-helpers';
 import { getAgeString, formatDateShort } from '@/utils/date-helpers';
 import FamilyTree from '@/components/pet/FamilyTree';
+import { Trophy, Stethoscope } from 'lucide-react';
 
 export default function PetProfilePage() {
   const params = useParams();
@@ -109,12 +111,15 @@ export default function PetProfilePage() {
               <div>
                 <Card className="overflow-hidden h-full flex flex-col">
                   <CardHeader className="p-0 flex-1">
-                    <div className="relative h-full">
+                    {/* Keep a stable aspect to avoid odd crops and ensure full fit */}
+                    <div className="relative h-full min-h-[260px] md:min-h-[360px] lg:min-h-[420px] bg-white">
                       <Image
                         src={currentImage}
                         alt={pet.name}
                         fill
-                        className="object-cover object-top"
+                        className="object-contain object-center bg-white"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        priority
                         unoptimized
                       />
                       {/* Gender Badge */}
@@ -156,13 +161,12 @@ export default function PetProfilePage() {
                     <div className="flex items-start justify-between mb-6">
                       <div>
                         <h1 className="text-3xl font-bold text-gray-900 mb-1">{pet.name}</h1>
-                        <p className="text-xl text-muted-foreground">{pet.breed}</p>
+                        <p className="text-xl text-muted-foreground mb-1">{pet.breed}</p>
+                        <p className="text-sm text-gray-600 font-mono">{pet.id}</p>
                       </div>
                       {pet.competitions_aggregate?.aggregate.count > 0 && (
                         <div className="flex items-center gap-2 bg-yellow-100 border border-yellow-300 px-3 py-2 rounded-full">
-                          <svg className="w-4 h-4 text-yellow-800" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
+                          <Trophy className="w-4 h-4 text-yellow-800" />
                           <span className="text-sm font-medium text-yellow-800">
                             {pet.competitions_aggregate.aggregate.count}
                           </span>
@@ -239,13 +243,103 @@ export default function PetProfilePage() {
                     </div>
 
                     {/* Action Buttons */}
-                    {pet.competitions_aggregate?.aggregate.count > 0 && (
-                      <div className="flex gap-3 pt-4 border-t">
-                        <Button onClick={() => router.push(`/pet/${encodeURIComponent(petId)}/trophies`)} variant="outline" className="flex-1">
-                          Trophies
-                        </Button>
+                    <div className="flex flex-col gap-3 pt-4 border-t">
+                      <div className="flex gap-3">
+                        {pet.competitions_aggregate?.aggregate.count > 0 && (
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" className="flex-1">
+                                <Trophy className="w-4 h-4 mr-2" />
+                                Trophies ({pet.competitions_aggregate.aggregate.count})
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle className="flex items-center gap-2 text-xl font-semibold">
+                                  <Trophy className="w-5 h-5 text-yellow-600" />
+                                  {pet.name}'s Trophies
+                                </DialogTitle>
+                              </DialogHeader>
+                              <div className="space-y-3">
+                                {pet.competitions?.map((competition: any) => (
+                                  <div key={competition.id} className="p-4 border rounded-lg bg-gray-50">
+                                    <div className="flex justify-between items-start mb-2">
+                                      <h3 className="font-semibold text-lg">{competition.name}</h3>
+                                      <span className="text-sm text-gray-600">{formatDateShort(competition.competition_date)}</span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2 text-sm">
+                                      {competition.location && (
+                                        <div><strong>Location:</strong> {competition.location}</div>
+                                      )}
+                                      {competition.organization && (
+                                        <div><strong>Organization:</strong> {competition.organization}</div>
+                                      )}
+                                      {competition.type && (
+                                        <div><strong>Type:</strong> {competition.type}</div>
+                                      )}
+                                      {competition.value && (
+                                        <div><strong>Value:</strong> {competition.value}</div>
+                                      )}
+                                    </div>
+                                    {competition.meaning && (
+                                      <div className="mt-2 rounded-md bg-green-50 border border-green-200 p-2 text-sm text-green-800">
+                                        <strong>Result:</strong> {competition.meaning}
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        )}
+                        
+                        {pet.medical_records_aggregate?.aggregate.count > 0 && (
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" className="flex-1">
+                                <Stethoscope className="w-4 h-4 mr-2" />
+                                Medical Records ({pet.medical_records_aggregate.aggregate.count})
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle className="flex items-center gap-2 text-xl font-semibold">
+                                  <Stethoscope className="w-5 h-5 text-blue-700" />
+                                  {pet.name}'s Medical Records
+                                </DialogTitle>
+                              </DialogHeader>
+                              <div className="grid grid-cols-1 gap-4">
+                                {pet.medical_records?.map((record: any) => (
+                                  <div key={record.id} className="rounded-xl border border-blue-200 bg-white p-4 shadow-sm">
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                      <h3 className="text-base font-semibold text-gray-900">{record.diagnose}</h3>
+                                      <span className="text-xs rounded-full bg-blue-50 px-2 py-1 font-medium text-blue-700 border border-blue-200">
+                                        {formatDateShort(record.date)}
+                                      </span>
+                                    </div>
+                                    <div className="mt-3 text-sm text-gray-700">
+                                      <div className="inline-flex items-center gap-2 rounded-md bg-gray-50 px-2 py-1">
+                                        <span className="text-gray-500">Veterinary:</span> {record.veterinary}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        )}
                       </div>
-                    )}
+                      
+                      <Button
+                        onClick={() => router.push(`/provparning?target=${encodeURIComponent(petId)}`)}
+                        className="bg-[#3d7c6f] hover:bg-[#2f6a5e] text-white flex items-center gap-2 flex-1"
+                      >
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                        Provparning
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
 

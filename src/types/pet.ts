@@ -24,6 +24,7 @@ export interface Pet {
   owner?: Owner;
   kennel?: Breeder;
   favorites?: { id: string }[];
+  family_tree?: string | null;
 }
 
 export interface CompetitionsAggregate {
