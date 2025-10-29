@@ -14,6 +14,7 @@ import { SEARCH_PETS, SEARCH_KENNELS } from '@/lib/graphql/queries';
 import { Pet } from '@/types/pet';
 import { Send } from 'lucide-react';
 import KennelCard from '@/components/kennel/KennelCard';
+import KennelMap from '@/components/maps/KennelMap';
 
 interface ConversationMessage {
   id: string;
@@ -21,6 +22,7 @@ interface ConversationMessage {
   content: string;
   pets?: Pet[];
   kennels?: any[];
+  kennelCoords?: { id: string; latitude: number; longitude: number; name?: string }[];
   filters?: ParsedFilters;
   timestamp: Date;
 }
@@ -355,6 +357,30 @@ export default function HomePage() {
           kennels = data?.kennels || [];
         }
 
+        // Geocode addresses (best-effort, parallel)
+        const toGeocode = kennels
+          .map(k => ({ id: k.id, name: k.name, address: `${k.address || ''} ${k.post_number || ''} Sweden`.trim() }))
+          .filter(k => k.address);
+
+        const results = await Promise.allSettled(
+          toGeocode.map(async k => {
+            const res = await fetch('/api/geocode', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ address: k.address }),
+            });
+            const json = await res.json();
+            if (json?.latitude && json?.longitude) {
+              return { id: k.id, name: k.name, latitude: json.latitude, longitude: json.longitude };
+            }
+            return null;
+          })
+        );
+
+        const kennelCoords = results
+          .map(r => (r.status === 'fulfilled' ? r.value : null))
+          .filter(Boolean) as { id: string; latitude: number; longitude: number; name?: string }[];
+
         const assistantMessage: ConversationMessage = {
           id: (Date.now() + 1).toString(),
           type: 'assistant',
@@ -363,6 +389,7 @@ export default function HomePage() {
               ? `Hittade ${kennels.length} kennlar som matchar din förfrågan:`
               : 'Inga kennlar hittades för din förfrågan.',
           kennels,
+          kennelCoords,
           filters,
           timestamp: new Date(),
         };
@@ -745,6 +772,9 @@ export default function HomePage() {
                             <div className="bg-gray-100 p-3 rounded-xl rounded-bl-md">
                               <p className="text-gray-800">{message.content}</p>
                             </div>
+                            {message.kennelCoords && message.kennelCoords.length > 0 && (
+                              <KennelMap points={message.kennelCoords} />
+                            )}
                             {message.pets && message.pets.length > 0 && (
                               <div className="space-y-4">
                                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">

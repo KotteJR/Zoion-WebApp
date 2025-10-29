@@ -9,6 +9,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { GET_KENNEL_DETAILS } from '@/lib/graphql/queries';
 import PetCard from '@/components/pet/PetCard';
+import KennelMap from '@/components/maps/KennelMap';
+import { useEffect, useState } from 'react';
 
 export default function KennelPage() {
   const params = useParams();
@@ -21,6 +23,23 @@ export default function KennelPage() {
 
   const kennel = data?.kennels?.[0];
   const pets = data?.pets || [];
+  const [coords, setCoords] = useState<{ latitude: number; longitude: number } | null>(null);
+
+  useEffect(() => {
+    const geocode = async () => {
+      if (!kennel?.address) return;
+      try {
+        const res = await fetch('/api/geocode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address: `${kennel.address} ${kennel.post_number || ''} Sweden` }),
+        });
+        const json = await res.json();
+        if (json?.latitude && json?.longitude) setCoords({ latitude: json.latitude, longitude: json.longitude });
+      } catch {}
+    };
+    geocode();
+  }, [kennel?.address, kennel?.post_number]);
 
   return (
     <SidebarProvider>
@@ -56,6 +75,11 @@ export default function KennelPage() {
                         </div>
                       </div>
                     </div>
+                    {coords && (
+                      <div className="mt-4">
+                        <KennelMap points={[{ id: kennel.id, latitude: coords.latitude, longitude: coords.longitude, name: kennel.name }]} height={260} />
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
