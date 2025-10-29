@@ -533,8 +533,8 @@ export const SEARCH_KENNELS = gql`
 
 // Kennel details with dogs
 export const GET_KENNEL_DETAILS = gql`
-  query GetKennelDetails($kennelId: String!, $limit: Int = 50) {
-    kennels(where: { id: { _eq: $kennelId } }, limit: 1) {
+  query GetKennelDetails($id: uuid!, $limit: Int = 50) {
+    kennels(where: { id: { _eq: $id } }, limit: 1) {
       id
       name
       address
@@ -543,7 +543,7 @@ export const GET_KENNEL_DETAILS = gql`
       website
       email
     }
-    pets(where: { kennel_id: { _eq: $kennelId } }, limit: $limit, order_by: { created_at: desc }) {
+    pets(where: { kennel_id: { _eq: $id } }, limit: $limit, order_by: { created_at: desc }) {
       id
       name
       breed

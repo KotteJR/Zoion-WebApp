@@ -13,10 +13,10 @@ import PetCard from '@/components/pet/PetCard';
 export default function KennelPage() {
   const params = useParams();
   const router = useRouter();
-  const kennelId = decodeURIComponent(params.id as string);
+  const id = decodeURIComponent(params.id as string);
 
   const { data, loading, error, refetch } = useQuery(GET_KENNEL_DETAILS, {
-    variables: { kennelId },
+    variables: { id },
   });
 
   const kennel = data?.kennels?.[0];
