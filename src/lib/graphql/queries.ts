@@ -71,6 +71,10 @@ export const READY_TO_BREED_FEED = gql`
         id
         name
         address
+        post_number
+        phone_number
+        website
+        email
       }
       competitions_aggregate {
         aggregate {
@@ -294,6 +298,7 @@ export const GET_PET_DETAILS = gql`
     pets(where: { id: { _eq: $petId } }, limit: 1) {
       id
       owner_id
+      kennel_id
       name
       breed
       date_born
@@ -474,6 +479,9 @@ export const SEARCH_PETS = gql`
         name
         address
         post_number
+        phone_number
+        website
+        email
       }
       favorites {
         id
@@ -504,6 +512,45 @@ export const GET_PET_TROPHIES = gql`
       competition_date
       location
       placement
+    }
+  }
+`;
+
+// Kennel listing/search
+export const SEARCH_KENNELS = gql`
+  query SearchKennels($where: kennel_bool_exp, $limit: Int = 50) {
+    kennel(limit: $limit, order_by: { name: asc }, where: $where) {
+      id
+      name
+      address
+      post_number
+      phone_number
+      website
+      email
+    }
+  }
+`;
+
+// Kennel details with dogs
+export const GET_KENNEL_DETAILS = gql`
+  query GetKennelDetails($kennelId: String!, $limit: Int = 50) {
+    kennel_by_pk(id: $kennelId) {
+      id
+      name
+      address
+      post_number
+      phone_number
+      website
+      email
+    }
+    pets(where: { kennel_id: { _eq: $kennelId } }, limit: $limit, order_by: { created_at: desc }) {
+      id
+      name
+      breed
+      sex
+      inbreed_rate
+      colour
+      images_pets(order_by: { profile_picture: desc_nulls_last }, limit: 1) { id location }
     }
   }
 `;

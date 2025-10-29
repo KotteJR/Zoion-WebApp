@@ -85,6 +85,8 @@ export default function PetProfilePage() {
   const tags = getPetTags(pet);
   const ageString = pet.date_born ? getAgeString(pet.date_born) : 'Age unknown';
 
+  const kennel = pet.kennel;
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -342,6 +344,50 @@ export default function PetProfilePage() {
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* Kennel Info Card */}
+                {kennel && (
+                  <Card>
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-lg font-semibold text-gray-900">Kennel</h3>
+                        <Button variant="outline" onClick={() => router.push(`/kennel/${kennel.id}`)}>
+                          Visa kennel
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Namn:</span> {kennel.name}
+                        </div>
+                        {kennel.address && (
+                          <div>
+                            <span className="text-muted-foreground">Adress:</span> {kennel.address}
+                          </div>
+                        )}
+                        {kennel.post_number && (
+                          <div>
+                            <span className="text-muted-foreground">Postnummer:</span> {kennel.post_number}
+                          </div>
+                        )}
+                        {kennel.phone_number && (
+                          <div>
+                            <span className="text-muted-foreground">Telefon:</span> {kennel.phone_number}
+                          </div>
+                        )}
+                        {kennel.email && (
+                          <div>
+                            <span className="text-muted-foreground">E‑post:</span> {kennel.email}
+                          </div>
+                        )}
+                        {kennel.website && (
+                          <div>
+                            <span className="text-muted-foreground">Webb:</span> {kennel.website}
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
 
                 {/* Owner Info Card */}
                 {pet.owner && (
