@@ -19,7 +19,7 @@ export default function KennelPage() {
     variables: { kennelId },
   });
 
-  const kennel = data?.kennel?.[0];
+  const kennel = data?.kennels?.[0];
   const pets = data?.pets || [];
 
   return (

@@ -518,8 +518,8 @@ export const GET_PET_TROPHIES = gql`
 
 // Kennel listing/search
 export const SEARCH_KENNELS = gql`
-  query SearchKennels($where: kennel_bool_exp, $limit: Int = 50) {
-    kennel(limit: $limit, order_by: { name: asc }, where: $where) {
+  query SearchKennels($where: kennels_bool_exp, $limit: Int = 50) {
+    kennels(limit: $limit, order_by: { name: asc }, where: $where) {
       id
       name
       address
@@ -534,7 +534,7 @@ export const SEARCH_KENNELS = gql`
 // Kennel details with dogs
 export const GET_KENNEL_DETAILS = gql`
   query GetKennelDetails($kennelId: String!, $limit: Int = 50) {
-    kennel(where: { id: { _eq: $kennelId } }, limit: 1) {
+    kennels(where: { id: { _eq: $kennelId } }, limit: 1) {
       id
       name
       address

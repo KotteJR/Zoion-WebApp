@@ -352,7 +352,7 @@ export default function HomePage() {
           const { data } = await searchKennels({
             variables: { where: and.length > 0 ? { _and: and } : {}, limit: 12 },
           });
-          kennels = data?.kennel || [];
+          kennels = data?.kennels || [];
         }
 
         const assistantMessage: ConversationMessage = {
