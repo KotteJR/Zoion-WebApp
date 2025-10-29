@@ -10,15 +10,17 @@ import Input from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import PetCard from '@/components/pet/PetCard';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { SEARCH_PETS } from '@/lib/graphql/queries';
+import { SEARCH_PETS, SEARCH_KENNELS } from '@/lib/graphql/queries';
 import { Pet } from '@/types/pet';
 import { Send } from 'lucide-react';
+import KennelCard from '@/components/kennel/KennelCard';
 
 interface ConversationMessage {
   id: string;
   type: 'user' | 'assistant';
   content: string;
   pets?: Pet[];
+  kennels?: any[];
   filters?: ParsedFilters;
   timestamp: Date;
 }
@@ -232,6 +234,7 @@ export default function HomePage() {
   const hasRestored = useRef(false);
 
   const [searchPets, { loading: searchLoading }] = useLazyQuery(SEARCH_PETS);
+  const [searchKennels] = useLazyQuery(SEARCH_KENNELS);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -311,6 +314,62 @@ export default function HomePage() {
       }
       console.log('Parsed filters:', filters);
       
+      // Detect kennel intent
+      const qLower = currentQuery.toLowerCase();
+      const isKennelIntent = qLower.includes('kennel') || qLower.includes('kennels');
+
+      // If the user asked for kennels, handle that separately
+      if (isKennelIntent) {
+        let kennels: any[] = [];
+
+        // If breed mentioned, get kennels from pet results filtered by breed
+        if (filters.breeds && filters.breeds.length > 0) {
+          const breedOr: any[] = [];
+          for (const b of filters.breeds) {
+            const variants = generateBreedVariants(b);
+            for (const v of variants) breedOr.push({ breed: { _ilike: `%${v}%` } });
+          }
+          const { data } = await searchPets({
+            variables: {
+              where: { _or: breedOr },
+              limit: 100,
+            },
+          });
+          const pets: Pet[] = data?.pets || [];
+          const unique = new Map<string, any>();
+          for (const p of pets) {
+            const k = (p as any).kennel;
+            if (k && k.id && !unique.has(k.id)) unique.set(k.id, k);
+          }
+          kennels = Array.from(unique.values()).slice(0, 12);
+        } else {
+          // Otherwise use kennel name / city detection
+          const and: any[] = [];
+          if (filters.kennelName) and.push({ name: { _ilike: `%${filters.kennelName}%` } });
+          const cityMatch = currentQuery.match(/\b(?:in|i)\s+([A-Za-zÅÄÖåäö\-\s]+)/i);
+          if (cityMatch) and.push({ address: { _ilike: `%${cityMatch[1].trim()}%` } });
+
+          const { data } = await searchKennels({
+            variables: { where: and.length > 0 ? { _and: and } : {}, limit: 12 },
+          });
+          kennels = data?.kennel || [];
+        }
+
+        const assistantMessage: ConversationMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content:
+            kennels.length > 0
+              ? `Hittade ${kennels.length} kennlar som matchar din förfrågan:`
+              : 'Inga kennlar hittades för din förfrågan.',
+          kennels,
+          filters,
+          timestamp: new Date(),
+        };
+        setConversation(prev => [...prev, assistantMessage]);
+        return;
+      }
+
       // Convert filters to GraphQL where clause
       const whereConditions: any[] = [];
       
@@ -707,6 +766,15 @@ export default function HomePage() {
                                     </Button>
                                   </div>
                                 )}
+                              </div>
+                            )}
+                            {message.kennels && message.kennels.length > 0 && (
+                              <div className="space-y-4">
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                  {message.kennels.map((k) => (
+                                    <KennelCard key={k.id} kennel={k} />
+                                  ))}
+                                </div>
                               </div>
                             )}
                           </div>
