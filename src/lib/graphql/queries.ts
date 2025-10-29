@@ -534,7 +534,7 @@ export const SEARCH_KENNELS = gql`
 // Kennel details with dogs
 export const GET_KENNEL_DETAILS = gql`
   query GetKennelDetails($kennelId: String!, $limit: Int = 50) {
-    kennel_by_pk(id: $kennelId) {
+    kennel(where: { id: { _eq: $kennelId } }, limit: 1) {
       id
       name
       address
