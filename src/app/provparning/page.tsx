@@ -184,13 +184,11 @@ function ProvparningContent() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Pet 1 Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Din hund</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Pet 1 */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">Din hund</h2>
+          <div className="space-y-4">
             <div>
               <label className="text-sm font-medium mb-2 block">Hund-ID</label>
               <Input
@@ -204,7 +202,7 @@ function ProvparningContent() {
             </div>
             
             {pet1 && (
-              <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="p-4 bg-gray-50 rounded-lg border">
                 <h3 className="font-semibold text-gray-900 mb-2">Hundinformation</h3>
                 <div className="space-y-1 text-sm">
                   <p><strong>Namn:</strong> {pet1.name}</p>
@@ -217,15 +215,13 @@ function ProvparningContent() {
                 </div>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        {/* Pet 2 Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Kompatibel hund</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        {/* Pet 2 */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">Kompatibel hund</h2>
+          <div className="space-y-4">
             <div>
               <label className="text-sm font-medium mb-2 block">Hund-ID</label>
               <Input
@@ -239,7 +235,7 @@ function ProvparningContent() {
             </div>
             
             {pet2 && (
-              <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="p-4 bg-gray-50 rounded-lg border">
                 <h3 className="font-semibold text-gray-900 mb-2">Hundinformation</h3>
                 <div className="space-y-1 text-sm">
                   <p><strong>Namn:</strong> {pet2.name}</p>
@@ -252,17 +248,14 @@ function ProvparningContent() {
                 </div>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Results Section */}
-      <div className="mt-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Resultat</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+      <div className="mt-8 space-y-4">
+        <h2 className="text-lg font-semibold">Resultat</h2>
+        <div className="space-y-4">
             {/* Compatibility Status */}
             {compatibilityStatus && (
               <div className={`p-4 rounded-lg text-sm ${
@@ -314,12 +307,11 @@ function ProvparningContent() {
             })()}
 
             {/* Action Buttons */}
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-3 pt-2">
               <Button
                 onClick={calculateInbreeding}
                 disabled={!pet1 || !pet2 || isCalculating || compatibilityStatus === 'Inkompatibel'}
-                className="flex-1"
-                size="lg"
+                className="px-5"
               >
                 {isCalculating ? 'Beräknar...' : 'Beräkna inavelkoefficient'}
               </Button>
@@ -332,23 +324,18 @@ function ProvparningContent() {
                   setCompatibilityStatus(null);
                 }}
                 variant="outline"
-                size="lg"
+                className="px-5"
               >
                 Rensa alla
               </Button>
             </div>
-          </CardContent>
-        </Card>
+        </div>
       </div>
 
       {/* Information Section */}
-      <div className="mt-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Information om provparning</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="prose prose-sm max-w-none">
+      <div className="mt-8">
+        <div className="prose prose-sm max-w-none">
+          <h2 className="text-lg font-semibold">Information om provparning</h2>
               <p className="text-gray-600 mb-3">
                 Provparning hjälper dig att bedöma kompatibiliteten mellan två hundar innan faktisk parning.
               </p>
@@ -358,9 +345,7 @@ function ProvparningContent() {
                 <li><strong>Rekommendation:</strong> En inavelkoefficient under 6.25% anses vara säker</li>
                 <li><strong>Varning:</strong> Högre värden kan öka risken för genetiska sjukdomar</li>
               </ul>
-            </div>
-          </CardContent>
-        </Card>
+        </div>
       </div>
     </div>
           </div>

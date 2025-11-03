@@ -98,22 +98,10 @@ export default function ProfilePage() {
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tight">Welcome to Zoion</h1>
                 <p className="text-muted-foreground max-w-md">
-                  Create an account to manage your pets, save favorites, and connect with other breeders.
+                  Log-in functionality coming soon!
                 </p>
               </div>
-              <div className="flex gap-4">
-                <Button onClick={() => router.push('/auth/login')} className="flex items-center gap-2">
-                  <LogIn className="w-4 h-4" />
-                  Sign In
-                </Button>
-                <Button onClick={() => router.push('/auth/register')} variant="outline" className="flex items-center gap-2">
-                  <UserPlus className="w-4 h-4" />
-                  Sign Up
-                </Button>
-              </div>
-              <div className="text-sm text-muted-foreground">
-                You can browse pets without an account, but signing in unlocks more features!
-              </div>
+              
             </div>
           </div>
         </SidebarInset>
