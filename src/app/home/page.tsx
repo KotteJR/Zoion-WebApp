@@ -51,6 +51,7 @@ interface ParsedFilters {
   kennelName?: string; // maps to DB field 'kennel_name' (and kennel.name fallback)
   nameContains?: string; // maps to DB field 'name'
   petId?: string; // maps to DB field 'id'
+  city?: string; // maps to user.address or kennel.address ilike city
 }
 
 // Natural language query parser
@@ -190,21 +191,29 @@ function parseNaturalLanguageQuery(query: string): ParsedFilters {
   }
 
   // Color detection: look for "color/colour <word>"
-  const colorMatch = query.match(/\b(?:color|colour)\s*:?\s*([a-zA-ZåäöÅÄÖéÉ\-]+)/i);
+  const colorMatch = query.match(/\b(?:color|colour)\s*:?:?\s*([a-zA-ZåäöÅÄÖéÉ\-]+)/i);
   if (colorMatch) {
     filters.color = colorMatch[1];
   }
 
   // Kennel detection: "kennel <name>" or "from kennel <name>"
-  const kennelMatch = query.match(/\bkennel\s*:?\s*([\w\s'’\-]+)/i);
+  const kennelMatch = query.match(/\bkennel\s*:?:?\s*([\w\s'’\-]+)/i);
   if (kennelMatch) {
     filters.kennelName = kennelMatch[1].trim();
   }
 
   // Name contains: "named <x>" or "called <x>"
-  const nameMatch = query.match(/\b(?:named|called|name)\s*:?\s*([\w\s'’\-]+)/i);
+  const nameMatch = query.match(/\b(?:named|called|name)\s*:?:?\s*([\w\s'’\-]+)/i);
   if (nameMatch) {
     filters.nameContains = nameMatch[1].trim();
+  }
+
+  // City / location detection: "near/close to/around/in <city>" or Swedish "i <stad>"
+  const cityMatch = query.match(/\b(?:near|close\s*to|around|in|i)\s+([A-Za-zÅÄÖåäö\-\s]+)/i);
+  if (cityMatch) {
+    let city = cityMatch[1].trim();
+    if (/^malmo$/i.test(city)) city = 'Malmö';
+    filters.city = city;
   }
   
   return filters;
@@ -533,6 +542,15 @@ export default function HomePage() {
         andConditions.push({ id: { _eq: filters.petId } });
       }
 
+      // City filter: match owner address or kennel address or kennel_name
+      if (filters.city) {
+        andConditions.push({ _or: [
+          { user: { address: { _ilike: `%${filters.city}%` } } },
+          { kennel: { address: { _ilike: `%${filters.city}%` } } },
+          { kennel_name: { _ilike: `%${filters.city}%` } }
+        ]});
+      }
+
       // Age: convert years to date boundaries (same logic we used earlier)
       if (filters.ageRange) {
         const currentDate = new Date();
@@ -565,10 +583,84 @@ export default function HomePage() {
         },
       });
 
-      const pets: Pet[] = data?.pets || [];
+      let pets: Pet[] = data?.pets || [];
       console.log('Found pets count:', pets.length);
       console.log('Pet breeds found:', pets.map(p => p.breed));
       console.log('Pet names and breeds:', pets.map(p => `${p.name} (${p.breed})`));
+
+      // If a location was specified, sort pets by proximity (best-effort geocode)
+      const locationQuery = (filters as any).locationQuery || (filters as any).city;
+      if (locationQuery && pets.length > 0) {
+        try {
+          // 1) Geocode the query place (assume Sweden)
+          const originRes = await fetch('/api/geocode', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ address: `${locationQuery}, Sweden` }),
+          });
+          const originJson = await originRes.json();
+          if (originJson?.latitude && originJson?.longitude) {
+            const origin = { lat: originJson.latitude as number, lng: originJson.longitude as number };
+
+            // 2) Build geocoding targets from pet addresses (user/kennel/kennel_name)
+            const addressCache = new Map<string, { lat: number; lng: number } | null>();
+            const petWithAddress = pets.map((p) => {
+              const userAddr = (p as any).owner?.address as string | undefined;
+              const kennelAddr = (p as any).kennel?.address as string | undefined;
+              const kennelName = (p as any).kennel_name as string | undefined;
+              const addressCandidate = [userAddr, kennelAddr, kennelName]
+                .filter(Boolean)
+                .map(a => String(a))
+                .find(a => a.trim().length > 0) || '';
+              const full = addressCandidate ? `${addressCandidate} Sweden` : '';
+              return { pet: p, address: full };
+            });
+
+            // 3) Geocode distinct addresses in parallel (best-effort)
+            const uniqueAddresses = Array.from(new Set(petWithAddress.map(x => x.address))).filter(a => a);
+            await Promise.allSettled(uniqueAddresses.map(async (addr) => {
+              try {
+                const res = await fetch('/api/geocode', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ address: addr }),
+                });
+                const json = await res.json();
+                if (json?.latitude && json?.longitude) {
+                  addressCache.set(addr, { lat: json.latitude, lng: json.longitude });
+                } else {
+                  addressCache.set(addr, null);
+                }
+              } catch {
+                addressCache.set(addr, null);
+              }
+            }));
+
+            // 4) Compute distances and sort
+            function haversine(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
+              const toRad = (x: number) => (x * Math.PI) / 180;
+              const R = 6371; // km
+              const dLat = toRad(b.lat - a.lat);
+              const dLon = toRad(b.lng - a.lng);
+              const lat1 = toRad(a.lat);
+              const lat2 = toRad(b.lat);
+              const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+              return 2 * R * Math.asin(Math.sqrt(h));
+            }
+
+            const petsWithDistance = petWithAddress.map(({ pet, address }) => {
+              const coord = address ? addressCache.get(address) : null;
+              const distanceKm = coord ? haversine(origin, coord) : Number.POSITIVE_INFINITY;
+              return { pet, distanceKm };
+            });
+
+            petsWithDistance.sort((a, b) => a.distanceKm - b.distanceKm);
+            pets = petsWithDistance.map(x => x.pet);
+          }
+        } catch (e) {
+          console.warn('Distance sort failed:', e);
+        }
+      }
 
       // No fallback to unrelated results — show zero and let user open Advanced Filters
       const finalPets = pets;

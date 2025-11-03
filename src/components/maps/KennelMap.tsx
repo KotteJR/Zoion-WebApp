@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useRef } from 'react';
+import 'leaflet/dist/leaflet.css';
 
 // Dynamic import to avoid SSR issues with Leaflet
 const MapContainer = dynamic(() => import('react-leaflet').then(m => m.MapContainer), { ssr: false });
@@ -21,10 +22,7 @@ export default function KennelMap({ points, height = 320 }: { points: Coord[]; h
       {/* @ts-ignore - MapContainer only on client */}
       <MapContainer center={center} zoom={6} style={{ height, width: '100%' }}>
         {/* @ts-ignore */}
-        <TileLayer
-          attribution="&copy; OpenStreetMap contributors"
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {coords.map(k => (
           // @ts-ignore
           <Marker key={k.id} position={[k.latitude, k.longitude]} />

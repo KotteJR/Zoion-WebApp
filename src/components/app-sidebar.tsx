@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth-store';
 import {
   Sidebar,
@@ -18,6 +18,7 @@ import {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
+  const router = useRouter();
   const { isAuthenticated, user } = useAuthStore();
 
   const navMain = [
@@ -62,6 +63,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const navSecondary = [
     {
+      title: 'About',
+      url: '/zoion',
+      icon: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+        </svg>
+      ),
+    },
+    {
       title: 'Inställningar',
       url: '/settings',
       icon: (
@@ -96,8 +106,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               {navMain.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname.startsWith(item.url) || (item.url === '/home' && pathname === '/')}>
-                    <Link href={item.url}>
+                  <SidebarMenuButton asChild isActive={pathname.startsWith(item.url) || (item.url === '/home' && pathname === '/')}> 
+                    <Link
+                      href={item.url}
+                      onClick={(e) => {
+                        if (item.url === '/home') {
+                          // Clear chat state when navigating Home
+                          try {
+                            if (typeof window !== 'undefined') {
+                              sessionStorage.removeItem('aiChatConversation');
+                              sessionStorage.removeItem('aiChatInput');
+                            }
+                          } catch {}
+                          // Ensure fresh load
+                          // Allow default Link navigation; also request a refresh
+                          setTimeout(() => {
+                            try { router.refresh(); } catch {}
+                          }, 0);
+                        }
+                      }}
+                    >
                       {item.icon}
                       <span>{item.title}</span>
                     </Link>

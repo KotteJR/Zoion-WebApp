@@ -32,7 +32,19 @@ export default function TopNavBar({
                 ← Back
               </button>
             ) : (
-              <Link href="/home" className="flex items-center">
+              <Link
+                href="/home"
+                className="flex items-center"
+                onClick={() => {
+                  try {
+                    if (typeof window !== 'undefined') {
+                      sessionStorage.removeItem('aiChatConversation');
+                      sessionStorage.removeItem('aiChatInput');
+                    }
+                  } catch {}
+                  try { router.refresh(); } catch {}
+                }}
+              >
                 <Image
                   src="/assets/images/png/zoionplatform.png"
                   alt="Zoion"

@@ -21,35 +21,10 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setIsLoading(true);
-
-    try {
-      const { isSignedIn } = await signIn({
-        username: email,
-        password,
-      });
-
-      if (isSignedIn) {
-        const session = await fetchAuthSession();
-        const token = session.tokens?.idToken?.toString();
-
-        if (token) {
-          setToken(token);
-          setIsAuthenticated(true);
-          
-            // Update Apollo client with new token
-            getApolloClient();
-          
-          router.push('/home');
-        }
-      }
-    } catch (err: any) {
-      console.error('Login error:', err);
-      setError(err.message || 'Failed to login. Please check your credentials.');
-    } finally {
-      setIsLoading(false);
-    }
+    // Temporary: Coming soon gate
+    setError('Kommer snart – inloggning aktiveras inom kort.');
+    setIsLoading(false);
+    return;
   };
 
   return (
@@ -120,7 +95,7 @@ export default function LoginPage() {
             </div>
 
             <Button type="submit" disabled={isLoading} className="w-full bg-black hover:bg-gray-800">
-              {isLoading ? 'Signing In...' : 'Sign In'}
+              {isLoading ? '...' : 'Sign In'}
             </Button>
           </form>
 
