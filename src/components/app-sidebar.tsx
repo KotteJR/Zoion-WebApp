@@ -3,192 +3,187 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/auth-store';
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarGroup,
-  SidebarGroupContent,
-} from '@/components/ui/sidebar';
+import { useState, useEffect, createContext, useContext } from 'react';
+import { cn } from '@/lib/utils';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Home, Star, Filter, Heart, Settings } from 'lucide-react';
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+// Simple sidebar context
+const SidebarContext = createContext<{
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  isMobile: boolean;
+  toggleSidebar: () => void;
+} | null>(null);
+
+export function SidebarProvider({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const toggleSidebar = () => setOpen((prev) => !prev);
+
+  return (
+    <SidebarContext.Provider value={{ open, setOpen, isMobile, toggleSidebar }}>
+      {children}
+    </SidebarContext.Provider>
+  );
+}
+
+export function useSidebar() {
+  const context = useContext(SidebarContext);
+  if (!context) {
+    throw new Error('useSidebar must be used within SidebarProvider');
+  }
+  return context;
+}
+
+export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { isAuthenticated, user } = useAuthStore();
+  const { open, setOpen, isMobile } = useSidebar();
 
   const navMain = [
     {
       title: 'Hem',
       url: '/home',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      ),
+      icon: <Home className="w-6 h-6" strokeWidth={1.5} />,
     },
     {
       title: 'Utvalda Hundar',
       url: '/featured',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-        </svg>
-      ),
+      icon: <Star className="w-6 h-6" strokeWidth={1.5} />,
     },
     {
       title: 'Avancerade Filter',
       url: '/advanced-filters',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-        </svg>
-      ),
+      icon: <Filter className="w-6 h-6" strokeWidth={1.5} />,
     },
     {
       title: 'Provparning',
       url: '/provparning',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-      ),
+      icon: <Heart className="w-6 h-6" strokeWidth={1.5} />,
     },
-    
   ];
 
   const navSecondary = [
     {
-      title: 'About',
-      url: '/zoion',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
-        </svg>
-      ),
-    },
-    {
       title: 'Inställningar',
       url: '/settings',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      ),
+      icon: <Settings className="w-6 h-6" strokeWidth={1.5} />,
     },
   ];
 
-  return (
-    <Sidebar collapsible="offcanvas" className="" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <div className="flex h-12 items-center px-2 pointer-events-none">
-              <Image 
-                src="/assets/images/png/zoionplatform.png" 
-                alt="Zoion" 
-                width={120} 
-                height={40}
-                className="h-6 w-auto"
-              />
-            </div>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navMain.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname.startsWith(item.url) || (item.url === '/home' && pathname === '/')}> 
-                    <Link
-                      href={item.url}
-                      onClick={(e) => {
-                        if (item.url === '/home') {
-                          // Clear chat state when navigating Home
+  const isActive = (url: string) => {
+    return pathname.startsWith(url) || (url === '/home' && pathname === '/');
+  };
+
+  const handleLinkClick = (url: string) => {
+    if (url === '/home') {
                           try {
                             if (typeof window !== 'undefined') {
                               sessionStorage.removeItem('aiChatConversation');
                               sessionStorage.removeItem('aiChatInput');
                             }
                           } catch {}
-                          // Ensure fresh load
-                          // Allow default Link navigation; also request a refresh
                           setTimeout(() => {
                             try { router.refresh(); } catch {}
                           }, 0);
                         }
-                      }}
+    if (isMobile) {
+      setOpen(false);
+    }
+  };
+
+  const sidebarContent = (
+    <div className="flex h-full flex-col">
+      {/* Logo */}
+      <div className="flex h-16 items-center justify-center">
+        <Image
+          src="/assets/images/svg/dogPaw.svg"
+          alt="Zoion"
+          width={28}
+          height={28}
+          className="h-8 w-8"
+        />
+      </div>
+
+      {/* Main Navigation */}
+      <nav className="flex flex-1 flex-col gap-2 p-3">
+        <div className="flex flex-1 flex-col gap-2 justify-center">
+          {navMain.map((item) => (
+            <Link
+              key={item.title}
+              href={item.url}
+              onClick={() => handleLinkClick(item.url)}
+              className={cn(
+                "flex items-center justify-center h-10 w-10 rounded-xl transition-colors",
+                isActive(item.url)
+                  ? "bg-gray-100/15 text-white"
+                  : "text-white/50 hover:bg-gray-100/10 hover:text-white/60"
+              )}
                     >
                       {item.icon}
-                      <span>{item.title}</span>
                     </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
               ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup className="mt-auto">
-          <SidebarGroupContent>
-            <SidebarMenu>
+        </div>
+
+        {/* Secondary Navigation */}
+        <div className="flex flex-col gap-2">
               {navSecondary.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname.startsWith(item.url)}>
-                    <Link href={item.url}>
+            <Link
+              key={item.title}
+              href={item.url}
+              onClick={() => handleLinkClick(item.url)}
+              className={cn(
+                "flex items-center justify-center h-10 w-10 rounded-lg transition-colors",
+                isActive(item.url)
+                  ? "bg-gray-100/15 text-white"
+                  : "text-white/50 hover:bg-gray-100/10 hover:text-white/60"
+              )}
+            >
                       {item.icon}
-                      <span>{item.title}</span>
                     </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild size="lg">
-              <Link href="/profile">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                  {isAuthenticated && user ? (
-                    <span className="text-sm font-semibold">
-                      {user.firstName ? user.firstName.charAt(0).toUpperCase() : 'U'}
-                    </span>
-                  ) : (
-                    <span className="text-sm font-semibold">?</span>
-                  )}
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  {isAuthenticated && user ? (
-                    <>
-                      <span className="truncate font-semibold">
-                        {user.firstName && user.lastName 
-                          ? `${user.firstName} ${user.lastName}` 
-                          : user.email || 'User'
-                        }
-                      </span>
-                      <span className="truncate text-xs">{user.email || 'user@zoion.com'}</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="truncate font-semibold">Logga in</span>
-                      <span className="truncate text-xs">Logga in på ditt konto</span>
-                    </>
-                  )}
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
+          ))}
+        </div>
+      </nav>
+    </div>
+  );
+
+  // Mobile: Use Sheet
+  if (isMobile) {
+    return (
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="left" className="w-64 p-0">
+          {sidebarContent}
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
+  // Desktop: Floating sidebar (always visible)
+  return (
+    <aside
+      className="fixed left-4 top-4 bottom-4 z-50 w-16 rounded-xl overflow-hidden border border-gray-200/30 bg-white/5"
+    >
+      {sidebarContent}
+    </aside>
+  );
+}
+
+// Simple SidebarInset component for layout
+export function SidebarInset({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <main className={cn("flex-1 md:ml-24 md:mt-4 md:mb-4 md:mr-4", className)}>
+      {children}
+    </main>
   );
 }

@@ -6,7 +6,6 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
-import { SiteHeader } from '@/components/site-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -38,8 +37,8 @@ export default function PetProfilePage() {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-            <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6">
+        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-transparent">
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-t-xl bg-transparent  p-6">
               <LoadingSpinner />
             </div>
           </div>
@@ -60,8 +59,8 @@ export default function PetProfilePage() {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-            <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 text-center">
+        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-transparent">
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-t-xl bg-transparent  p-6 text-center">
               <div className="text-6xl mb-4">🐕</div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Pet Not Found</h2>
               <p className="text-gray-600 text-base mb-4">
@@ -91,13 +90,13 @@ export default function PetProfilePage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-          <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
+        <div className="flex h-full bg-transparent">
+          <div className="flex flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6 w-full">
             {/* Header with Back Button */}
             <div className="flex items-center justify-between">
               <Button
                 variant="outline"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
                 onClick={() => router.back()}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,15 +110,17 @@ export default function PetProfilePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:items-stretch">
               {/* Left Column - Image Gallery */}
               <div>
-                <Card className="overflow-hidden h-full flex flex-col">
+                <Card className="overflow-hidden h-full flex flex-col bg-white/5 border border-white/20 text-white">
                   <CardHeader className="p-0 flex-1">
                     {/* Keep a stable aspect to avoid odd crops and ensure full fit */}
-                    <div className="relative h-full min-h-[260px] md:min-h-[360px] lg:min-h-[420px] bg-white">
+                    <div className="relative h-full min-h-[260px] md:min-h-[360px] lg:min-h-[420px] bg-transparent">
+                      {/* Soft white glow behind image */}
+                      <div className="pointer-events-none absolute inset-0 z-0 rounded-t-[inherit] blur-2xl bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.35)_0%,rgba(255,255,255,0.0)_65%)]" />
                       <Image
                         src={currentImage}
                         alt={pet.name}
                         fill
-                        className="object-contain object-center bg-white"
+                        className="object-contain object-center bg-transparent relative z-10"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                         priority
                         unoptimized
@@ -127,8 +128,8 @@ export default function PetProfilePage() {
                       {/* Gender Badge */}
                       {pet.sex && (
                         <div className="absolute top-3 left-3">
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/90 border border-gray-200">
-                            <span className="text-sm font-bold text-[#3d7c6f]">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 border border-white/30">
+                            <span className="text-sm font-bold text-white">
                               {pet.sex === 'male' ? '♂' : '♀'}
                             </span>
                           </div>
@@ -144,7 +145,7 @@ export default function PetProfilePage() {
                             key={img.id}
                             onClick={() => setCurrentImageIndex(index)}
                             className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors ${
-                              index === currentImageIndex ? 'border-[#3d7c6f]' : 'border-gray-200'
+                              index === currentImageIndex ? 'border-white/40' : 'border-white/20'
                             }`}
                           >
                             <Image src={img.location} alt={`${pet.name} ${index + 1}`} fill className="object-cover" unoptimized />
@@ -158,18 +159,18 @@ export default function PetProfilePage() {
 
               {/* Right Column - Pet Info and Owner */}
               <div className="flex flex-col space-y-4">
-                <Card>
+                <Card className="bg-white/5 border border-white/20 text-white">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-6">
                       <div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-1">{pet.name}</h1>
-                        <p className="text-xl text-muted-foreground mb-1">{pet.breed}</p>
-                        <p className="text-sm text-gray-600 font-mono">{pet.id}</p>
+                        <h1 className="text-3xl font-bold text-white mb-1">{pet.name}</h1>
+                        <p className="text-xl text-white/80 mb-1">{pet.breed}</p>
+                        <p className="text-sm text-white/70 font-mono">{pet.id}</p>
                       </div>
                       {pet.competitions_aggregate?.aggregate.count > 0 && (
-                        <div className="flex items-center gap-2 bg-yellow-100 border border-yellow-300 px-3 py-2 rounded-full">
-                          <Trophy className="w-4 h-4 text-yellow-800" />
-                          <span className="text-sm font-medium text-yellow-800">
+                        <div className="flex items-center gap-2 bg-yellow-200/20 border border-yellow-300/40 px-3 py-2 rounded-full">
+                          <Trophy className="w-4 h-4 text-yellow-300" />
+                          <span className="text-sm font-medium text-yellow-200">
                             {pet.competitions_aggregate.aggregate.count}
                           </span>
                         </div>
@@ -182,7 +183,7 @@ export default function PetProfilePage() {
                         {tags.map((tag, index) => (
                           <span
                             key={index}
-                            className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-primary/10 text-primary border border-primary/20"
+                            className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-white/5 text-white border border-white/20"
                           >
                             {tag}
                           </span>
@@ -193,64 +194,64 @@ export default function PetProfilePage() {
                     {/* Details Grid */}
                     <div className="grid grid-cols-2 gap-6 mb-6">
                       <div>
-                        <p className="text-sm text-muted-foreground mb-1">Age</p>
-                        <p className="text-base font-medium text-gray-900">{ageString}</p>
+                        <p className="text-sm text-white/70 mb-1">Age</p>
+                        <p className="text-base font-medium text-white">{ageString}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground mb-1">Sex</p>
-                        <p className="text-base font-medium text-gray-900 capitalize">{pet.sex}</p>
+                        <p className="text-sm text-white/70 mb-1">Sex</p>
+                        <p className="text-base font-medium text-white capitalize">{pet.sex}</p>
                       </div>
                       {pet.colour && (
                         <div>
-                          <p className="text-sm text-muted-foreground mb-1">Color</p>
-                          <p className="text-base font-medium text-gray-900">{pet.colour}</p>
+                          <p className="text-sm text-white/70 mb-1">Color</p>
+                          <p className="text-base font-medium text-white">{pet.colour}</p>
                         </div>
                       )}
                       {pet.weight && (
                         <div>
-                          <p className="text-sm text-muted-foreground mb-1">Weight</p>
-                          <p className="text-base font-medium text-gray-900">{pet.weight} kg</p>
+                          <p className="text-sm text-white/70 mb-1">Weight</p>
+                          <p className="text-base font-medium text-white">{pet.weight} kg</p>
                         </div>
                       )}
                       {pet.inbreed_rate && (
                         <div>
-                          <p className="text-sm text-muted-foreground mb-1">Inbreed Rate</p>
-                          <p className="text-base font-medium text-gray-900">{pet.inbreed_rate}%</p>
+                          <p className="text-sm text-white/70 mb-1">Inbreed Rate</p>
+                          <p className="text-base font-medium text-white">{pet.inbreed_rate}%</p>
                         </div>
                       )}
                       {pet.kennel_name && (
                         <div>
-                          <p className="text-sm text-muted-foreground mb-1">Kennel</p>
-                          <p className="text-base font-medium text-gray-900">{pet.kennel_name}</p>
+                          <p className="text-sm text-white/70 mb-1">Kennel</p>
+                          <p className="text-base font-medium text-white">{pet.kennel_name}</p>
                         </div>
                       )}
                       {pet.vaccinated !== null && pet.vaccinated !== undefined && (
                         <div>
-                          <p className="text-sm text-muted-foreground mb-1">Vaccinated</p>
-                          <p className="text-base font-medium text-gray-900">{pet.vaccinated ? 'Yes' : 'No'}</p>
+                          <p className="text-sm text-white/70 mb-1">Vaccinated</p>
+                          <p className="text-base font-medium text-white">{pet.vaccinated ? 'Yes' : 'No'}</p>
                         </div>
                       )}
                       {pet.date_born && (
                         <div>
-                          <p className="text-sm text-muted-foreground mb-1">Date of Birth</p>
-                          <p className="text-base font-medium text-gray-900">{formatDateShort(pet.date_born)}</p>
+                          <p className="text-sm text-white/70 mb-1">Date of Birth</p>
+                          <p className="text-base font-medium text-white">{formatDateShort(pet.date_born)}</p>
                         </div>
                       )}
                       {pet.next_breeding_date && (
                         <div>
-                          <p className="text-sm text-muted-foreground mb-1">Next Breeding Date</p>
-                          <p className="text-base font-medium text-gray-900">{formatDateShort(pet.next_breeding_date)}</p>
+                          <p className="text-sm text-white/70 mb-1">Next Breeding Date</p>
+                          <p className="text-base font-medium text-white">{formatDateShort(pet.next_breeding_date)}</p>
                         </div>
                       )}
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col gap-3 pt-4 border-t">
+                    <div className="flex flex-col gap-3 pt-4 border-t border-white/20">
                       <div className="flex gap-3">
                         {pet.competitions_aggregate?.aggregate.count > 0 && (
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button variant="outline" className="flex-1">
+                              <Button variant="outline" className="flex-1 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30">
                                 <Trophy className="w-4 h-4 mr-2" />
                                 Trophies ({pet.competitions_aggregate.aggregate.count})
                               </Button>
@@ -298,7 +299,7 @@ export default function PetProfilePage() {
                         {pet.medical_records_aggregate?.aggregate.count > 0 && (
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button variant="outline" className="flex-1">
+                              <Button variant="outline" className="flex-1 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30">
                                 <Stethoscope className="w-4 h-4 mr-2" />
                                 Medical Records ({pet.medical_records_aggregate.aggregate.count})
                               </Button>
@@ -312,7 +313,7 @@ export default function PetProfilePage() {
                               </DialogHeader>
                               <div className="grid grid-cols-1 gap-4">
                                 {pet.medical_records?.map((record: any) => (
-                                  <div key={record.id} className="rounded-xl border border-blue-200 bg-white p-4 shadow-sm">
+                                  <div key={record.id} className="rounded-xl border border-blue-200 bg-transparent p-4 shadow-sm">
                                     <div className="flex flex-wrap items-center justify-between gap-2">
                                       <h3 className="text-base font-semibold text-gray-900">{record.diagnose}</h3>
                                       <span className="text-xs rounded-full bg-blue-50 px-2 py-1 font-medium text-blue-700 border border-blue-200">
@@ -334,7 +335,7 @@ export default function PetProfilePage() {
                       
                       <Button
                         onClick={() => router.push(`/provparning?target=${encodeURIComponent(petId)}`)}
-                        className="bg-[#3d7c6f] hover:bg-[#2f6a5e] text-white flex items-center gap-2 flex-1"
+                        className="bg-white/5 hover:bg-white/10 text-white border border-white/20 flex items-center gap-2 flex-1"
                       >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
@@ -347,41 +348,41 @@ export default function PetProfilePage() {
 
                 {/* Kennel Info Card */}
                 {kennel && (
-                  <Card>
+                  <Card className="bg-white/5 border border-white/20 text-white">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">Kennel</h3>
-                        <Button variant="outline" onClick={() => router.push(`/kennel/${kennel.id}`)}>
+                        <h3 className="text-lg font-semibold text-white">Kennel</h3>
+                        <Button variant="outline" className="bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30" onClick={() => router.push(`/kennel/${kennel.id}`)}>
                           Visa kennel
                         </Button>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div>
-                          <span className="text-muted-foreground">Namn:</span> {kennel.name}
+                          <span className="text-white/70">Namn:</span> {kennel.name}
                         </div>
                         {kennel.address && (
                           <div>
-                            <span className="text-muted-foreground">Adress:</span> {kennel.address}
+                            <span className="text-white/70">Adress:</span> {kennel.address}
                           </div>
                         )}
                         {kennel.post_number && (
                           <div>
-                            <span className="text-muted-foreground">Postnummer:</span> {kennel.post_number}
+                            <span className="text-white/70">Postnummer:</span> {kennel.post_number}
                           </div>
                         )}
                         {kennel.phone_number && (
                           <div>
-                            <span className="text-muted-foreground">Telefon:</span> {kennel.phone_number}
+                            <span className="text-white/70">Telefon:</span> {kennel.phone_number}
                           </div>
                         )}
                         {kennel.email && (
                           <div>
-                            <span className="text-muted-foreground">E‑post:</span> {kennel.email}
+                            <span className="text-white/70">E‑post:</span> {kennel.email}
                           </div>
                         )}
                         {kennel.website && (
                           <div>
-                            <span className="text-muted-foreground">Webb:</span> {kennel.website}
+                            <span className="text-white/70">Webb:</span> {kennel.website}
                           </div>
                         )}
                       </div>
@@ -391,25 +392,25 @@ export default function PetProfilePage() {
 
                 {/* Owner Info Card */}
                 {pet.owner && (
-                  <Card>
+                  <Card className="bg-white/5 border border-white/20 text-white">
                     <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Owner Information</h3>
+                      <h3 className="text-lg font-semibold text-white mb-4">Owner Information</h3>
                       <div className="flex items-center gap-4">
-                        <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200">
+                        <div className="relative w-16 h-16 rounded-full overflow-hidden bg-white/5 border-2 border-white/20">
                           {pet.owner.profile_picture ? (
                             <Image src={pet.owner.profile_picture} alt="Owner" fill className="object-cover" unoptimized />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xl font-bold">
+                            <div className="w-full h-full flex items-center justify-center text-white/60 text-xl font-bold">
                               {pet.owner.given_name?.[0]}
                             </div>
                           )}
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-white">
                             {pet.owner.given_name} {pet.owner.family_name}
                           </p>
                           {pet.owner.address && (
-                            <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                            <p className="text-sm text-white/80 flex items-center gap-1 mt-1">
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -418,7 +419,13 @@ export default function PetProfilePage() {
                             </p>
                           )}
                         </div>
-                        <Button onClick={() => router.push(`/breeder/${pet.owner_id}`)} variant="outline">View Profile</Button>
+                        <Button 
+                          onClick={() => router.push(`/breeder/${pet.owner_id}`)} 
+                          variant="outline"
+                          className="bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
+                        >
+                          View Profile
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>

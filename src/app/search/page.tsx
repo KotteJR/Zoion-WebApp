@@ -93,8 +93,8 @@ export default function SearchPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-      <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-        <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
+      <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-transparent">
+        <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-t-xl bg-white p-6 mt-4">
             <div className="flex flex-col gap-2">
               <h2 className="text-2xl font-semibold tracking-tight">Search</h2>
               <p className="text-sm text-muted-foreground">Find the perfect breeding partner for your pet</p>

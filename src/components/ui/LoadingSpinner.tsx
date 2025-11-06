@@ -11,11 +11,11 @@ export default function LoadingSpinner() {
   return (
     <Empty className="w-full">
       <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <Spinner />
+        <EmptyMedia variant="default">
+          <Spinner className="text-white" />
         </EmptyMedia>
-        <EmptyTitle>Fetching the good boys & girls...</EmptyTitle>
-        <EmptyDescription>
+        <EmptyTitle className="text-white">Fetching the good boys & girls...</EmptyTitle>
+        <EmptyDescription className="text-white/80">
           Hold tight! We're rounding up the pack for you.
         </EmptyDescription>
       </EmptyHeader>

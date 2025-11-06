@@ -44,37 +44,40 @@ export default function PetCard({ pet, onFavoriteChange }: PetCardProps) {
 
   return (
     <div onClick={handleCardClick} className="block cursor-pointer">
-      <Card className="overflow-hidden pet-card-hover">
+      <Card className="overflow-hidden transition-all duration-200 hover:border-white/30 border-white/20 bg-white/15 border border-white/10 text-white">
         <CardHeader className="p-0">
-          <div className="relative h-48 bg-gray-50">
+          <div className="relative h-48 bg-transparent">
+            {/* Soft white glow behind the image */}
+            <div className="pointer-events-none absolute inset-0 z-0 rounded-t-[inherit] blur-2xl bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.35)_0%,rgba(255,255,255,0.0)_65%)]" />
             {!imageError ? (
               <Image
                 src={profileImage}
                 alt={pet.name || 'Pet'}
                 fill
-                className="object-contain object-center"
+                className="object-contain object-center relative z-10"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 unoptimized
                 onError={() => setImageError(true)}
               />
             ) : (
-              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+              <div className="w-full h-full bg-white/10 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
-                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-16 h-16 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                   </div>
-                  <p className="text-xs text-gray-500">No image</p>
+                  <p className="text-xs text-white/70">No image</p>
                 </div>
               </div>
             )}
+
             
             {/* Gender Badge */}
             {pet.sex && (
               <div className="absolute top-2 left-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/70 border border-gray-200">
-                  <span className="text-md font-bold text-[#3d7c6f]">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/20 border border-white/30">
+                  <span className="text-md font-bold text-white">
                     {pet.sex === 'male' ? '♂' : '♀'}
                   </span>
                 </div>
@@ -87,10 +90,10 @@ export default function PetCard({ pet, onFavoriteChange }: PetCardProps) {
                 variant="ghost"
                 size="sm"
                 onClick={handleFavoriteClick}
-                className="w-8 h-8 p-0 bg-white/90 hover:bg-white border border-gray-200 rounded-full"
+                className="w-8 h-8 p-0 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-full"
               >
                 <svg 
-                  className={`w-4 h-4 ${pet.isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} 
+                  className={`w-4 h-4 ${pet.isFavorite ? 'fill-red-400 text-red-400' : 'text-white/80'}`} 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -125,12 +128,12 @@ export default function PetCard({ pet, onFavoriteChange }: PetCardProps) {
           <div className="space-y-3">
             {/* Pet Name and Breed */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 truncate">{pet.name}</h3>
-              <p className="text-sm text-gray-600">{pet.breed}</p>
+              <h3 className="text-lg font-semibold text-white truncate">{pet.name}</h3>
+              <p className="text-sm text-white/80">{pet.breed}</p>
             </div>
 
             {/* Pet Details */}
-            <div className="space-y-1 text-sm text-gray-600">
+            <div className="space-y-1 text-sm text-white/80">
               <p>{ageString}</p>
               {pet.owner && (
                 <p className="truncate">
@@ -154,7 +157,7 @@ export default function PetCard({ pet, onFavoriteChange }: PetCardProps) {
                 {tags.slice(0, 3).map((tag, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-primary/10 text-primary border border-primary/20"
+                    className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-white/10 text-white border border-white/20"
                   >
                     {tag}
                   </span>

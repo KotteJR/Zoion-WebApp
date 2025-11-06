@@ -56,7 +56,7 @@ function VerifyContent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-sidebar px-4">
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-xl border border-gray-200/50 shadow-sm p-8">
           <div className="text-center mb-8">
@@ -132,7 +132,7 @@ function VerifyContent() {
 export default function VerifyPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-sidebar px-4">
+      <div className="min-h-screen flex items-center justify-center bg-white px-4">
         <div className="w-full max-w-md">
           <div className="bg-white rounded-xl border border-gray-200/50 shadow-sm p-8">
             <div className="text-center">

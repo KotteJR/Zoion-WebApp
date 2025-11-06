@@ -117,10 +117,10 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
 
   if (!parsedData || sortedGenerations.length === 0) {
     return (
-      <Card>
+      <Card className="bg-white/15 border border-white/10 text-white">
         <CardContent className="p-6">
-          <div className="text-center text-muted-foreground">
-            <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+          <div className="text-center text-white/80">
+            <Users className="w-12 h-12 mx-auto mb-4 text-white/60" />
             <p>No family tree data available for {petName}</p>
           </div>
         </CardContent>
@@ -134,10 +134,10 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
   }, 0);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-white/15 border border-white/10 text-white">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-white">
             <Users className="w-5 h-5" />
             Family Tree
           </CardTitle>
@@ -145,7 +145,7 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
             variant="outline"
             size="sm"
             onClick={() => setShowFullTree(!showFullTree)}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
           >
             {showFullTree ? (
               <>
@@ -166,7 +166,7 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
         <div className="mb-8">
           <div className="flex justify-center">
             <div className="relative">
-              <div className="px-6 py-3 bg-[#3d7c6f] text-white rounded-lg shadow-md text-center">
+              <div className="px-6 py-3 bg-white/20 border border-white/30 text-white rounded-lg shadow-md text-center">
                 <div className="font-bold text-lg">{petName}</div>
                 <div className="text-sm opacity-90">{petId}</div>
               </div>
@@ -186,12 +186,12 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
               <div key={generation} className="relative">
                 {/* Connecting lines */}
                 {genIndex === 0 && (
-                  <div className="absolute top-0 left-1/2 w-0.5 h-6 bg-gray-300 -translate-x-1/2 -translate-y-6" />
+                  <div className="absolute top-0 left-1/2 w-0.5 h-6 bg-white/30 -translate-x-1/2 -translate-y-6" />
                 )}
 
                 {/* Generation Label */}
                 <div className="text-center mb-3">
-                  <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full">
+                  <span className="inline-block px-3 py-1 bg-white/10 text-white border border-white/20 text-sm font-medium rounded-full">
                     {getGenerationLabel(generation)} ({validMembers.length})
                   </span>
                 </div>
@@ -209,9 +209,9 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
                       className="relative group"
                     >
                       <div 
-                        className={`p-3 bg-white border border-gray-200 rounded-lg transition-all text-center ${
+                        className={`p-3 bg-white/10 border border-white/20 rounded-lg transition-all text-center ${
                           member.code && existingDogs.has(member.code)
-                            ? 'hover:border-[#3d7c6f] hover:shadow-md cursor-pointer hover:bg-green-50' 
+                            ? 'hover:border-white/40 hover:shadow-md cursor-pointer hover:bg-white/20' 
                             : 'opacity-75'
                         }`}
                         onClick={() => handleDogClick(member)}
@@ -225,21 +225,21 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
                       >
                         <div className={`w-10 h-10 mx-auto mb-2 rounded-full flex items-center justify-center font-semibold ${
                           member.code && existingDogs.has(member.code)
-                            ? 'bg-[#3d7c6f] text-white' 
-                            : 'bg-gray-100 text-gray-600'
+                            ? 'bg-white/30 text-white border border-white/40' 
+                            : 'bg-white/10 text-white/70 border border-white/20'
                         }`}>
                           {member.name.split(' ')[0][0]}
                         </div>
-                        <div className="font-medium text-xs text-gray-900 truncate" title={member.name}>
+                        <div className="font-medium text-xs text-white truncate" title={member.name}>
                           {member.name.length > 15 ? member.name.substring(0, 15) + '...' : member.name}
                         </div>
                         {member.code && (
-                          <div className="text-xs text-gray-500 mt-1">
+                          <div className="text-xs text-white/70 mt-1">
                             {member.code}
                           </div>
                         )}
                         {member.code && existingDogs.has(member.code) && (
-                          <div className="text-xs text-[#3d7c6f] mt-1 font-medium">
+                          <div className="text-xs text-white/90 mt-1 font-medium">
                             View Profile
                           </div>
                         )}
@@ -251,7 +251,7 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
                 {/* Connecting line to next generation */}
                 {genIndex < displayGenerations.length - 1 && (
                   <div className="flex justify-center mt-4">
-                    <div className="w-0.5 h-4 bg-gray-300" />
+                    <div className="w-0.5 h-4 bg-white/30" />
                   </div>
                 )}
               </div>
@@ -260,7 +260,7 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
         </div>
 
         {/* Summary */}
-        <div className="mt-6 pt-6 border-t text-center text-sm text-gray-600">
+        <div className="mt-6 pt-6 border-t border-white/20 text-center text-sm text-white/80">
           {showFullTree ? (
             <p>Showing complete family tree with {totalMembers} ancestors across {displayGenerations.length} generations</p>
           ) : (

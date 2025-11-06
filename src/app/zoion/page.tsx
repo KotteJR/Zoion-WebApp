@@ -17,17 +17,17 @@ export default function ZoionMarketingPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-          <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
+        <div className="flex h-full bg-transparent">
+          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6">
       {/* Hero */}
-      <section className="bg-white">
+      <section className="bg-transparent">
         <div className="max-w-7xl mx-auto px-4 py-12 md:py-12">
-        <h1 className="text-3xl text-center md:text-4xl font-bold text-gray-900 mb-12">
+        <h1 className="text-3xl text-center md:text-4xl font-bold text-white mb-12">
                 Sveriges smartaste app för uppfödare och hundägare
               </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="space-y-6">
-              <p className="text-gray-700 text-base md:text-lg max-w-xl">
+              <p className="text-white/90 text-base md:text-lg max-w-xl">
                 Med Zoion blir ditt hundliv enklare – här möter du hundägare, uppfödare och deras hundar på ett helt nytt sätt. Unika möjligheter att se härstamning i många led, hälsodata och inavelsgrad gör Zoion till ett avancerat verktyg för att planera en valpkull. Nyfiken? Ladda ned appen redan idag.
               </p>
               <div className="flex flex-wrap gap-4 items-center">
@@ -63,10 +63,10 @@ export default function ZoionMarketingPage() {
       </section>
 
       {/* Visual About: how Zoion works without images */}
-      <section className="bg-white">
+      <section className="bg-transparent">
         <div className="max-w-7xl mx-auto px-4 py-12 md:py-16">
           <div className="space-y-8">
-            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-12">Så funkar Zoion – steg för steg</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold text-white mb-12">Så funkar Zoion – steg för steg</h2>
 
             {/* Process — 4 columns with headline, subtitle and pills */}
             <div className="relative pt-6">
@@ -85,8 +85,8 @@ export default function ZoionMarketingPage() {
                <div className="grid grid-cols-1 md:grid-cols-4 gap-10 relative mt-0">
                 {/* Part 1 */}
                  <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Skapa konto</h3>
-                  <p className="text-gray-600">Logga in med BankID eller e‑post.</p>
+                  <h3 className="text-xl font-semibold text-white mb-2">Skapa konto</h3>
+                  <p className="text-white/80">Logga in med BankID eller e‑post.</p>
                   <div className="mt-6 flex flex-wrap gap-2">
 
                   </div>
@@ -94,16 +94,16 @@ export default function ZoionMarketingPage() {
 
                 {/* Part 2 */}
                  <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Lägg till din hund</h3>
-                  <p className="text-gray-600">Registreringsnummer, bilder och grunddata.</p>
+                  <h3 className="text-xl font-semibold text-white mb-2">Lägg till din hund</h3>
+                  <p className="text-white/80">Registreringsnummer, bilder och grunddata.</p>
                   <div className="mt-6 flex flex-wrap gap-2">
                   </div>
                 </div>
 
                 {/* Part 3 */}
                  <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Sök & filtrera/AI‑fråga</h3>
-                  <p className="text-gray-600">Beskriv vad du söker eller använd filter.</p>
+                  <h3 className="text-xl font-semibold text-white mb-2">Sök & filtrera/AI‑fråga</h3>
+                  <p className="text-white/80">Beskriv vad du söker eller använd filter.</p>
                   <div className="mt-6 flex flex-wrap gap-2">
             
                   </div>
@@ -111,8 +111,8 @@ export default function ZoionMarketingPage() {
 
                 {/* Part 4 */}
                  <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Få träffar & planera</h3>
-                  <p className="text-gray-600">Se inavelsgrad och gör provparning för rekommendationer.</p>
+                  <h3 className="text-xl font-semibold text-white mb-2">Få träffar & planera</h3>
+                  <p className="text-white/80">Se inavelsgrad och gör provparning för rekommendationer.</p>
                   <div className="mt-6 flex flex-wrap gap-2">
                   </div>
                 </div>
@@ -123,23 +123,23 @@ export default function ZoionMarketingPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-5 rounded-xl bg-gray-50 border border-gray-200/70">
                 <Dog className="mb-2 text-[#2d5a4f]" size={24} />
-                <div className="font-medium text-gray-900">Ras & egenskaper</div>
-                <div className="text-sm text-gray-600">Hitta rätt hund med tydliga fakta och filter.</div>
+                <div className="font-medium text-white">Ras & egenskaper</div>
+                <div className="text-sm text-white/80">Hitta rätt hund med tydliga fakta och filter.</div>
               </div>
               <div className="p-5 rounded-xl bg-gray-50 border border-gray-200/70">
                 <Dna className="mb-2 text-[#2d5a4f]" size={24} />
-                <div className="font-medium text-gray-900">Inavelsgrad & släkt</div>
-                <div className="text-sm text-gray-600">Stamtavla i flera led direkt i sökresultatet.</div>
+                <div className="font-medium text-white">Inavelsgrad & släkt</div>
+                <div className="text-sm text-white/80">Stamtavla i flera led direkt i sökresultatet.</div>
               </div>
               <div className="p-5 rounded-xl bg-gray-50 border border-gray-200/70">
                 <MessageCircle className="mb-2 text-[#2d5a4f]" size={24} />
-                <div className="font-medium text-gray-900">Dialog & matchning</div>
-                <div className="text-sm text-gray-600">Kontakta ägare och provpara för rekommendationer.</div>
+                <div className="font-medium text-white">Dialog & matchning</div>
+                <div className="text-sm text-white/80">Kontakta ägare och provpara för rekommendationer.</div>
               </div>
               <div className="p-5 rounded-xl bg-gray-50 border border-gray-200/70">
                 <Stethoscope className="mb-2 text-[#2d5a4f]" size={24} />
-                <div className="font-medium text-gray-900">Hälsa & tävling</div>
-                <div className="text-sm text-gray-600">Se medicinsk data och tävlingsresultat samlat.</div>
+                <div className="font-medium text-white">Hälsa & tävling</div>
+                <div className="text-sm text-white/80">Se medicinsk data och tävlingsresultat samlat.</div>
               </div>
             </div>
           </div>
@@ -151,20 +151,20 @@ export default function ZoionMarketingPage() {
 
 
       {/* Why Zoion – feature grid */}
-      <section className="bg-white">
+      <section className="bg-transparent">
         <div className="max-w-7xl mx-auto px-4 py-12 md:py-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-24 items-start">
             <div>
-              <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">Varför Zoion?</h2>
-              <p className="text-gray-600 mt-3 max-w-sm">Det här är varför uppfödare och hundägare väljer Zoion – fakta, trygghet och smarta verktyg på ett ställe.</p>
+              <h2 className="text-2xl md:text-3xl font-semibold text-white">Varför Zoion?</h2>
+              <p className="text-white/80 mt-3 max-w-sm">Det här är varför uppfödare och hundägare väljer Zoion – fakta, trygghet och smarta verktyg på ett ställe.</p>
             </div>
             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-2">
               <div className="flex items-start gap-3">
                 <svg className="w-5 h-5 text-[#2d5a4f]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 <div>
-                  <div className="font-medium text-gray-900">Trygg avel med fakta</div>
-                  <div className="text-sm text-gray-600">Inavelsgrad, stamtavlor i flera led och medicinska data samlat.</div>
+                  <div className="font-medium text-white">Trygg avel med fakta</div>
+                  <div className="text-sm text-white/80">Inavelsgrad, stamtavlor i flera led och medicinska data samlat.</div>
                 </div>
               </div>
             </div>
@@ -173,8 +173,8 @@ export default function ZoionMarketingPage() {
               <div className="flex items-start gap-3">
                 <MessageCircle className="w-5 h-5 text-[#2d5a4f]" />
                 <div>
-                  <div className="font-medium text-gray-900">Community & nätverk</div>
-                  <div className="text-sm text-gray-600">Chatta med ägare och uppfödare, bygg relationer och planera.</div>
+                  <div className="font-medium text-white">Community & nätverk</div>
+                  <div className="text-sm text-white/80">Chatta med ägare och uppfödare, bygg relationer och planera.</div>
                 </div>
               </div>
             </div>
@@ -183,8 +183,8 @@ export default function ZoionMarketingPage() {
               <div className="flex items-start gap-3">
                 <Dog className="w-5 h-5 text-[#2d5a4f]" />
                 <div>
-                  <div className="font-medium text-gray-900">Kraftfull sök & matchning</div>
-                  <div className="text-sm text-gray-600">Filtrera efter ras, ålder, kön och få rekommenderade partners.</div>
+                  <div className="font-medium text-white">Kraftfull sök & matchning</div>
+                  <div className="text-sm text-white/80">Filtrera efter ras, ålder, kön och få rekommenderade partners.</div>
                 </div>
               </div>
             </div>
@@ -193,8 +193,8 @@ export default function ZoionMarketingPage() {
               <div className="flex items-start gap-3">
                 <Stethoscope className="w-5 h-5 text-[#2d5a4f]" />
                 <div>
-                  <div className="font-medium text-gray-900">AI‑stöd när du behöver</div>
-                  <div className="text-sm text-gray-600">Tre guider ger snabba och relevanta svar även på svåra frågor.</div>
+                  <div className="font-medium text-white">AI‑stöd när du behöver</div>
+                  <div className="text-sm text-white/80">Tre guider ger snabba och relevanta svar även på svåra frågor.</div>
                 </div>
               </div>
             </div>
@@ -203,8 +203,8 @@ export default function ZoionMarketingPage() {
               <div className="flex items-start gap-3">
                 <Dog className="w-5 h-5 text-[#2d5a4f]" />
                 <div>
-                  <div className="font-medium text-gray-900">Data från uppfödare</div>
-                  <div className="text-sm text-gray-600">Stort uppfödarregister och uppdaterad hunddata för bättre beslut.</div>
+                  <div className="font-medium text-white">Data från uppfödare</div>
+                  <div className="text-sm text-white/80">Stort uppfödarregister och uppdaterad hunddata för bättre beslut.</div>
                 </div>
               </div>
             </div>
@@ -213,8 +213,8 @@ export default function ZoionMarketingPage() {
               <div className="flex items-start gap-3">
                 <MessageCircle className="w-5 h-5 text-[#2d5a4f]" />
                 <div>
-                  <div className="font-medium text-gray-900">Lätt att använda</div>
-                  <div className="text-sm text-gray-600">Modern, tydlig och enkel – byggd av veterinärer och uppfödare.</div>
+                  <div className="font-medium text-white">Lätt att använda</div>
+                  <div className="text-sm text-white/80">Modern, tydlig och enkel – byggd av veterinärer och uppfödare.</div>
                 </div>
               </div>
             </div>

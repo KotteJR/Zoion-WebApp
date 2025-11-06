@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
@@ -15,28 +16,38 @@ export default function FeaturedPetsPage() {
 
   const pets: Pet[] = data?.pets || [];
 
+  const shuffledPets = useMemo(() => {
+    const arr = [...pets];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+    // Recompute only when the set of IDs changes
+  }, [pets.map((p) => p.id).join(',')]);
+
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-          <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
+        <div className="flex h-full bg-transparent">
+          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6">
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-semibold tracking-tight">Featured Pets</h2>
-              <p className="text-sm text-muted-foreground">Browse featured pets available for breeding</p>
+              <h2 className="text-2xl font-semibold tracking-tight text-white">Featured Pets</h2>
+              <p className="text-sm text-white/80">Browse featured pets available for breeding</p>
             </div>
             {loading ? (
               <LoadingSpinner />
-            ) : pets.length > 0 ? (
+            ) : shuffledPets.length > 0 ? (
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {pets.map((pet) => (
+                {shuffledPets.map((pet) => (
                   <PetCard key={pet.id} pet={pet} onFavoriteChange={refetch} />
                 ))}
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-lg font-medium">No pets available at the moment</p>
-                <p className="text-sm text-muted-foreground">Check back later for new listings</p>
+                <p className="text-lg font-medium text-white">No pets available at the moment</p>
+                <p className="text-sm text-white/80">Check back later for new listings</p>
               </div>
             )}
           </div>

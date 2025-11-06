@@ -118,14 +118,14 @@ export default function AdvancedFiltersResultsPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-          <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
+        <div className="flex h-full bg-transparent">
+          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6">
             {/* Back Button */}
             <div className="mb-4">
               <Button
                 onClick={() => router.push('/advanced-filters')}
                 variant="outline"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -135,8 +135,8 @@ export default function AdvancedFiltersResultsPage() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-semibold tracking-tight">Sökresultat</h2>
-              <p className="text-sm text-muted-foreground">
+              <h2 className="text-2xl font-semibold tracking-tight text-white">Sökresultat</h2>
+              <p className="text-sm text-white/80">
                 Hittade {pets.length} hundar som matchar dina kriterier
               </p>
             </div>
@@ -151,12 +151,12 @@ export default function AdvancedFiltersResultsPage() {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-lg font-medium">Inga hundar hittades</p>
-                <p className="text-sm text-muted-foreground">Försök justera dina sökkriterier</p>
+                <p className="text-lg font-medium text-white">Inga hundar hittades</p>
+                <p className="text-sm text-white/80">Försök justera dina sökkriterier</p>
                 <Button 
                   onClick={() => router.push('/advanced-filters')} 
                   variant="outline" 
-                  className="mt-4"
+                  className="mt-4 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
                 >
                   Ändra sökning
                 </Button>

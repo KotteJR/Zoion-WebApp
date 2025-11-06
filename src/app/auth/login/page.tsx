@@ -28,7 +28,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-sidebar px-4">
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-xl border border-gray-200/50 shadow-sm p-8">
           {/* Zoion Logo at the top */}

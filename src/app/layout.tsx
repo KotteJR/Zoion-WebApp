@@ -23,12 +23,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={dmSans.variable}>
+    <html lang="en" className="h-full overflow-hidden">
+      <body className={`${dmSans.variable} h-full overflow-hidden`}>
+        {/* Global dark, fluid green background */}
+        <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+          {/* base deep green */}
+          <div className="absolute inset-0" style={{ backgroundColor: '#031813' }} />
+
+          {/* moving fluid green masses */}
+          <div className="absolute inset-0 bg-fluid-dark" />
+
+          {/* soft edge vignette */}
+          <div className="absolute inset-0 bg-vignette pointer-events-none" />
+
+          {/* subtle film grain */}
+          <div className="absolute inset-0 bg-grain pointer-events-none" />
+        </div>
+
+
         <Providers>{children}</Providers>
       </body>
     </html>
   );
 }
-
-

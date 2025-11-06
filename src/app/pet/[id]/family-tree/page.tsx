@@ -17,7 +17,7 @@ interface PetNodeProps {
 function PetNode({ pet, generation }: PetNodeProps) {
   if (!pet) {
     return (
-      <div className="bg-gray-100 rounded-lg p-3 text-center text-gray-400 text-sm min-w-[120px]">
+      <div className="bg-white/5 rounded-lg border border-white/20 p-3 text-center text-white/60 text-sm min-w-[120px]">
         Unknown
       </div>
     );
@@ -26,12 +26,12 @@ function PetNode({ pet, generation }: PetNodeProps) {
   const image = pet.profilePicture || '/images/default-dog.png';
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-3 min-w-[120px] hover:shadow-lg transition-shadow">
-      <div className="relative w-16 h-16 mx-auto mb-2 rounded-full overflow-hidden bg-gray-200">
+    <div className="bg-white/5 rounded-lg border border-white/20 p-3 min-w-[120px] hover:bg-white/10 hover:border-white/30 transition-all">
+      <div className="relative w-16 h-16 mx-auto mb-2 rounded-full overflow-hidden bg-white/5 border border-white/20">
         <Image src={image} alt={pet.name} fill className="object-cover" unoptimized />
       </div>
-      <p className="text-sm font-medium text-gray-800 text-center truncate">{pet.name}</p>
-      <p className="text-xs text-gray-500 text-center">{pet.breed}</p>
+      <p className="text-sm font-medium text-white text-center truncate">{pet.name}</p>
+      <p className="text-xs text-white/70 text-center">{pet.breed}</p>
     </div>
   );
 }
@@ -49,8 +49,8 @@ export default function FamilyTreePage() {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <div className="flex h-full flex-col gap-4 p-4 pt-0">
-            <div className="flex h-[calc(100vh-2rem)] flex-col items-center justify-center gap-4 overflow-auto rounded-xl border bg-background p-6 mt-4">
+          <div className="flex h-full bg-transparent">
+            <div className="flex flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6 w-full">
               <LoadingSpinner />
             </div>
           </div>
@@ -66,9 +66,9 @@ export default function FamilyTreePage() {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <div className="flex h-full flex-col gap-4 p-4 pt-0">
-            <div className="flex h-[calc(100vh-2rem)] flex-col items-center justify-center gap-4 overflow-auto rounded-xl border bg-background p-6 mt-4 text-center">
-              <p className="text-lg font-medium">Family tree not available</p>
+          <div className="flex h-full bg-white/5">
+            <div className="flex flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6 w-full text-center">
+              <p className="text-lg font-medium text-white">Family tree not available</p>
             </div>
           </div>
         </SidebarInset>
@@ -80,11 +80,11 @@ export default function FamilyTreePage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-full flex-col gap-4 p-4 pt-0">
-          <div className="flex h-[calc(100vh-2rem)] flex-col gap-4 overflow-auto rounded-xl border bg-background p-6 mt-4">
+        <div className="flex h-full bg-white/5">
+          <div className="flex flex-col gap-6 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6 w-full">
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-semibold tracking-tight">Family Tree</h2>
-              <p className="text-sm text-muted-foreground">{pet.name}'s family lineage</p>
+              <h2 className="text-2xl font-semibold tracking-tight text-white">Family Tree</h2>
+              <p className="text-sm text-white/80">{pet.name}'s family lineage</p>
             </div>
             <div className="overflow-x-auto">
               <div className="inline-block min-w-full">
@@ -97,11 +97,11 @@ export default function FamilyTreePage() {
                 {(pet.father || pet.mother) && (
                   <div className="flex justify-center gap-8 mb-8">
                     <div className="flex flex-col items-center">
-                      <p className="text-xs text-muted-foreground mb-2">Father</p>
+                      <p className="text-xs text-white/70 mb-2">Father</p>
                       <PetNode pet={pet.father} generation={1} />
                     </div>
                     <div className="flex flex-col items-center">
-                      <p className="text-xs text-muted-foreground mb-2">Mother</p>
+                      <p className="text-xs text-white/70 mb-2">Mother</p>
                       <PetNode pet={pet.mother} generation={1} />
                     </div>
                   </div>
@@ -113,11 +113,11 @@ export default function FamilyTreePage() {
                     {/* Father's side */}
                     <div className="flex gap-4">
                       <div className="flex flex-col items-center">
-                        <p className="text-xs text-muted-foreground mb-2">Paternal Grandfather</p>
+                        <p className="text-xs text-white/70 mb-2">Paternal Grandfather</p>
                         <PetNode pet={pet.father?.father || null} generation={2} />
                       </div>
                       <div className="flex flex-col items-center">
-                        <p className="text-xs text-muted-foreground mb-2">Paternal Grandmother</p>
+                        <p className="text-xs text-white/70 mb-2">Paternal Grandmother</p>
                         <PetNode pet={pet.father?.mother || null} generation={2} />
                       </div>
                     </div>
@@ -125,11 +125,11 @@ export default function FamilyTreePage() {
                     {/* Mother's side */}
                     <div className="flex gap-4">
                       <div className="flex flex-col items-center">
-                        <p className="text-xs text-muted-foreground mb-2">Maternal Grandfather</p>
+                        <p className="text-xs text-white/70 mb-2">Maternal Grandfather</p>
                         <PetNode pet={pet.mother?.father || null} generation={2} />
                       </div>
                       <div className="flex flex-col items-center">
-                        <p className="text-xs text-muted-foreground mb-2">Maternal Grandmother</p>
+                        <p className="text-xs text-white/70 mb-2">Maternal Grandmother</p>
                         <PetNode pet={pet.mother?.mother || null} generation={2} />
                       </div>
                     </div>

@@ -5,13 +5,13 @@ import { useSearchParams } from 'next/navigation';
 import { useQuery, useMutation } from '@apollo/client';
 import { Button } from '@/components/ui/button';
 import Input from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { GET_PET_DETAILS } from '@/lib/graphql/queries';
 import { CALCULATE_INBREEDING_COEFFICIENT } from '@/lib/graphql/mutations';
 import { Pet } from '@/types/pet';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { Heart, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 
 function ProvparningContent() {
   const searchParams = useSearchParams();
@@ -174,180 +174,226 @@ function ProvparningContent() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-          <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
-    <div className="container mx-auto p-0 max-w-none">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Provparning</h1>
-        <p className="text-gray-600 mt-2">
-          Testa parning mellan två hundar och beräkna inavelkoefficienten för att säkerställa hälsosam avel.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Pet 1 */}
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Din hund</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Hund-ID</label>
-              <Input
-                type="text"
-                placeholder="Ange hund-ID"
-                value={pet1Id}
-                onChange={(e) => setPet1Id(e.target.value)}
-                className="w-full"
-              />
-              {pet1Loading && <p className="text-xs text-gray-500 mt-1">Laddar hund...</p>}
+        <div className="flex h-full bg-transparent">
+          <div className="flex flex-col gap-6 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6 w-full">
+            {/* Header */}
+            <div className="flex flex-col gap-2">
+             
             </div>
-            
-            {pet1 && (
-              <div className="p-4 bg-gray-50 rounded-lg border">
-                <h3 className="font-semibold text-gray-900 mb-2">Hundinformation</h3>
-                <div className="space-y-1 text-sm">
-                  <p><strong>Namn:</strong> {pet1.name}</p>
-                  <p><strong>Ras:</strong> {pet1.breed}</p>
-                  <p><strong>Kön:</strong> {pet1.sex === 'male' ? 'Hane' : 'Tik'}</p>
-                  <p><strong>Född:</strong> {pet1.date_born ? new Date(pet1.date_born).toLocaleDateString('sv-SE') : 'Okänt'}</p>
-                  {pet1.inbreed_rate && (
-                    <p><strong>Nuvarande inavel:</strong> {pet1.inbreed_rate}</p>
-                  )}
+
+            {/* Two Column Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Pet 1 */}
+              <div className="space-y-4">
+                <h2 className="text-2xl font-semibold text-white">Din hund</h2>
+                <div>
+                  <label className="text-sm font-medium text-white/80 mb-2 block">Hund-ID</label>
+                  <Input
+                    type="text"
+                    placeholder="Ange hund-ID"
+                    value={pet1Id}
+                    onChange={(e) => setPet1Id(e.target.value)}
+                    className="w-full bg-white/5 text-white placeholder:text-white/60 border border-white/20 focus:border-white/30 focus:ring-0"
+                  />
+                  {pet1Loading && <p className="text-xs text-white/60 mt-1">Laddar hund...</p>}
                 </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Pet 2 */}
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Kompatibel hund</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Hund-ID</label>
-              <Input
-                type="text"
-                placeholder="Ange hund-ID"
-                value={pet2Id}
-                onChange={(e) => setPet2Id(e.target.value)}
-                className="w-full"
-              />
-              {pet2Loading && <p className="text-xs text-gray-500 mt-1">Laddar hund...</p>}
-            </div>
-            
-            {pet2 && (
-              <div className="p-4 bg-gray-50 rounded-lg border">
-                <h3 className="font-semibold text-gray-900 mb-2">Hundinformation</h3>
-                <div className="space-y-1 text-sm">
-                  <p><strong>Namn:</strong> {pet2.name}</p>
-                  <p><strong>Ras:</strong> {pet2.breed}</p>
-                  <p><strong>Kön:</strong> {pet2.sex === 'male' ? 'Hane' : 'Tik'}</p>
-                  <p><strong>Född:</strong> {pet2.date_born ? new Date(pet2.date_born).toLocaleDateString('sv-SE') : 'Okänt'}</p>
-                  {pet2.inbreed_rate && (
-                    <p><strong>Nuvarande inavel:</strong> {pet2.inbreed_rate}</p>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Results Section */}
-      <div className="mt-8 space-y-4">
-        <h2 className="text-lg font-semibold">Resultat</h2>
-        <div className="space-y-4">
-            {/* Compatibility Status */}
-            {compatibilityStatus && (
-              <div className={`p-4 rounded-lg text-sm ${
-                compatibilityStatus === 'Kompatibel' 
-                  ? 'bg-green-50 border border-green-200 text-green-800' 
-                  : 'bg-red-50 border border-red-200 text-red-800'
-              }`}>
-                <h3 className="font-semibold mb-1">Kompatibilitet:</h3>
-                <p>{compatibilityStatus}</p>
-              </div>
-            )}
-
-            {/* Error Display */}
-            {error && (
-              <div className="p-4 rounded-lg text-sm bg-red-50 border border-red-200 text-red-800">
-                <h3 className="font-semibold mb-1">Fel:</h3>
-                <p>{error}</p>
-              </div>
-            )}
-
-            {/* Inbreeding Result */}
-            {inbreedingResult && (() => {
-              const rateNum = (() => {
-                const cleaned = String(inbreedingResult).replace('%', '').trim().replace(',', '.');
-                const n = parseFloat(cleaned);
-                return isNaN(n) ? 0 : n;
-              })();
-              const isGood = rateNum < 6.25;
-              const isWarning = rateNum >= 6.25 && rateNum < 12.5;
-              const isBad = rateNum >= 12.5;
-              const boxClasses = isGood
-                ? 'bg-green-50 border-green-200 text-green-800'
-                : isWarning
-                ? 'bg-yellow-50 border-yellow-200 text-yellow-800'
-                : 'bg-red-50 border-red-200 text-red-800';
-              const label = isGood ? 'Låg (rekommenderad)' : isWarning ? 'Måttlig (varning)' : 'Hög (inte rekommenderad)';
-              return (
-                <div className={`p-4 rounded-lg text-sm border ${boxClasses}`}>
-                  <h3 className="font-semibold mb-1">Beräknad inavelkoefficient:</h3>
-                  <div className="flex items-baseline gap-2">
-                    <p className="text-lg font-bold">{inbreedingResult}</p>
-                    <span className="text-xs opacity-80">{label}</span>
+                
+                {pet1 && (
+                  <div className="p-4 bg-white/5 rounded-lg border border-white/20">
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-white/70">Namn:</span>
+                        <span className="text-white font-medium">{pet1.name}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/70">Ras:</span>
+                        <span className="text-white font-medium">{pet1.breed}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/70">Kön:</span>
+                        <span className="text-white font-medium">{pet1.sex === 'male' ? 'Hane' : 'Tik'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/70">Född:</span>
+                        <span className="text-white font-medium">
+                          {pet1.date_born ? new Date(pet1.date_born).toLocaleDateString('sv-SE') : 'Okänt'}
+                        </span>
+                      </div>
+                      {pet1.inbreed_rate && (
+                        <div className="flex justify-between">
+                          <span className="text-white/70">Nuvarande inavel:</span>
+                          <span className="text-white font-medium">{pet1.inbreed_rate}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <p className="text-xs mt-1 opacity-90">
-                    Denna procent anger risken för genetiska problem hos avkomman.
-                  </p>
+                )}
+              </div>
+
+              {/* Pet 2 */}
+              <div className="space-y-4">
+                <h2 className="text-2xl font-semibold text-white">Kompatibel hund</h2>
+                <div>
+                  <label className="text-sm font-medium text-white/80 mb-2 block">Hund-ID</label>
+                  <Input
+                    type="text"
+                    placeholder="Ange hund-ID"
+                    value={pet2Id}
+                    onChange={(e) => setPet2Id(e.target.value)}
+                    className="w-full bg-white/5 text-white placeholder:text-white/60 border border-white/20 focus:border-white/30 focus:ring-0"
+                  />
+                  {pet2Loading && <p className="text-xs text-white/60 mt-1">Laddar hund...</p>}
                 </div>
-              );
-            })()}
-
-            {/* Action Buttons */}
-            <div className="flex gap-3 pt-2">
-              <Button
-                onClick={calculateInbreeding}
-                disabled={!pet1 || !pet2 || isCalculating || compatibilityStatus === 'Inkompatibel'}
-                className="px-5"
-              >
-                {isCalculating ? 'Beräknar...' : 'Beräkna inavelkoefficient'}
-              </Button>
-              <Button
-                onClick={() => {
-                  setPet1Id('');
-                  setPet2Id('');
-                  setInbreedingResult(null);
-                  setError(null);
-                  setCompatibilityStatus(null);
-                }}
-                variant="outline"
-                className="px-5"
-              >
-                Rensa alla
-              </Button>
+                
+                {pet2 && (
+                  <div className="p-4 bg-white/5 rounded-lg border border-white/20">
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-white/70">Namn:</span>
+                        <span className="text-white font-medium">{pet2.name}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/70">Ras:</span>
+                        <span className="text-white font-medium">{pet2.breed}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/70">Kön:</span>
+                        <span className="text-white font-medium">{pet2.sex === 'male' ? 'Hane' : 'Tik'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/70">Född:</span>
+                        <span className="text-white font-medium">
+                          {pet2.date_born ? new Date(pet2.date_born).toLocaleDateString('sv-SE') : 'Okänt'}
+                        </span>
+                      </div>
+                      {pet2.inbreed_rate && (
+                        <div className="flex justify-between">
+                          <span className="text-white/70">Nuvarande inavel:</span>
+                          <span className="text-white font-medium">{pet2.inbreed_rate}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-        </div>
-      </div>
 
-      {/* Information Section */}
-      <div className="mt-8">
-        <div className="prose prose-sm max-w-none">
-          <h2 className="text-lg font-semibold">Information om provparning</h2>
-              <p className="text-gray-600 mb-3">
+            {/* Results Section */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-white">Resultat</h2>
+              
+              {/* Compatibility Status */}
+              {compatibilityStatus && (
+                <div className={`p-4 rounded-lg border ${
+                  compatibilityStatus === 'Kompatibel' 
+                    ? 'bg-white/5 border-white/30' 
+                    : 'bg-white/5 border-white/20'
+                } text-white`}>
+                  <div className="flex items-center gap-3">
+                    {compatibilityStatus === 'Kompatibel' ? (
+                      <CheckCircle className="w-5 h-5 text-green-400" />
+                    ) : (
+                      <XCircle className="w-5 h-5 text-red-400" />
+                    )}
+                    <div>
+                      <h3 className="font-semibold mb-1">Kompatibilitet:</h3>
+                      <p className="text-sm text-white/80">{compatibilityStatus}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Error Display */}
+              {error && (
+                <div className="p-4 rounded-lg border border-white/20 bg-white/5 text-white">
+                  <div className="flex items-center gap-3">
+                    <AlertCircle className="w-5 h-5 text-red-400" />
+                    <div>
+                      <h3 className="font-semibold mb-1">Fel:</h3>
+                      <p className="text-sm text-white/80">{error}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Inbreeding Result */}
+              {inbreedingResult && (() => {
+                const rateNum = (() => {
+                  const cleaned = String(inbreedingResult).replace('%', '').trim().replace(',', '.');
+                  const n = parseFloat(cleaned);
+                  return isNaN(n) ? 0 : n;
+                })();
+                const isGood = rateNum < 6.25;
+                const isWarning = rateNum >= 6.25 && rateNum < 12.5;
+                const isBad = rateNum >= 12.5;
+                const borderColor = isGood
+                  ? 'border-green-400/50'
+                  : isWarning
+                  ? 'border-yellow-400/50'
+                  : 'border-red-400/50';
+                const iconColor = isGood
+                  ? 'text-green-400'
+                  : isWarning
+                  ? 'text-yellow-400'
+                  : 'text-red-400';
+                const label = isGood ? 'Låg (rekommenderad)' : isWarning ? 'Måttlig (varning)' : 'Hög (inte rekommenderad)';
+                return (
+                  <div className={`p-4 rounded-lg border ${borderColor} bg-white/5 text-white`}>
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className={`w-5 h-5 ${iconColor} mt-0.5`} />
+                      <div className="flex-1">
+                        <h3 className="font-semibold mb-2">Beräknad inavelkoefficient:</h3>
+                        <div className="flex items-baseline gap-3 mb-2">
+                          <p className="text-2xl font-bold">{inbreedingResult}</p>
+                          <span className="text-sm text-white/70">{label}</span>
+                        </div>
+                        <p className="text-xs text-white/70">
+                          Denna procent anger risken för genetiska problem hos avkomman.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-2">
+                <Button
+                  onClick={calculateInbreeding}
+                  disabled={!pet1 || !pet2 || isCalculating || compatibilityStatus === 'Inkompatibel'}
+                  className="flex-1 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
+                >
+                  {isCalculating ? 'Beräknar...' : 'Beräkna inavelkoefficient'}
+                </Button>
+                <Button
+                  onClick={() => {
+                    setPet1Id('');
+                    setPet2Id('');
+                    setInbreedingResult(null);
+                    setError(null);
+                    setCompatibilityStatus(null);
+                  }}
+                  variant="outline"
+                  className="bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
+                >
+                  Rensa alla
+                </Button>
+              </div>
+            </div>
+
+            {/* Information Section */}
+            <div className="p-4 rounded-lg border border-white/20 bg-white/5 text-white">
+              <h2 className="text-lg font-semibold text-white mb-3">Information om provparning</h2>
+              <p className="text-white/80 mb-4 text-sm">
                 Provparning hjälper dig att bedöma kompatibiliteten mellan två hundar innan faktisk parning.
               </p>
-              <ul className="list-disc list-inside space-y-2 text-gray-600">
-                <li><strong>Kompatibilitet:</strong> Hundarna måste vara av samma ras och motsatt kön</li>
-                <li><strong>Inavelkoefficient:</strong> Visar risken för genetiska problem hos avkomman</li>
-                <li><strong>Rekommendation:</strong> En inavelkoefficient under 6.25% anses vara säker</li>
-                <li><strong>Varning:</strong> Högre värden kan öka risken för genetiska sjukdomar</li>
+              <ul className="list-disc list-inside space-y-2 text-white/80 text-sm">
+                <li><strong className="text-white">Kompatibilitet:</strong> Hundarna måste vara av samma ras och motsatt kön</li>
+                <li><strong className="text-white">Inavelkoefficient:</strong> Visar risken för genetiska problem hos avkomman</li>
+                <li><strong className="text-white">Rekommendation:</strong> En inavelkoefficient under 6.25% anses vara säker</li>
+                <li><strong className="text-white">Varning:</strong> Högre värden kan öka risken för genetiska sjukdomar</li>
               </ul>
-        </div>
-      </div>
-    </div>
+            </div>
           </div>
         </div>
       </SidebarInset>
@@ -361,8 +407,8 @@ export default function ProvparningPage() {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-            <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6">
+          <div className="flex h-full bg-transparent">
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6">
               <LoadingSpinner />
             </div>
           </div>

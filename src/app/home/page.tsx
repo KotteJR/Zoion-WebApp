@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { AppSidebar } from '@/components/app-sidebar';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarInset, SidebarProvider, useSidebar } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,7 +12,19 @@ import PetCard from '@/components/pet/PetCard';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { SEARCH_PETS, SEARCH_KENNELS } from '@/lib/graphql/queries';
 import { Pet } from '@/types/pet';
-import { Send } from 'lucide-react';
+import { Send, Menu } from 'lucide-react';
+function MobileHamburger() {
+  const { toggleSidebar } = useSidebar();
+  return (
+    <button
+      onClick={toggleSidebar}
+      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-300/60 bg-white/70 text-gray-700 shadow-sm hover:text-gray-900"
+      aria-label="Öppna meny"
+    >
+      <Menu className="w-5 h-5" />
+    </button>
+  );
+}
 import KennelCard from '@/components/kennel/KennelCard';
 import KennelMap from '@/components/maps/KennelMap';
 
@@ -781,25 +793,34 @@ export default function HomePage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-          <div className="flex flex-1 flex-col gap-4 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
+        <div className="flex h-full bg-transparent">
+          {/* Mobile hamburger placed on gray background */}
+          <div className="md:hidden mb-2">
+            <MobileHamburger />
+          </div>
+          <div className="flex flex-1 flex-col overflow-y-auto border border-gray-100/30 overflow-x-visible rounded-xl bg-white/5 md:h-[calc(100vh-2rem)]">
             {conversation.length === 0 ? (
               // Initial state - ChatGPT-like interface
-              <div className="flex flex-col items-center justify-center flex-1 text-center">
-                <div className="mb-8">
-                  <h2 className="text-3xl font-semibold text-gray-900 mb-2">Vad kan jag hjälpa dig hitta?</h2>
-                  <p className="text-gray-600">Beskriv den perfekta hunden du letar efter</p>
+              <div className="flex flex-col items-center justify-center flex-1 text-center relative">
+                <div className="mb-8 relative z-20">
+                  <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-3">
+                    Vad kan jag hjälpa dig hitta?
+                  </h2>
+                  <p className="text-white mb-2 ext-base md:text-lg font-medium">
+                    Beskriv den perfekta hunden du letar efter
+                  </p>
                 </div>
 
                 {/* Search Input */}
-                <div className="w-full max-w-2xl mb-8">
-                  <div className="relative">
+                <div className="w-full max-w-2xl mb-20 relative bg-transparent">
+                  {/* Fluid gradient shadow behind search box */}
+                  <div className="relative z-10">
                     <Input
-                      placeholder="Fråga vad som helst"
+                      placeholder="Fråga oss om vad som helst"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="h-12 pl-4 pr-16 text-lg rounded-full border border-gray-300 focus:border-[#3d7c6f] focus:outline-none ring-0 ring-offset-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="!bg-transparent !border-gray-200/20 !border h-10 pl-4 pr-16 text-sm text-white placeholder:text-gray-400 rounded-full focus:!border-gray-200/30 !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                       disabled={isSearching || searchLoading}
                     />
                     <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
@@ -810,37 +831,32 @@ export default function HomePage() {
                         onClick={handleSearch}
                         disabled={isSearching || searchLoading || !searchQuery.trim()}
                       >
-                        <Send className="w-4 h-4" />
+                        <Send className="w-4 h-4 text-white" />
                       </Button>
                     </div>
                   </div>
                 </div>
 
                 {/* Example Queries */}
-                <div className="w-full max-w-4xl">
-                  <p className="text-sm text-gray-500 mb-4">Prova dessa exempel:</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {exampleQueries.map((example, index) => (
+                <div className="w-full max-w-5xl relative">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                    {exampleQueries.slice(0,4).map((example, index) => (
                       <button
                         key={index}
                         onClick={() => {
                           setSearchQuery(example.query);
                           handleSearch();
                         }}
-                        className="p-4 text-left border border-gray-200 rounded-lg hover:border-[#3d7c6f] hover:bg-gray-50 transition-all duration-200 hover:shadow-sm group"
+                        className="p-3 md:p-4 rounded-xl bg-transparent shadow-sm hover:shadow-md border border-gray-200/20 text-left transition-all duration-200 relative overflow-hidden"
                       >
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-[#3d7c6f] group-hover:text-[#2d5a4f] transition-colors">
-                            {example.icon}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-medium text-gray-900 group-hover:text-[#3d7c6f] transition-colors">
-                              {example.title}
-                            </h3>
-                            <p className="text-sm text-gray-500 mt-1">
-                              {example.description}
-                            </p>
-                          </div>
+                        {/* Flowy animated background inside each card */}
+                        <div className="relative z-10">
+                          <h3 className="font-medium text-white">
+                            {example.title}
+                          </h3>
+                          <p className="text-xs md:text-sm text-white/95 mt-1 line-clamp-2">
+                            {example.description}
+                          </p>
                         </div>
                       </button>
                     ))}
@@ -849,20 +865,20 @@ export default function HomePage() {
               </div>
             ) : (
               // Conversation view
-              <div className="flex flex-col flex-1">
+              <div className="flex flex-col flex-1 p-4">
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto space-y-4 mb-6">
                   {conversation.map((message) => (
                     <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                       <div className={`max-w-2xl ${message.type === 'user' ? 'ml-12' : 'mr-12'}`}>
                         {message.type === 'user' ? (
-                          <div className="bg-[#3d7c6f] text-white p-3 rounded-xl rounded-br-md">
+                          <div className="bg-white/5 text-white px-3 py-3 rounded-xl rounded-br-md border border-white/20">
                             <p>{message.content}</p>
                           </div>
                         ) : (
                           <div className="space-y-4">
-                            <div className="bg-gray-100 p-3 rounded-xl rounded-bl-md">
-                              <p className="text-gray-800">{message.content}</p>
+                            <div className="bg-white/5 text-white px-3 py-3 rounded-xl rounded-bl-md border border-white/20">
+                              <p>{message.content}</p>
                             </div>
                             {message.kennelCoords && message.kennelCoords.length > 0 && (
                               <KennelMap points={message.kennelCoords} />
@@ -879,7 +895,7 @@ export default function HomePage() {
                                     <Button 
                                       onClick={() => handleSeeMore(message.filters!)}
                                       variant="outline"
-                                      className="flex items-center gap-2"
+                                      className="flex items-center gap-2 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white/80"
                                     >
                                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -908,10 +924,10 @@ export default function HomePage() {
                   {(isSearching || searchLoading) && (
                     <div className="flex justify-start">
                       <div className="max-w-3xl mr-12">
-                        <div className="bg-gray-100 p-4 rounded-2xl rounded-bl-md">
+                        <div className="bg-white/5 text-white px-5 py-4 rounded-2xl rounded-bl-md border border-white/20">
                           <div className="flex items-center gap-3">
-                            <div className="w-4 h-4 border-2 border-[#3d7c6f] border-t-transparent rounded-full animate-spin" />
-                            <p className="text-gray-600">Söker efter hundar...</p>
+                            <div className="w-4 h-4 border-2 border-white/60 border-t-transparent rounded-full animate-spin" />
+                            <p>Söker efter hundar...</p>
                           </div>
                         </div>
                       </div>
@@ -922,21 +938,21 @@ export default function HomePage() {
                 </div>
 
                 {/* Bottom Search Input */}
-                <div className="sticky bottom-0 bg-white pt-4">
+                <div className="bottom pt-4">
                   <div className="relative">
                     <Input
                       placeholder="Fråga vad som helst"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="h-12 pl-4 pr-16 text-lg rounded-full border border-gray-200 focus:border-[#3d7c6f] focus:outline-none ring-0 ring-offset-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="!bg-transparent !border-white/20 !border h-12 pl-4 pr-16 text-sm text-white placeholder:text-white/60 rounded-full focus:!border-white/30 !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                       disabled={isSearching || searchLoading}
                     />
                     <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="p-1 h-8 w-8"
+                        className="p-1 h-8 w-8 text-white hover:bg-white/10"
                         onClick={handleSearch}
                         disabled={isSearching || searchLoading || !searchQuery.trim()}
                       >
@@ -944,8 +960,6 @@ export default function HomePage() {
                       </Button>
                     </div>
                   </div>
-
-                  
                 </div>
               </div>
             )}

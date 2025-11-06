@@ -89,9 +89,9 @@ export default function ProfilePage() {
     return (
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset>
-          <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-            <div className="flex flex-1 flex-col items-center justify-center gap-6 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-8 mt-4 text-center">
+      <SidebarInset>
+        <div className="flex h-screen flex-col p-4 md:p-6 pt-6 pb-0 bg-transparent">
+          <div className="flex flex-1 flex-col items-center justify-center gap-6 overflow-y-auto overflow-x-visible rounded-t-xl bg-transparent  p-6 md:p-8 mt-4 text-center">
               <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
                 <User className="w-12 h-12 text-gray-400" />
               </div>
@@ -114,8 +114,8 @@ export default function ProfilePage() {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-            <div className="flex flex-1 flex-col items-center justify-center overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
+          <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-transparent">
+            <div className="flex flex-1 flex-col items-center justify-center overflow-y-auto overflow-x-visible rounded-t-xl bg-transparent  p-6 mt-4">
               <LoadingSpinner />
             </div>
           </div>
@@ -128,8 +128,8 @@ export default function ProfilePage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-sidebar">
-          <div className="flex flex-1 flex-col gap-6 overflow-auto rounded-t-xl bg-white border-t border-l border-r border-gray-200/50 p-6 mt-4">
+        <div className="flex h-screen flex-col p-4 md:p-6 pt-6 pb-0 bg-transparent">
+          <div className="flex flex-1 flex-col gap-6 overflow-y-auto overflow-x-visible rounded-t-xl bg-transparent  p-4 md:p-6 mt-4">
             {/* Profile Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
