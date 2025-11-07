@@ -2,7 +2,7 @@
 
 import { useQuery } from '@apollo/client';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,7 @@ import { SEARCH_PETS } from '@/lib/graphql/queries';
 import { useSearchStore } from '@/store/search-store';
 import { Pet } from '@/types/pet';
 
-export default function AdvancedFiltersResultsPage() {
+function AdvancedFiltersResultsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { filter } = useSearchStore();
@@ -226,5 +226,24 @@ export default function AdvancedFiltersResultsPage() {
         </div>
       </SidebarInset>
     </SidebarProvider>
+  );
+}
+
+export default function AdvancedFiltersResultsPage() {
+  return (
+    <Suspense fallback={
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <div className="flex h-full bg-transparent">
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6">
+              <LoadingSpinner />
+            </div>
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
+    }>
+      <AdvancedFiltersResultsContent />
+    </Suspense>
   );
 }
