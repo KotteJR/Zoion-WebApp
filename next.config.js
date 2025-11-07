@@ -6,7 +6,19 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**',
       },
+      {
+        protocol: 'http',
+        hostname: '**',
+      },
     ],
+    // Disable image optimization for external images to avoid CORS issues
+    unoptimized: false,
+    // Add domains that might be used
+    domains: [],
+    // Allow all image formats
+    formats: ['image/avif', 'image/webp'],
+    // Increase timeout for image loading
+    minimumCacheTTL: 60,
   },
   reactStrictMode: true,
   webpack: (config, { isServer }) => {

@@ -56,7 +56,15 @@ export default function PetCard({ pet, onFavoriteChange }: PetCardProps) {
                 className="object-contain object-center z-0"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 unoptimized
-                onError={() => setImageError(true)}
+                onError={(e) => {
+                  console.warn('Image failed to load:', profileImage, e);
+                  setImageError(true);
+                }}
+                onLoadingComplete={() => {
+                  // Image loaded successfully
+                }}
+                // Add referrerPolicy to help with CORS issues
+                referrerPolicy="no-referrer"
               />
             ) : (
               <div className="absolute inset-0 z-0 w-full h-full bg-gray-200/20 flex items-center justify-center">

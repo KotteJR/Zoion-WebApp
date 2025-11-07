@@ -16,6 +16,35 @@ import { getAgeString, formatDateShort } from '@/utils/date-helpers';
 import FamilyTree from '@/components/pet/FamilyTree';
 import { Trophy, Stethoscope } from 'lucide-react';
 
+// Normalize image URL helper (same as in pet-helpers.ts)
+const normalizeImageUrl = (url: string | undefined | null): string | null => {
+  if (!url || typeof url !== 'string' || url.trim() === '') {
+    return null;
+  }
+
+  const trimmed = url.trim();
+  
+  if (trimmed.startsWith('/') || trimmed.startsWith('data:')) {
+    return trimmed;
+  }
+
+  try {
+    let parsedUrl: URL;
+    if (!trimmed.match(/^https?:\/\//i)) {
+      parsedUrl = new URL(`https://${trimmed}`);
+    } else {
+      parsedUrl = new URL(trimmed);
+    }
+    if (parsedUrl.protocol === 'http:') {
+      parsedUrl.protocol = 'https:';
+    }
+    return parsedUrl.toString();
+  } catch (error) {
+    console.warn('Invalid image URL:', trimmed, error);
+    return null;
+  }
+};
+
 export default function PetProfilePage() {
   const params = useParams();
   const router = useRouter();
@@ -80,7 +109,8 @@ export default function PetProfilePage() {
   }
 
   const images = pet.images_pets || [];
-  const currentImage = images[currentImageIndex]?.location || getPetProfileImage(pet);
+  const rawCurrentImage = images[currentImageIndex]?.location || getPetProfileImage(pet);
+  const currentImage = normalizeImageUrl(rawCurrentImage) || getPetProfileImage(pet);
   const tags = getPetTags(pet);
   const ageString = pet.date_born ? getAgeString(pet.date_born) : 'Age unknown';
 
@@ -124,6 +154,10 @@ export default function PetProfilePage() {
                         sizes="(max-width: 1024px) 100vw, 50vw"
                         priority
                         unoptimized
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          console.warn('Image failed to load:', currentImage, e);
+                        }}
                       />
                       {/* Gender Badge */}
                       {pet.sex && (
@@ -148,7 +182,17 @@ export default function PetProfilePage() {
                               index === currentImageIndex ? 'border-gray-400/60' : 'border-gray-300/40'
                             }`}
                           >
-                            <Image src={img.location} alt={`${pet.name} ${index + 1}`} fill className="object-cover" unoptimized />
+                            <Image 
+                              src={normalizeImageUrl(img.location) || '/assets/icons/default_picture.svg'} 
+                              alt={`${pet.name} ${index + 1}`} 
+                              fill 
+                              className="object-cover" 
+                              unoptimized
+                              referrerPolicy="no-referrer"
+                              onError={(e) => {
+                                console.warn('Thumbnail image failed to load:', img.location, e);
+                              }}
+                            />
                           </button>
                         ))}
                       </div>

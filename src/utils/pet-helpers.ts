@@ -26,10 +26,56 @@ const fallbackByBreed = (breed?: string): string => {
   return `/assets/breeds/${variations[0]}.png`;
 };
 
+// Normalize and validate image URLs
+const normalizeImageUrl = (url: string | undefined | null): string | null => {
+  if (!url || typeof url !== 'string' || url.trim() === '') {
+    return null;
+  }
+
+  const trimmed = url.trim();
+  
+  // If it's already a relative path (starts with /), return as is
+  if (trimmed.startsWith('/')) {
+    return trimmed;
+  }
+
+  // If it's a data URL, return as is
+  if (trimmed.startsWith('data:')) {
+    return trimmed;
+  }
+
+  try {
+    // Try to parse as URL
+    let parsedUrl: URL;
+    
+    // If URL doesn't have protocol, add https://
+    if (!trimmed.match(/^https?:\/\//i)) {
+      parsedUrl = new URL(`https://${trimmed}`);
+    } else {
+      parsedUrl = new URL(trimmed);
+    }
+
+    // Force HTTPS for external URLs
+    if (parsedUrl.protocol === 'http:') {
+      parsedUrl.protocol = 'https:';
+    }
+
+    return parsedUrl.toString();
+  } catch (error) {
+    // Invalid URL, return null to trigger fallback
+    console.warn('Invalid image URL:', trimmed, error);
+    return null;
+  }
+};
+
 export const getPetProfileImage = (pet: Pet): string => {
   if (pet.images_pets && pet.images_pets.length > 0) {
     const firstImage = pet.images_pets[0];
-    return firstImage.location || firstImage.dogImage || '';
+    const imageUrl = normalizeImageUrl(firstImage.location || firstImage.dogImage);
+    
+    if (imageUrl) {
+      return imageUrl;
+    }
   }
   
   // Fallback to local breed artwork when no user image
