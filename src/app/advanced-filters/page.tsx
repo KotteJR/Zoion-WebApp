@@ -484,7 +484,7 @@ function AdvancedFiltersContent() {
           <div className="flex flex-1 flex-col overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)]">
             {/* Header with result count */}
             <div className="p-6 pb-4 relative">
-              <div className="flex items-center justify-between gap-4 mb-3 pb-3 border-b border-gray-300/30">
+              <div className="flex items-center justify-between gap-4 border-gray-300/30">
                 <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
                   Avancerade Filter
                   {resultCount !== null && (
@@ -812,7 +812,7 @@ function AdvancedFiltersContent() {
             </div>
 
             {/* Sticky Footer */}
-            <div className="sticky bottom-0 p-6 pt-4 border-t border-gray-300/30 bg-transparent backdrop-blur-sm">
+            <div className="sticky bottom-0 p-6 pt-4 border-gray-300/30 bg-transparent backdrop-blur-sm">
               <div className="flex gap-3 items-center">
                 <Button
                   onClick={handleSearch}
