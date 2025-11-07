@@ -12,10 +12,10 @@ export default function LoadingSpinner() {
     <Empty className="w-full">
       <EmptyHeader>
         <EmptyMedia variant="default">
-          <Spinner className="text-white" />
+          <Spinner className="text-gray-900" />
         </EmptyMedia>
-        <EmptyTitle className="text-white">Fetching the good boys & girls...</EmptyTitle>
-        <EmptyDescription className="text-white/80">
+        <EmptyTitle className="text-gray-900">Fetching the good boys & girls...</EmptyTitle>
+        <EmptyDescription className="text-gray-600/90">
           Hold tight! We're rounding up the pack for you.
         </EmptyDescription>
       </EmptyHeader>

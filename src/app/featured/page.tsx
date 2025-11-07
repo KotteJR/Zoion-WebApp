@@ -31,10 +31,10 @@ export default function FeaturedPetsPage() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-full bg-transparent">
-          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6">
+          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6">
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-semibold tracking-tight text-white">Featured Pets</h2>
-              <p className="text-sm text-white/80">Browse featured pets available for breeding</p>
+              <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Utvalda hundar</h2>
+              <p className="text-sm text-gray-600/90 mb-4">Bläddra bland utvalda hundar som är redo att para med varandra</p>
             </div>
             {loading ? (
               <LoadingSpinner />
@@ -46,8 +46,8 @@ export default function FeaturedPetsPage() {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-lg font-medium text-white">No pets available at the moment</p>
-                <p className="text-sm text-white/80">Check back later for new listings</p>
+                <p className="text-lg font-medium text-gray-900">No pets available at the moment</p>
+                <p className="text-sm text-gray-600/90">Check back later for new listings</p>
               </div>
             )}
           </div>

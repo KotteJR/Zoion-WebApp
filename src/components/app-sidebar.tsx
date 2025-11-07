@@ -103,7 +103,7 @@ export function AppSidebar() {
     }
   };
 
-  const sidebarContent = (
+  const sidebarContentDesktop = (
     <div className="flex h-full flex-col">
       {/* Logo */}
       <div className="flex h-16 items-center justify-center">
@@ -114,6 +114,7 @@ export function AppSidebar() {
           height={28}
           className="h-8 w-8"
         />
+        
       </div>
 
       {/* Main Navigation */}
@@ -127,18 +128,18 @@ export function AppSidebar() {
               className={cn(
                 "flex items-center justify-center h-10 w-10 rounded-xl transition-colors",
                 isActive(item.url)
-                  ? "bg-gray-100/15 text-white"
-                  : "text-white/50 hover:bg-gray-100/10 hover:text-white/60"
+                  ? "bg-gray-400/15 text-gray-800"
+                  : "text-gray-700 hover:bg-gray-400/10 hover:text-gray-800"
               )}
-                    >
-                      {item.icon}
-                    </Link>
-              ))}
+            >
+              {item.icon}
+            </Link>
+          ))}
         </div>
 
         {/* Secondary Navigation */}
         <div className="flex flex-col gap-2">
-              {navSecondary.map((item) => (
+          {navSecondary.map((item) => (
             <Link
               key={item.title}
               href={item.url}
@@ -146,43 +147,99 @@ export function AppSidebar() {
               className={cn(
                 "flex items-center justify-center h-10 w-10 rounded-lg transition-colors",
                 isActive(item.url)
-                  ? "bg-gray-100/15 text-white"
-                  : "text-white/50 hover:bg-gray-100/10 hover:text-white/60"
+                  ? "bg-gray-400/15 text-gray-800"
+                  : "text-gray-700 hover:bg-gray-400/10 hover:text-gray-800"
               )}
             >
-                      {item.icon}
-                    </Link>
+              {item.icon}
+            </Link>
           ))}
         </div>
       </nav>
     </div>
   );
 
-  // Mobile: Use Sheet
+  const sidebarContentMobile = (
+    <div className="flex h-16 items-center justify-between px-4 w-full">
+      {/* Logo */}
+      <div className="flex items-center">
+        <Image
+          src="/assets/images/svg/dogPaw.svg"
+          alt="Zoion"
+          width={28}
+          height={28}
+          className="h-7 w-7"
+        />
+      </div>
+
+      {/* Main Navigation - Horizontal */}
+      <nav className="flex items-center gap-2 flex-1 justify-center">
+        {navMain.map((item) => (
+          <Link
+            key={item.title}
+            href={item.url}
+            onClick={() => handleLinkClick(item.url)}
+            className={cn(
+              "flex items-center justify-center h-10 w-10 rounded-xl transition-colors",
+              isActive(item.url)
+                ? "bg-gray-100/15 text-white"
+                : "text-white/50 hover:bg-gray-100/10 hover:text-white/60"
+            )}
+                    >
+                      {item.icon}
+                    </Link>
+              ))}
+      </nav>
+
+      {/* Settings - Right side */}
+      <div className="flex items-center">
+              {navSecondary.map((item) => (
+          <Link
+            key={item.title}
+            href={item.url}
+            onClick={() => handleLinkClick(item.url)}
+            className={cn(
+              "flex items-center justify-center h-10 w-10 rounded-lg transition-colors",
+              isActive(item.url)
+                ? "bg-gray-100/15 text-white"
+                : "text-white/50 hover:bg-gray-100/10 hover:text-white/60"
+            )}
+          >
+                      {item.icon}
+                    </Link>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Mobile: Header at top
   if (isMobile) {
     return (
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="w-64 p-0">
-          {sidebarContent}
-        </SheetContent>
-      </Sheet>
+      <header className="fixed top-0 left-0 right-0 z-50 h-16 border-b border-white/20 bg-white/5 backdrop-blur-sm">
+        {sidebarContentMobile}
+      </header>
     );
   }
 
   // Desktop: Floating sidebar (always visible)
   return (
     <aside
-      className="fixed left-4 top-4 bottom-4 z-50 w-16 rounded-xl overflow-hidden border border-gray-200/30 bg-white/5"
+      className="fixed left-4 top-4 bottom-4 z-50 w-16 rounded-xl overflow-hidden border shadow-lg shadow-gray-800/10 border-gray-300/30 bg-gray-300/15"
     >
-      {sidebarContent}
+      {sidebarContentDesktop}
     </aside>
   );
 }
 
 // Simple SidebarInset component for layout
 export function SidebarInset({ children, className }: { children: React.ReactNode; className?: string }) {
+  const { isMobile } = useSidebar();
   return (
-    <main className={cn("flex-1 md:ml-24 md:mt-4 md:mb-4 md:mr-4", className)}>
+    <main className={cn(
+      "flex-1",
+      isMobile ? "pt-16" : "md:ml-24 md:mt-4 md:mb-4 md:mr-4",
+      className
+    )}>
       {children}
     </main>
   );

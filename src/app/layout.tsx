@@ -25,12 +25,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full overflow-hidden">
       <body className={`${dmSans.variable} h-full overflow-hidden`}>
-        {/* Global dark, fluid green background */}
+        {/* Global light, fluid background */}
         <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-          {/* base deep green */}
-          <div className="absolute inset-0" style={{ backgroundColor: '#031813' }} />
+          {/* Base soft white */}
+          <div className="absolute inset-0" style={{ backgroundColor: '#ffffff' }} />
 
-          {/* moving fluid green masses */}
+          {/* moving fluid highlights */}
           <div className="absolute inset-0 bg-fluid-dark" />
 
           {/* soft edge vignette */}

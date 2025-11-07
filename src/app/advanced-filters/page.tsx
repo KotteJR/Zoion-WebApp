@@ -11,7 +11,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { Accordion } from '@/components/ui/accordion';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { Slider } from '@/components/ui/slider';
-import { GET_ALL_BREEDS, SEARCH_PETS } from '@/lib/graphql/queries';
+import { GET_ALL_BREEDS, SEARCH_PETS, SEARCH_KENNELS } from '@/lib/graphql/queries';
 import { useSearchStore } from '@/store/search-store';
 import { Breed } from '@/types/search';
 import { cn } from '@/lib/utils';
@@ -62,6 +62,7 @@ function AdvancedFiltersContent() {
 
   const { data: breedsData, loading: breedsLoading } = useQuery(GET_ALL_BREEDS);
   const [searchPets, { loading: searchLoading }] = useLazyQuery(SEARCH_PETS);
+  const [searchKennels] = useLazyQuery(SEARCH_KENNELS);
 
   const breeds: Breed[] = breedsData?.breeds || [];
   
@@ -224,6 +225,61 @@ function AdvancedFiltersContent() {
     };
 
     setFilter(searchFilter);
+
+    // Check if this is a kennel search (kennelName provided and no other pet-specific filters)
+    const isKennelSearch = kennelName && 
+      !id && !petId && !nameContains && 
+      selectedBreeds.length === 0 && !selectedSex && 
+      !readyToBreed && !pregnant && !hasFrozenSperm && 
+      vaccinated === null && !inbreedRate && !ageRange && !weight && !color;
+
+    if (isKennelSearch) {
+      // Search for kennels
+      try {
+        const and: any[] = [];
+        if (kennelName) and.push({ name: { _ilike: `%${kennelName}%` } });
+
+        const { data } = await searchKennels({
+          variables: { where: and.length > 0 ? { _and: and } : {}, limit: 50 },
+        });
+        
+        const kennels = data?.kennels || [];
+        
+        // Geocode addresses
+        const toGeocode = kennels
+          .map((k: any) => ({ id: k.id, name: k.name, address: `${k.address || ''} ${k.post_number || ''} Sweden`.trim() }))
+          .filter((k: { address: string }) => k.address);
+
+        const results = await Promise.allSettled(
+          toGeocode.map(async (k: { id: string; name: string; address: string }) => {
+            const res = await fetch('/api/geocode', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ address: k.address }),
+            });
+            const json = await res.json();
+            if (json?.latitude && json?.longitude) {
+              return { id: k.id, name: k.name, latitude: json.latitude, longitude: json.longitude };
+            }
+            return null;
+          })
+        );
+
+        const kennelCoords = results
+          .map(r => (r.status === 'fulfilled' ? r.value : null))
+          .filter(Boolean) as { id: string; latitude: number; longitude: number; name?: string }[];
+
+        // Store kennels and coords in session storage for results page
+        sessionStorage.setItem('advancedFiltersKennels', JSON.stringify(kennels));
+        sessionStorage.setItem('advancedFiltersKennelCoords', JSON.stringify(kennelCoords));
+        
+        setResultCount(kennels.length);
+        router.push('/advanced-filters/results?type=kennels');
+        return;
+      } catch (error) {
+        console.error('Kennel search error:', error);
+      }
+    }
 
     if (id) {
       try {
@@ -425,47 +481,46 @@ function AdvancedFiltersContent() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-full bg-transparent">
-          <div className="flex flex-1 flex-col overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)]">
+          <div className="flex flex-1 flex-col overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)]">
             {/* Header with result count */}
-            <div className="p-6 pb-4 border-b border-white/20 relative">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-2xl font-semibold tracking-tight text-white">
+            <div className="p-6 pb-4 relative">
+              <div className="flex items-center justify-between gap-4 mb-3 pb-3 border-b border-gray-300/30">
+                <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
                   Avancerade Filter
                   {resultCount !== null && (
-                    <span className="ml-2 text-lg font-normal text-white/70">
+                    <span className="ml-2 text-lg font-normal text-gray-600/70">
                       — {resultCount} resultat
                     </span>
                   )}
                 </h2>
-                {appliedFilters.length > 0 && (
-                  <Button
-                    onClick={clearFilters}
-                    variant="ghost"
-                    size="sm"
-                    className="text-white/70 hover:text-white hover:bg-white/10"
-                  >
-                    Rensa alla
-                  </Button>
-                )}
-              </div>
-              
-              {/* Applied filters bar - always reserve space to prevent layout shift */}
-              <div className="min-h-[40px] flex flex-wrap gap-2 mt-3">
-                {appliedFilters.length > 0 && appliedFilters.map((filter) => (
-                  <div
-                    key={filter.key}
-                    className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs bg-white/10 text-white border border-white/20"
-                  >
-                    <span>{filter.label}</span>
-                    <button
-                      type="button"
-                      onClick={filter.onRemove}
-                      className="hover:bg-white/20 rounded p-0.5 transition-colors"
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* Applied filters bar - on the right side of title */}
+                  {appliedFilters.length > 0 && appliedFilters.map((filter) => (
+                    <div
+                      key={filter.key}
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs bg-gray-200/30 text-gray-700 border border-gray-300/40"
                     >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
-                ))}
+                      <span>{filter.label}</span>
+                      <button
+                        type="button"
+                        onClick={filter.onRemove}
+                        className="hover:bg-gray-300/30 rounded p-0.5 transition-colors"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                  {appliedFilters.length > 0 && (
+                    <Button
+                      onClick={clearFilters}
+                      variant="ghost"
+                      size="sm"
+                      className="text-gray-600/70 hover:text-gray-900 hover:bg-gray-200/20"
+                    >
+                      Rensa alla
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -475,7 +530,7 @@ function AdvancedFiltersContent() {
                 {/* Left Column - Breeds (tall) */}
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-base font-medium mb-3 text-white">Ras</h3>
+                    <h3 className="text-base font-medium mb-3 text-gray-900">Ras</h3>
                     {breedsLoading ? (
                       <LoadingSpinner />
                     ) : (
@@ -496,7 +551,7 @@ function AdvancedFiltersContent() {
                 <div className="space-y-4">
                   {/* Sex */}
                   <div>
-                    <h3 className="text-base font-medium mb-2 text-white">Kön</h3>
+                    <h3 className="text-base font-medium mb-2 text-gray-900">Kön</h3>
                     <div className="flex gap-2">
                       {[
                         { key: 'male', label: 'Hane' },
@@ -507,10 +562,10 @@ function AdvancedFiltersContent() {
                           key={String(opt.key)}
                           onClick={() => setSelectedSex(opt.key as 'male' | 'female' | null)}
                           className={cn(
-                            'px-3 py-1.5 rounded border text-sm transition-colors text-white',
+                            'px-3 py-1.5 rounded border text-sm transition-colors text-gray-900',
                             selectedSex === opt.key
-                              ? 'bg-white/10 border-white/30'
-                              : 'bg-white/5 border-white/20 hover:border-white/30'
+                              ? 'bg-white/10 border-gray-300/50 shadow-sm'
+                              : 'bg-white/10 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                           )}
                           type="button"
                         >
@@ -522,16 +577,16 @@ function AdvancedFiltersContent() {
 
                   {/* Status - Compact chips in one row */}
                   <div>
-                    <h3 className="text-base font-medium mb-2 text-white">Status</h3>
+                    <h3 className="text-base font-medium mb-2 text-gray-900">Status</h3>
                     <div className="flex gap-2 flex-wrap">
                       <button
                         type="button"
                         onClick={() => setReadyToBreed((v) => !v)}
                         className={cn(
-                          'px-3 py-1.5 rounded border text-sm transition-colors text-white',
+                          'px-3 py-1.5 rounded border text-sm transition-colors text-gray-900',
                           readyToBreed
-                            ? 'bg-white/10 border-white/30'
-                            : 'bg-white/5 border-white/20 hover:border-white/30'
+                            ? 'bg-white/10 border-gray-300/50 shadow-sm'
+                            : 'bg-white/10 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                         )}
                       >
                         Redo att para
@@ -540,10 +595,10 @@ function AdvancedFiltersContent() {
                         type="button"
                         onClick={() => setPregnant((v) => !v)}
                         className={cn(
-                          'px-3 py-1.5 rounded border text-sm transition-colors text-white',
+                          'px-3 py-1.5 rounded border text-sm transition-colors text-gray-900',
                           pregnant
-                            ? 'bg-white/10 border-white/30'
-                            : 'bg-white/5 border-white/20 hover:border-white/30'
+                            ? 'bg-white/10 border-gray-300/50 shadow-sm'
+                            : 'bg-white/10 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                         )}
                       >
                         Dräktig
@@ -552,10 +607,10 @@ function AdvancedFiltersContent() {
                         type="button"
                         onClick={() => setHasFrozenSperm((v) => !v)}
                         className={cn(
-                          'px-3 py-1.5 rounded border text-sm transition-colors text-white',
+                          'px-3 py-1.5 rounded border text-sm transition-colors text-gray-900',
                           hasFrozenSperm
-                            ? 'bg-white/10 border-white/30'
-                            : 'bg-white/5 border-white/20 hover:border-white/30'
+                            ? 'bg-white/10 border-gray-300/50 shadow-sm'
+                            : 'bg-white/10 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                         )}
                       >
                         Har fryst sperma
@@ -565,7 +620,7 @@ function AdvancedFiltersContent() {
 
                   {/* Vaccination */}
                   <div>
-                    <h3 className="text-base font-medium mb-2 text-white">Vaccination</h3>
+                    <h3 className="text-base font-medium mb-2 text-gray-900">Vaccination</h3>
                     <div className="flex gap-2">
                       {[
                         { key: true, label: 'Vaccinerad' },
@@ -576,10 +631,10 @@ function AdvancedFiltersContent() {
                           key={String(opt.key)}
                           onClick={() => setVaccinated(opt.key as boolean | null)}
                           className={cn(
-                            'px-3 py-1.5 rounded border text-sm transition-colors text-white',
+                            'px-3 py-1.5 rounded border text-sm transition-colors text-gray-900',
                             vaccinated === opt.key
-                              ? 'bg-white/10 border-white/30'
-                              : 'bg-white/5 border-white/20 hover:border-white/30'
+                              ? 'bg-white/10 border-gray-300/50 shadow-sm'
+                              : 'bg-white/10 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                           )}
                           type="button"
                         >
@@ -591,7 +646,7 @@ function AdvancedFiltersContent() {
 
                   {/* Inbreeding Rate - Slider with operator */}
                   <div>
-                    <h3 className="text-base font-medium mb-2 text-white">Inavelsgrad (%)</h3>
+                    <h3 className="text-base font-medium mb-2 text-gray-900">Inavelsgrad (%)</h3>
                     <div className="space-y-3">
                       <div className="flex gap-2">
                         {[
@@ -603,10 +658,10 @@ function AdvancedFiltersContent() {
                             key={opt.key}
                             onClick={() => setInbreedRate(prev => prev ? { ...prev, operator: opt.key as 'less' | 'greater' | 'equal' } : { operator: opt.key as 'less' | 'greater' | 'equal', value: 0 })}
                             className={cn(
-                              'px-3 py-1.5 rounded border text-sm transition-colors text-white',
+                              'px-3 py-1.5 rounded border text-sm transition-colors text-gray-900',
                               inbreedRate?.operator === opt.key
-                                ? 'bg-white/10 border-white/30'
-                                : 'bg-white/5 border-white/20 hover:border-white/30'
+                                ? 'bg-white/10 border-gray-300/50 shadow-sm'
+                                : 'bg-white/10 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                             )}
                             type="button"
                           >
@@ -624,7 +679,7 @@ function AdvancedFiltersContent() {
                             step={0.1}
                             formatValue={(v) => `${v.toFixed(1)}%`}
                           />
-                          <div className="text-xs text-white/70 mt-1 text-center">
+                          <div className="text-xs text-gray-600/70 mt-1 text-center">
                             {inbreedRate.value.toFixed(1)}%
                           </div>
                         </div>
@@ -634,7 +689,7 @@ function AdvancedFiltersContent() {
 
                   {/* Age Range - Dual-handle slider */}
                   <div>
-                    <h3 className="text-base font-medium mb-2 text-white">Ålder (år)</h3>
+                    <h3 className="text-base font-medium mb-2 text-gray-900">Ålder (år)</h3>
                     <div className="px-2">
                       <Slider
                         value={ageRange ? [ageRange.min || 0, ageRange.max || 15] : [0, 15]}
@@ -646,7 +701,7 @@ function AdvancedFiltersContent() {
                         formatValue={(v) => `${v.toFixed(1)} år`}
                       />
                     </div>
-                    <div className="flex justify-between text-xs text-white/70 mt-1">
+                    <div className="flex justify-between text-xs text-gray-600/70 mt-1">
                       <span>{(ageRange?.min ?? 0).toFixed(1)} år</span>
                       <span>{(ageRange?.max ?? 15).toFixed(1)} år</span>
                     </div>
@@ -654,7 +709,7 @@ function AdvancedFiltersContent() {
 
                   {/* Weight - Slider with operator */}
                   <div>
-                    <h3 className="text-base font-medium mb-2 text-white">Vikt (kg)</h3>
+                    <h3 className="text-base font-medium mb-2 text-gray-900">Vikt (kg)</h3>
                     <div className="space-y-3">
                       <div className="flex gap-2">
                         {[
@@ -666,10 +721,10 @@ function AdvancedFiltersContent() {
                             key={opt.key}
                             onClick={() => setWeight(prev => prev ? { ...prev, operator: opt.key as 'less' | 'greater' | 'equal' } : { operator: opt.key as 'less' | 'greater' | 'equal', value: 0 })}
                             className={cn(
-                              'px-3 py-1.5 rounded border text-sm transition-colors text-white',
+                              'px-3 py-1.5 rounded border text-sm transition-colors text-gray-900',
                               weight?.operator === opt.key
-                                ? 'bg-white/10 border-white/30'
-                                : 'bg-white/5 border-white/20 hover:border-white/30'
+                                ? 'bg-white/10 border-gray-300/50 shadow-sm'
+                                : 'bg-white/10 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                             )}
                             type="button"
                           >
@@ -687,7 +742,7 @@ function AdvancedFiltersContent() {
                             step={0.5}
                             formatValue={(v) => `${v.toFixed(1)} kg`}
                           />
-                          <div className="text-xs text-white/70 mt-1 text-center">
+                          <div className="text-xs text-gray-600/70 mt-1 text-center">
                             {weight.value.toFixed(1)} kg
                           </div>
                         </div>
@@ -697,13 +752,13 @@ function AdvancedFiltersContent() {
 
                   {/* Color */}
                   <div>
-                    <h3 className="text-base font-medium mb-2 text-white">Färg</h3>
+                    <h3 className="text-base font-medium mb-2 text-gray-900">Färg</h3>
                     <input
                       type="text"
                       placeholder="Färg"
                       value={color}
                       onChange={(e) => setColor(e.target.value)}
-                      className="w-full px-3 py-2 rounded text-sm bg-white/5 text-white placeholder:text-white/60 border border-white/20 focus:border-white/30 focus:outline-none"
+                      className="w-full px-3 py-2 rounded text-sm !bg-transparent !border-gray-300/60 !border text-gray-600 placeholder:text-gray-600 focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                     />
                   </div>
 
@@ -711,43 +766,43 @@ function AdvancedFiltersContent() {
                   <Accordion title="Avancerat" defaultOpen={false}>
                     <div className="space-y-3">
                       <div>
-                        <label className="text-sm text-white/80 mb-1 block">Kennel</label>
+                        <label className="text-sm text-gray-700 mb-1 block">Kennel</label>
                         <input
                           type="text"
                           placeholder="Kennelnamn"
                           value={kennelName}
                           onChange={(e) => setKennelName(e.target.value)}
-                          className="w-full px-3 py-2 rounded text-sm bg-white/5 text-white placeholder:text-white/60 border border-white/20 focus:border-white/30 focus:outline-none"
+                          className="w-full px-3 py-2 rounded text-sm !bg-transparent !border-gray-300/60 !border text-gray-600 placeholder:text-gray-600 focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                         />
                       </div>
                       <div>
-                        <label className="text-sm text-white/80 mb-1 block">Namn</label>
+                        <label className="text-sm text-gray-700 mb-1 block">Namn</label>
                         <input
                           type="text"
                           placeholder="Namn innehåller"
                           value={nameContains}
                           onChange={(e) => setNameContains(e.target.value)}
-                          className="w-full px-3 py-2 rounded text-sm bg-white/5 text-white placeholder:text-white/60 border border-white/20 focus:border-white/30 focus:outline-none"
+                          className="w-full px-3 py-2 rounded text-sm !bg-transparent !border-gray-300/60 !border text-gray-600 placeholder:text-gray-600 focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                         />
                       </div>
                       <div>
-                        <label className="text-sm text-white/80 mb-1 block">Hund-ID (Exakt)</label>
+                        <label className="text-sm text-gray-700 mb-1 block">Hund-ID (Exakt)</label>
                         <input
                           type="text"
                           placeholder="Exakt Hund-ID"
                           value={id}
                           onChange={(e) => setId(e.target.value)}
-                          className="w-full px-3 py-2 rounded text-sm bg-white/5 text-white placeholder:text-white/60 border border-white/20 focus:border-white/30 focus:outline-none"
+                          className="w-full px-3 py-2 rounded text-sm !bg-transparent !border-gray-300/60 !border text-gray-600 placeholder:text-gray-600 focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                         />
                       </div>
                       <div>
-                        <label className="text-sm text-white/80 mb-1 block">Hund-ID (Innehåller)</label>
+                        <label className="text-sm text-gray-700 mb-1 block">Hund-ID (Innehåller)</label>
                         <input
                           type="text"
                           placeholder="Hund-ID innehåller"
                           value={petId}
                           onChange={(e) => setPetId(e.target.value)}
-                          className="w-full px-3 py-2 rounded text-sm bg-white/5 text-white placeholder:text-white/60 border border-white/20 focus:border-white/30 focus:outline-none"
+                          className="w-full px-3 py-2 rounded text-sm !bg-transparent !border-gray-300/60 !border text-gray-600 placeholder:text-gray-600 focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                         />
                       </div>
                     </div>
@@ -757,12 +812,12 @@ function AdvancedFiltersContent() {
             </div>
 
             {/* Sticky Footer */}
-            <div className="sticky bottom-0 p-6 pt-4 border-t border-white/20 bg-white/5 backdrop-blur-sm">
+            <div className="sticky bottom-0 p-6 pt-4 border-t border-gray-300/30 bg-transparent backdrop-blur-sm">
               <div className="flex gap-3 items-center">
                 <Button
                   onClick={handleSearch}
                   disabled={searchLoading}
-                  className="flex-1 bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:border-white/30 h-10"
+                  className="flex-1 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm h-10"
                 >
                   {searchLoading ? 'Söker...' : 'Visa resultat'}
                 </Button>
@@ -770,7 +825,7 @@ function AdvancedFiltersContent() {
                   onClick={clearFilters}
                   variant="ghost"
                   disabled={searchLoading}
-                  className="bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30 h-10"
+                  className="bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm h-10"
                 >
                   Rensa
                 </Button>

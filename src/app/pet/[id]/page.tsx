@@ -91,12 +91,12 @@ export default function PetProfilePage() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-full bg-transparent">
-          <div className="flex flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6 w-full">
+          <div className="flex flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6 w-full">
             {/* Header with Back Button */}
             <div className="flex items-center justify-between">
               <Button
                 variant="outline"
-                className="flex items-center gap-2 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
+                className="flex items-center gap-2 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
                 onClick={() => router.back()}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,7 +110,7 @@ export default function PetProfilePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:items-stretch">
               {/* Left Column - Image Gallery */}
               <div>
-                <Card className="overflow-hidden h-full flex flex-col bg-white/5 border border-white/20 text-white">
+                <Card className="overflow-hidden h-full flex flex-col bg-white/10 border border-gray-300/30 text-gray-900 shadow-sm">
                   <CardHeader className="p-0 flex-1">
                     {/* Keep a stable aspect to avoid odd crops and ensure full fit */}
                     <div className="relative h-full min-h-[260px] md:min-h-[360px] lg:min-h-[420px] bg-transparent">
@@ -128,8 +128,8 @@ export default function PetProfilePage() {
                       {/* Gender Badge */}
                       {pet.sex && (
                         <div className="absolute top-3 left-3">
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 border border-white/30">
-                            <span className="text-sm font-bold text-white">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/30 border border-gray-300/50">
+                            <span className="text-sm font-bold text-gray-700">
                               {pet.sex === 'male' ? '♂' : '♀'}
                             </span>
                           </div>
@@ -145,7 +145,7 @@ export default function PetProfilePage() {
                             key={img.id}
                             onClick={() => setCurrentImageIndex(index)}
                             className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors ${
-                              index === currentImageIndex ? 'border-white/40' : 'border-white/20'
+                              index === currentImageIndex ? 'border-gray-400/60' : 'border-gray-300/40'
                             }`}
                           >
                             <Image src={img.location} alt={`${pet.name} ${index + 1}`} fill className="object-cover" unoptimized />
@@ -159,18 +159,18 @@ export default function PetProfilePage() {
 
               {/* Right Column - Pet Info and Owner */}
               <div className="flex flex-col space-y-4">
-                <Card className="bg-white/5 border border-white/20 text-white">
+                <Card className="bg-white/10 border border-gray-300/30 text-gray-900 shadow-sm">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-6">
                       <div>
-                        <h1 className="text-3xl font-bold text-white mb-1">{pet.name}</h1>
-                        <p className="text-xl text-white/80 mb-1">{pet.breed}</p>
-                        <p className="text-sm text-white/70 font-mono">{pet.id}</p>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-1">{pet.name}</h1>
+                        <p className="text-xl text-gray-700 mb-1">{pet.breed}</p>
+                        <p className="text-sm text-gray-600/70 font-mono">{pet.id}</p>
                       </div>
                       {pet.competitions_aggregate?.aggregate.count > 0 && (
-                        <div className="flex items-center gap-2 bg-yellow-200/20 border border-yellow-300/40 px-3 py-2 rounded-full">
-                          <Trophy className="w-4 h-4 text-yellow-300" />
-                          <span className="text-sm font-medium text-yellow-200">
+                        <div className="flex items-center gap-2 bg-yellow-100/50 border border-yellow-300/50 px-3 py-2 rounded-full">
+                          <Trophy className="w-4 h-4 text-yellow-700" />
+                          <span className="text-sm font-medium text-yellow-800">
                             {pet.competitions_aggregate.aggregate.count}
                           </span>
                         </div>
@@ -183,7 +183,7 @@ export default function PetProfilePage() {
                         {tags.map((tag, index) => (
                           <span
                             key={index}
-                            className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-white/5 text-white border border-white/20"
+                            className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-gray-200/30 text-gray-700 border border-gray-300/40"
                           >
                             {tag}
                           </span>
@@ -194,64 +194,64 @@ export default function PetProfilePage() {
                     {/* Details Grid */}
                     <div className="grid grid-cols-2 gap-6 mb-6">
                       <div>
-                        <p className="text-sm text-white/70 mb-1">Age</p>
-                        <p className="text-base font-medium text-white">{ageString}</p>
+                        <p className="text-sm text-gray-600/70 mb-1">Age</p>
+                        <p className="text-base font-medium text-gray-900">{ageString}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-white/70 mb-1">Sex</p>
-                        <p className="text-base font-medium text-white capitalize">{pet.sex}</p>
+                        <p className="text-sm text-gray-600/70 mb-1">Sex</p>
+                        <p className="text-base font-medium text-gray-900 capitalize">{pet.sex}</p>
                       </div>
                       {pet.colour && (
                         <div>
-                          <p className="text-sm text-white/70 mb-1">Color</p>
-                          <p className="text-base font-medium text-white">{pet.colour}</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Color</p>
+                          <p className="text-base font-medium text-gray-900">{pet.colour}</p>
                         </div>
                       )}
                       {pet.weight && (
                         <div>
-                          <p className="text-sm text-white/70 mb-1">Weight</p>
-                          <p className="text-base font-medium text-white">{pet.weight} kg</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Weight</p>
+                          <p className="text-base font-medium text-gray-900">{pet.weight} kg</p>
                         </div>
                       )}
                       {pet.inbreed_rate && (
                         <div>
-                          <p className="text-sm text-white/70 mb-1">Inbreed Rate</p>
-                          <p className="text-base font-medium text-white">{pet.inbreed_rate}%</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Inbreed Rate</p>
+                          <p className="text-base font-medium text-gray-900">{pet.inbreed_rate}%</p>
                         </div>
                       )}
                       {pet.kennel_name && (
                         <div>
-                          <p className="text-sm text-white/70 mb-1">Kennel</p>
-                          <p className="text-base font-medium text-white">{pet.kennel_name}</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Kennel</p>
+                          <p className="text-base font-medium text-gray-900">{pet.kennel_name}</p>
                         </div>
                       )}
                       {pet.vaccinated !== null && pet.vaccinated !== undefined && (
                         <div>
-                          <p className="text-sm text-white/70 mb-1">Vaccinated</p>
-                          <p className="text-base font-medium text-white">{pet.vaccinated ? 'Yes' : 'No'}</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Vaccinated</p>
+                          <p className="text-base font-medium text-gray-900">{pet.vaccinated ? 'Yes' : 'No'}</p>
                         </div>
                       )}
                       {pet.date_born && (
                         <div>
-                          <p className="text-sm text-white/70 mb-1">Date of Birth</p>
-                          <p className="text-base font-medium text-white">{formatDateShort(pet.date_born)}</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Date of Birth</p>
+                          <p className="text-base font-medium text-gray-900">{formatDateShort(pet.date_born)}</p>
                         </div>
                       )}
                       {pet.next_breeding_date && (
                         <div>
-                          <p className="text-sm text-white/70 mb-1">Next Breeding Date</p>
-                          <p className="text-base font-medium text-white">{formatDateShort(pet.next_breeding_date)}</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Next Breeding Date</p>
+                          <p className="text-base font-medium text-gray-900">{formatDateShort(pet.next_breeding_date)}</p>
                         </div>
                       )}
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col gap-3 pt-4 border-t border-white/20">
+                    <div className="flex flex-col gap-3 pt-4 border-t border-gray-300/30">
                       <div className="flex gap-3">
                         {pet.competitions_aggregate?.aggregate.count > 0 && (
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button variant="outline" className="flex-1 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30">
+                              <Button variant="outline" className="flex-1 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm">
                                 <Trophy className="w-4 h-4 mr-2" />
                                 Trophies ({pet.competitions_aggregate.aggregate.count})
                               </Button>
@@ -299,7 +299,7 @@ export default function PetProfilePage() {
                         {pet.medical_records_aggregate?.aggregate.count > 0 && (
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button variant="outline" className="flex-1 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30">
+                              <Button variant="outline" className="flex-1 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm">
                                 <Stethoscope className="w-4 h-4 mr-2" />
                                 Medical Records ({pet.medical_records_aggregate.aggregate.count})
                               </Button>
@@ -335,7 +335,7 @@ export default function PetProfilePage() {
                       
                       <Button
                         onClick={() => router.push(`/provparning?target=${encodeURIComponent(petId)}`)}
-                        className="bg-white/5 hover:bg-white/10 text-white border border-white/20 flex items-center gap-2 flex-1"
+                        className="bg-white/10 hover:bg-white/20 text-gray-900 border border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm flex items-center gap-2 flex-1"
                       >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
@@ -348,41 +348,41 @@ export default function PetProfilePage() {
 
                 {/* Kennel Info Card */}
                 {kennel && (
-                  <Card className="bg-white/5 border border-white/20 text-white">
+                  <Card className="bg-white/10 border border-gray-300/30 text-gray-900 shadow-sm">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-lg font-semibold text-white">Kennel</h3>
-                        <Button variant="outline" className="bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30" onClick={() => router.push(`/kennel/${kennel.id}`)}>
+                        <h3 className="text-lg font-semibold text-gray-900">Kennel</h3>
+                        <Button variant="outline" className="bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm" onClick={() => router.push(`/kennel/${kennel.id}`)}>
                           Visa kennel
                         </Button>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div>
-                          <span className="text-white/70">Namn:</span> {kennel.name}
+                          <span className="text-gray-600/70">Namn:</span> <span className="text-gray-900">{kennel.name}</span>
                         </div>
                         {kennel.address && (
                           <div>
-                            <span className="text-white/70">Adress:</span> {kennel.address}
+                            <span className="text-gray-600/70">Adress:</span> <span className="text-gray-900">{kennel.address}</span>
                           </div>
                         )}
                         {kennel.post_number && (
                           <div>
-                            <span className="text-white/70">Postnummer:</span> {kennel.post_number}
+                            <span className="text-gray-600/70">Postnummer:</span> <span className="text-gray-900">{kennel.post_number}</span>
                           </div>
                         )}
                         {kennel.phone_number && (
                           <div>
-                            <span className="text-white/70">Telefon:</span> {kennel.phone_number}
+                            <span className="text-gray-600/70">Telefon:</span> <span className="text-gray-900">{kennel.phone_number}</span>
                           </div>
                         )}
                         {kennel.email && (
                           <div>
-                            <span className="text-white/70">E‑post:</span> {kennel.email}
+                            <span className="text-gray-600/70">E‑post:</span> <span className="text-gray-900">{kennel.email}</span>
                           </div>
                         )}
                         {kennel.website && (
                           <div>
-                            <span className="text-white/70">Webb:</span> {kennel.website}
+                            <span className="text-gray-600/70">Webb:</span> <span className="text-gray-900">{kennel.website}</span>
                           </div>
                         )}
                       </div>
@@ -392,25 +392,25 @@ export default function PetProfilePage() {
 
                 {/* Owner Info Card */}
                 {pet.owner && (
-                  <Card className="bg-white/5 border border-white/20 text-white">
+                  <Card className="bg-white/10 border border-gray-300/30 text-gray-900 shadow-sm">
                     <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold text-white mb-4">Owner Information</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Owner Information</h3>
                       <div className="flex items-center gap-4">
-                        <div className="relative w-16 h-16 rounded-full overflow-hidden bg-white/5 border-2 border-white/20">
+                        <div className="relative w-16 h-16 rounded-full overflow-hidden bg-white/10 border-2 border-gray-300/40">
                           {pet.owner.profile_picture ? (
                             <Image src={pet.owner.profile_picture} alt="Owner" fill className="object-cover" unoptimized />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-white/60 text-xl font-bold">
+                            <div className="w-full h-full flex items-center justify-center text-gray-600 text-xl font-bold">
                               {pet.owner.given_name?.[0]}
                             </div>
                           )}
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-white">
+                          <p className="font-medium text-gray-900">
                             {pet.owner.given_name} {pet.owner.family_name}
                           </p>
                           {pet.owner.address && (
-                            <p className="text-sm text-white/80 flex items-center gap-1 mt-1">
+                            <p className="text-sm text-gray-600/90 flex items-center gap-1 mt-1">
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -422,7 +422,7 @@ export default function PetProfilePage() {
                         <Button 
                           onClick={() => router.push(`/breeder/${pet.owner_id}`)} 
                           variant="outline"
-                          className="bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
+                          className="bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
                         >
                           View Profile
                         </Button>

@@ -1,11 +1,14 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import PetCard from '@/components/pet/PetCard';
+import KennelCard from '@/components/kennel/KennelCard';
+import KennelMap from '@/components/maps/KennelMap';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { SEARCH_PETS } from '@/lib/graphql/queries';
 import { useSearchStore } from '@/store/search-store';
@@ -13,7 +16,11 @@ import { Pet } from '@/types/pet';
 
 export default function AdvancedFiltersResultsPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { filter } = useSearchStore();
+  const [kennels, setKennels] = useState<any[]>([]);
+  const [kennelCoords, setKennelCoords] = useState<{ id: string; latitude: number; longitude: number; name?: string }[]>([]);
+  const isKennelSearch = searchParams?.get('type') === 'kennels';
   
   // Build the where clause for GraphQL - must match exact logic from search page
   const whereConditions: any[] = [];
@@ -100,6 +107,24 @@ export default function AdvancedFiltersResultsPage() {
     whereConditions.push({ weight: { [graphQLOp]: filter.weight.value } });
   }
 
+  // Load kennels from session storage if this is a kennel search
+  useEffect(() => {
+    if (isKennelSearch) {
+      try {
+        const savedKennels = sessionStorage.getItem('advancedFiltersKennels');
+        const savedCoords = sessionStorage.getItem('advancedFiltersKennelCoords');
+        if (savedKennels) {
+          setKennels(JSON.parse(savedKennels));
+        }
+        if (savedCoords) {
+          setKennelCoords(JSON.parse(savedCoords));
+        }
+      } catch (error) {
+        console.error('Error loading kennels from session storage:', error);
+      }
+    }
+  }, [isKennelSearch]);
+
   const whereClause = whereConditions.length > 0 ? { _and: whereConditions } : {};
   
   // Use limit 1 for exact ID search, otherwise 50
@@ -110,6 +135,7 @@ export default function AdvancedFiltersResultsPage() {
       where: whereClause,
       limit: searchLimit,
     },
+    skip: isKennelSearch, // Skip pet search if this is a kennel search
   });
 
   const pets: Pet[] = data?.pets || [];
@@ -119,13 +145,13 @@ export default function AdvancedFiltersResultsPage() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-full bg-transparent">
-          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6">
+          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6">
             {/* Back Button */}
             <div className="mb-4">
               <Button
                 onClick={() => router.push('/advanced-filters')}
                 variant="outline"
-                className="flex items-center gap-2 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
+                className="flex items-center gap-2 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -135,32 +161,66 @@ export default function AdvancedFiltersResultsPage() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-semibold tracking-tight text-white">Sökresultat</h2>
-              <p className="text-sm text-white/80">
-                Hittade {pets.length} hundar som matchar dina kriterier
+              <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Sökresultat</h2>
+              <p className="text-sm text-gray-600/90">
+                {isKennelSearch 
+                  ? `Hittade ${kennels.length} kennlar som matchar dina kriterier`
+                  : `Hittade ${pets.length} hundar som matchar dina kriterier`
+                }
               </p>
             </div>
 
-            {loading ? (
-              <LoadingSpinner />
-            ) : pets.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {pets.map((pet) => (
-                  <PetCard key={pet.id} pet={pet} onFavoriteChange={refetch} />
-                ))}
-              </div>
+            {isKennelSearch ? (
+              // Kennel search results
+              kennels.length > 0 ? (
+                <div className="space-y-4">
+                  {/* Map */}
+                  {kennelCoords.length > 0 && (
+                    <KennelMap points={kennelCoords} height={400} />
+                  )}
+                  {/* Kennel Cards */}
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {kennels.map((kennel) => (
+                      <KennelCard key={kennel.id} kennel={kennel} />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <p className="text-lg font-medium text-gray-900">Inga kennlar hittades</p>
+                  <p className="text-sm text-gray-600/90">Försök justera dina sökkriterier</p>
+                  <Button 
+                    onClick={() => router.push('/advanced-filters')} 
+                    variant="outline" 
+                    className="mt-4 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
+                  >
+                    Ändra sökning
+                  </Button>
+                </div>
+              )
             ) : (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-lg font-medium text-white">Inga hundar hittades</p>
-                <p className="text-sm text-white/80">Försök justera dina sökkriterier</p>
-                <Button 
-                  onClick={() => router.push('/advanced-filters')} 
-                  variant="outline" 
-                  className="mt-4 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
-                >
-                  Ändra sökning
-                </Button>
-              </div>
+              // Pet search results
+              loading ? (
+                <LoadingSpinner />
+              ) : pets.length > 0 ? (
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {pets.map((pet) => (
+                    <PetCard key={pet.id} pet={pet} onFavoriteChange={refetch} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <p className="text-lg font-medium text-gray-900">Inga hundar hittades</p>
+                  <p className="text-sm text-gray-600/90">Försök justera dina sökkriterier</p>
+                  <Button 
+                    onClick={() => router.push('/advanced-filters')} 
+                    variant="outline" 
+                    className="mt-4 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
+                  >
+                    Ändra sökning
+                  </Button>
+                </div>
+              )
             )}
           </div>
         </div>

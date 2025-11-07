@@ -12,19 +12,7 @@ import PetCard from '@/components/pet/PetCard';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { SEARCH_PETS, SEARCH_KENNELS } from '@/lib/graphql/queries';
 import { Pet } from '@/types/pet';
-import { Send, Menu } from 'lucide-react';
-function MobileHamburger() {
-  const { toggleSidebar } = useSidebar();
-  return (
-    <button
-      onClick={toggleSidebar}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-300/60 bg-white/70 text-gray-700 shadow-sm hover:text-gray-900"
-      aria-label="Öppna meny"
-    >
-      <Menu className="w-5 h-5" />
-    </button>
-  );
-}
+import { Send } from 'lucide-react';
 import KennelCard from '@/components/kennel/KennelCard';
 import KennelMap from '@/components/maps/KennelMap';
 
@@ -794,19 +782,17 @@ export default function HomePage() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-full bg-transparent">
-          {/* Mobile hamburger placed on gray background */}
-          <div className="md:hidden mb-2">
-            <MobileHamburger />
-          </div>
-          <div className="flex flex-1 flex-col overflow-y-auto border border-gray-100/30 overflow-x-visible rounded-xl bg-white/5 md:h-[calc(100vh-2rem)]">
+          <div className="flex flex-1 flex-col overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)]">
             {conversation.length === 0 ? (
               // Initial state - ChatGPT-like interface
-              <div className="flex flex-col items-center justify-center flex-1 text-center relative">
+              <div className="flex flex-col items-center justify-center flex-1 text-center relative px-4">
                 <div className="mb-8 relative z-20">
-                  <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-3">
+                  {/* White glow behind text */}
+                  <div className="absolute inset-0 -inset-x-8 -inset-y-4 blur-2xl bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.15)_0%,transparent_70%)] opacity-60 -z-10" />
+                  <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gray-900 mb-3 relative z-10">
                     Vad kan jag hjälpa dig hitta?
                   </h2>
-                  <p className="text-white mb-2 ext-base md:text-lg font-medium">
+                  <p className="text-gray-600/90 mb-4 mt-6 ext-base md:text-lg relative z-10">
                     Beskriv den perfekta hunden du letar efter
                   </p>
                 </div>
@@ -820,7 +806,7 @@ export default function HomePage() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="!bg-transparent !border-gray-200/20 !border h-10 pl-4 pr-16 text-sm text-white placeholder:text-gray-400 rounded-full focus:!border-gray-200/30 !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
+                      className="!bg-transparent !border-gray-300/60  !border h-10 pl-4 pr-16 text-sm text-gray-600 placeholder:text-gray-600 rounded-full focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                       disabled={isSearching || searchLoading}
                     />
                     <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
@@ -831,7 +817,7 @@ export default function HomePage() {
                         onClick={handleSearch}
                         disabled={isSearching || searchLoading || !searchQuery.trim()}
                       >
-                        <Send className="w-4 h-4 text-white" />
+                        <Send className="w-4 h-4 text-black" />
                       </Button>
                     </div>
                   </div>
@@ -847,14 +833,14 @@ export default function HomePage() {
                           setSearchQuery(example.query);
                           handleSearch();
                         }}
-                        className="p-3 md:p-4 rounded-xl bg-transparent shadow-sm hover:shadow-md border border-gray-200/20 text-left transition-all duration-200 relative overflow-hidden"
+                        className="p-3 md:p-4 rounded-xl bg-white/10 shadow-md hover:shadow-gray-600/25 border border-gray-300/30 text-left transition-all duration-200 relative overflow-hidden"
                       >
                         {/* Flowy animated background inside each card */}
                         <div className="relative z-10">
-                          <h3 className="font-medium text-white">
+                          <h3 className="font-medium text-gray-600/90">
                             {example.title}
                           </h3>
-                          <p className="text-xs md:text-sm text-white/95 mt-1 line-clamp-2">
+                          <p className="text-xs md:text-sm text-gray-600/90 mt-1 line-clamp-2">
                             {example.description}
                           </p>
                         </div>
@@ -872,12 +858,12 @@ export default function HomePage() {
                     <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                       <div className={`max-w-2xl ${message.type === 'user' ? 'ml-12' : 'mr-12'}`}>
                         {message.type === 'user' ? (
-                          <div className="bg-white/5 text-white px-3 py-3 rounded-xl rounded-br-md border border-white/20">
+                          <div className="bg-gray-300/10 text-gray-900 px-4 py-2 rounded-xl rounded-br-md border border-gray-300/30 shadow-sm">
                             <p>{message.content}</p>
                           </div>
                         ) : (
                           <div className="space-y-4">
-                            <div className="bg-white/5 text-white px-3 py-3 rounded-xl rounded-bl-md border border-white/20">
+                            <div className="bg-gray-300/20 text-gray-900 px-4 py-2 rounded-xl rounded-bl-md border border-gray-300/30 shadow-sm">
                               <p>{message.content}</p>
                             </div>
                             {message.kennelCoords && message.kennelCoords.length > 0 && (
@@ -895,7 +881,7 @@ export default function HomePage() {
                                     <Button 
                                       onClick={() => handleSeeMore(message.filters!)}
                                       variant="outline"
-                                      className="flex items-center gap-2 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white/80"
+                                      className="flex items-center gap-2 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
                                     >
                                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -924,10 +910,10 @@ export default function HomePage() {
                   {(isSearching || searchLoading) && (
                     <div className="flex justify-start">
                       <div className="max-w-3xl mr-12">
-                        <div className="bg-white/5 text-white px-5 py-4 rounded-2xl rounded-bl-md border border-white/20">
+                        <div className="bg-gray-300/10 text-gray-900 px-4 py-2 rounded-2xl rounded-bl-md border border-gray-300/30 shadow-sm">
                           <div className="flex items-center gap-3">
-                            <div className="w-4 h-4 border-2 border-white/60 border-t-transparent rounded-full animate-spin" />
-                            <p>Söker efter hundar...</p>
+                            <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin" />
+                            <p className="text-gray-900">Söker efter hundar...</p>
                           </div>
                         </div>
                       </div>
@@ -945,14 +931,14 @@ export default function HomePage() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="!bg-transparent !border-white/20 !border h-12 pl-4 pr-16 text-sm text-white placeholder:text-white/60 rounded-full focus:!border-white/30 !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
+                      className="!bg-transparent !border-gray-300/60 !border h-12 pl-4 pr-16 text-sm text-gray-600 placeholder:text-gray-600 rounded-full focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                       disabled={isSearching || searchLoading}
                     />
                     <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="p-1 h-8 w-8 text-white hover:bg-white/10"
+                        className="p-1 h-8 w-8 text-gray-900 hover:bg-gray-200/20"
                         onClick={handleSearch}
                         disabled={isSearching || searchLoading || !searchQuery.trim()}
                       >

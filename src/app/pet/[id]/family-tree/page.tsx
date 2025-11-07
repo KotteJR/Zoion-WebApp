@@ -50,7 +50,7 @@ export default function FamilyTreePage() {
         <AppSidebar />
         <SidebarInset>
           <div className="flex h-full bg-transparent">
-            <div className="flex flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6 w-full">
+            <div className="flex flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6 w-full">
               <LoadingSpinner />
             </div>
           </div>
@@ -66,8 +66,8 @@ export default function FamilyTreePage() {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <div className="flex h-full bg-white/5">
-            <div className="flex flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6 w-full text-center">
+          <div className="flex h-full bg-transparent">
+            <div className="flex flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-xl md:border border-gray-100/30 bg-white/5 h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6 w-full text-center">
               <p className="text-lg font-medium text-white">Family tree not available</p>
             </div>
           </div>
@@ -80,8 +80,8 @@ export default function FamilyTreePage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-full bg-white/5">
-          <div className="flex flex-col gap-6 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6 w-full">
+        <div className="flex h-full bg-transparent">
+            <div className="flex flex-col gap-6 overflow-y-auto overflow-x-visible rounded-xl md:border border-gray-100/30 bg-white/5 h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6 w-full">
             <div className="flex flex-col gap-2">
               <h2 className="text-2xl font-semibold tracking-tight text-white">Family Tree</h2>
               <p className="text-sm text-white/80">{pet.name}'s family lineage</p>

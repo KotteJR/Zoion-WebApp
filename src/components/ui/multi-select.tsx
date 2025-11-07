@@ -89,13 +89,13 @@ export function MultiSelect({
             return (
               <div
                 key={value}
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs bg-white/10 text-white border border-white/20"
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs bg-gray-200/30 text-gray-700 border border-gray-300/40"
               >
                 <span>{label}</span>
                 <button
                   type="button"
                   onClick={(e) => handleRemove(value, e)}
-                  className="hover:bg-white/20 rounded p-0.5 transition-colors"
+                  className="hover:bg-gray-300/30 rounded p-0.5 transition-colors"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -108,20 +108,20 @@ export function MultiSelect({
       {/* Always visible dropdown with search */}
       {isOpen && (
         <div
-          className="w-full rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm shadow-lg overflow-hidden"
+          className="w-full rounded-lg border border-gray-300/30 bg-white/10 backdrop-blur-sm shadow-sm overflow-hidden"
           style={{ maxHeight }}
         >
           {/* Search input */}
-          <div className="p-2 border-b border-white/20">
+          <div className="p-2 border-b border-gray-300/30">
             <div className="relative">
-              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
               <input
                 ref={inputRef}
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="w-full pl-8 pr-3 py-2 rounded-md bg-white/5 border border-white/20 text-white text-sm placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-white/20"
+                className="w-full pl-8 pr-3 py-2 rounded-md !bg-transparent !border-gray-300/60 !border text-gray-600 text-sm placeholder:text-gray-600 focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
               />
             </div>
           </div>
@@ -131,7 +131,7 @@ export function MultiSelect({
             {/* Top breeds section */}
             {topOptions.length > 0 && (
               <div className="p-2">
-                <div className="text-xs text-white/60 mb-1 px-2">Popular</div>
+                <div className="text-xs text-gray-600/70 mb-1 px-2">Popular</div>
                 {topOptions.map((option) => {
                   const isSelected = selected.includes(option.value);
                   return (
@@ -142,14 +142,14 @@ export function MultiSelect({
                       className={cn(
                         'w-full text-left px-2 py-1.5 rounded text-sm transition-colors',
                         isSelected
-                          ? 'bg-white/20 text-white'
-                          : 'text-white/90 hover:bg-white/10'
+                          ? 'bg-gray-200/30 text-gray-900'
+                          : 'text-gray-700 hover:bg-gray-200/20'
                       )}
                     >
                       <div className="flex items-center justify-between">
                         <span>{option.label}</span>
                         {isSelected && (
-                          <div className="w-3 h-3 rounded-full bg-white/60" />
+                          <div className="w-3 h-3 rounded-full bg-gray-600" />
                         )}
                       </div>
                     </button>
@@ -162,7 +162,7 @@ export function MultiSelect({
             {otherOptions.length > 0 && (
               <div className="p-2">
                 {topOptions.length > 0 && (
-                  <div className="text-xs text-white/60 mb-1 px-2">All Breeds</div>
+                  <div className="text-xs text-gray-600/70 mb-1 px-2">All Breeds</div>
                 )}
                 {otherOptions.map((option) => {
                   const isSelected = selected.includes(option.value);
@@ -174,14 +174,14 @@ export function MultiSelect({
                       className={cn(
                         'w-full text-left px-2 py-1.5 rounded text-sm transition-colors',
                         isSelected
-                          ? 'bg-white/20 text-white'
-                          : 'text-white/90 hover:bg-white/10'
+                          ? 'bg-gray-200/30 text-gray-900'
+                          : 'text-gray-700 hover:bg-gray-200/20'
                       )}
                     >
                       <div className="flex items-center justify-between">
                         <span>{option.label}</span>
                         {isSelected && (
-                          <div className="w-3 h-3 rounded-full bg-white/60" />
+                          <div className="w-3 h-3 rounded-full bg-gray-600" />
                         )}
                       </div>
                     </button>
@@ -191,7 +191,7 @@ export function MultiSelect({
             )}
 
             {filteredOptions.length === 0 && (
-              <div className="p-4 text-center text-sm text-white/60">No breeds found</div>
+              <div className="p-4 text-center text-sm text-gray-600/70">No breeds found</div>
             )}
           </div>
         </div>

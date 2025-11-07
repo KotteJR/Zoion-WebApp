@@ -18,7 +18,7 @@ export default function ZoionMarketingPage() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-full bg-transparent">
-          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6">
+          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl md:border border-gray-100/30 bg-white/5 h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6">
       {/* Hero */}
       <section className="bg-transparent">
         <div className="max-w-7xl mx-auto px-4 py-12 md:py-12">

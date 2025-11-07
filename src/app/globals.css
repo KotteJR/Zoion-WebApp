@@ -85,36 +85,84 @@ a {
 
 /* Fluid dark green background helpers (used by layout) */
 .bg-fluid-dark {
-  /* Four large radial blobs with parallax; clearly visible movement */
+  /* Layered radial waves with subtle depth */
   background:
-    radial-gradient(900px 720px at 15% 30%, rgba(10, 77, 57, 0.55), transparent 72%),
-    radial-gradient(820px 640px at 80% 55%, rgba(3, 56, 41, 0.60), transparent 74%),
-    radial-gradient(1100px 820px at 45% 115%, rgba(16, 102, 73, 0.42), transparent 75%),
-    radial-gradient(700px 520px at 10% 95%, rgba(12, 66, 50, 0.38), transparent 70%);
+    radial-gradient(900px 720px at 22% 28%, rgba(11, 41, 29, 0.75), rgba(255, 255, 255, 0) 68%),
+    radial-gradient(920px 760px at 74% 22%, rgba(16, 90, 63, 0.68), rgba(255, 255, 255, 0) 70%),
+    radial-gradient(1120px 880px at 45% 112%, rgba(24, 110, 75, 0.58), rgba(255, 255, 255, 0) 78%),
+    radial-gradient(820px 620px at 18% 88%, rgba(8, 32, 23, 0.62), rgba(255, 255, 255, 0) 68%),
+    radial-gradient(760px 580px at 88% 82%, rgba(38, 129, 92, 0.55), rgba(255, 255, 255, 0) 70%),
+    radial-gradient(720px 540px at 40% 60%, rgba(134, 208, 172, 0.35), rgba(255, 255, 255, 0) 68%);
   background-repeat: no-repeat;
-  background-size: 180% 180%, 170% 170%, 200% 200%, 160% 160%;
-  animation: fluid-shift-a 26s ease-in-out infinite alternate,
-             fluid-shift-b 32s ease-in-out infinite alternate-reverse;
-  filter: blur(0.5px) saturate(112%) contrast(108%);
+  background-size: 220% 220%, 210% 210%, 230% 230%, 200% 200%, 240% 240%, 260% 260%;
+  animation: fluid-shift-a 28s ease-in-out infinite alternate,
+             fluid-shift-b 36s ease-in-out infinite alternate-reverse,
+             fluid-depth 48s ease-in-out infinite;
+  filter: blur(0.4px) saturate(120%) contrast(118%);
   will-change: background-position, background-size, transform;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Primary motion: large, obvious drift of blobs (positions) */
+/* Primary motion: wide sweeping drift */
 @keyframes fluid-shift-a {
-  0%   { background-position: 0% 0%, 100% 0%, 50% 100%, 0% 80%; }
-  50%  { background-position: 12% 10%, 88% 18%, 46% 88%, 8% 66%; }
-  100% { background-position: 24% 18%, 76% 28%, 40% 76%, 16% 52%; }
+  0%   { background-position: 0% 0%, 100% 0%, 50% 100%, 10% 80%, 90% 60%; }
+  50%  { background-position: 16% 12%, 82% 10%, 48% 86%, 14% 68%, 76% 48%; }
+  100% { background-position: 28% 20%, 68% 24%, 42% 72%, 22% 54%, 62% 36%; }
 }
 
-/* Secondary motion: gentle breathing via background-size */
+/* Secondary motion: breathing and stretching */
 @keyframes fluid-shift-b {
-  0%   { background-size: 180% 180%, 170% 170%, 200% 200%, 160% 160%; }
-  50%  { background-size: 190% 190%, 160% 160%, 210% 210%, 150% 150%; }
-  100% { background-size: 175% 175%, 180% 180%, 195% 195%, 165% 165%; }
+  0%   { background-size: 200% 200%, 190% 190%, 210% 210%, 180% 180%, 220% 220%; }
+  50%  { background-size: 215% 215%, 205% 205%, 225% 225%, 195% 195%, 235% 235%; }
+  100% { background-size: 195% 195%, 185% 185%, 205% 205%, 175% 175%, 215% 215%; }
+}
+
+/* Depth pulse for layered parallax */
+@keyframes fluid-depth {
+  0% { filter: blur(0.4px) saturate(108%) contrast(104%); }
+  50% { filter: blur(0.6px) saturate(112%) contrast(108%); }
+  100% { filter: blur(0.4px) saturate(108%) contrast(104%); }
+}
+
+.bg-fluid-dark::before,
+.bg-fluid-dark::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(650px 650px at 50% 45%, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0) 70%);
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  filter: blur(0.6px);
+  pointer-events: none;
+}
+
+.bg-fluid-dark::before {
+  animation: depth-orbit 32s ease-in-out infinite;
+}
+
+.bg-fluid-dark::after {
+  animation: depth-orbit-2 40s ease-in-out infinite;
+}
+
+@keyframes depth-orbit {
+  0%   { transform: translate3d(-10%, -8%, 0) scale(1.08); opacity: 0.55; }
+  25%  { transform: translate3d(6%, -14%, 0) scale(1.18); opacity: 0.72; }
+  50%  { transform: translate3d(16%, 6%, 0) scale(1.1); opacity: 0.5; }
+  75%  { transform: translate3d(-6%, 14%, 0) scale(1.2); opacity: 0.68; }
+  100% { transform: translate3d(-10%, -8%, 0) scale(1.08); opacity: 0.55; }
+}
+
+@keyframes depth-orbit-2 {
+  0%   { transform: translate3d(12%, 14%, 0) scale(1.12); opacity: 0.5; }
+  30%  { transform: translate3d(-8%, 6%, 0) scale(1.22); opacity: 0.7; }
+  60%  { transform: translate3d(-18%, -10%, 0) scale(1.08); opacity: 0.48; }
+  90%  { transform: translate3d(8%, -16%, 0) scale(1.16); opacity: 0.62; }
+  100% { transform: translate3d(12%, 14%, 0) scale(1.12); opacity: 0.5; }
 }
 
 .bg-vignette {
-  background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 42%, rgba(0,0,0,0.42) 100%);
+  background: radial-gradient(125% 110% at 50% 45%, rgba(255,255,255,0) 60%, rgba(7,26,19,0.28) 100%);
   pointer-events: none;
 }
 

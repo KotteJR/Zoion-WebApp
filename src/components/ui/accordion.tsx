@@ -15,15 +15,15 @@ export function Accordion({ title, children, defaultOpen = false, className }: A
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className={cn('border border-white/20 rounded-lg bg-white/5 overflow-hidden', className)}>
+    <div className={cn('border border-gray-300/30 rounded-lg bg-white/10 overflow-hidden shadow-sm', className)}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-white/5 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-200/20 transition-colors"
       >
-        <span className="text-sm font-medium text-white">{title}</span>
+        <span className="text-sm font-medium text-gray-900">{title}</span>
         <ChevronDown
-          className={cn('w-4 h-4 text-white/70 transition-transform', isOpen && 'rotate-180')}
+          className={cn('w-4 h-4 text-gray-600 transition-transform', isOpen && 'rotate-180')}
         />
       </button>
       {isOpen && (

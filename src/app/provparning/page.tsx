@@ -175,7 +175,7 @@ function ProvparningContent() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-full bg-transparent">
-          <div className="flex flex-col gap-6 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6 w-full">
+          <div className="flex flex-col gap-6 overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6 w-full">
             {/* Header */}
             <div className="flex flex-col gap-2">
              
@@ -185,44 +185,44 @@ function ProvparningContent() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Pet 1 */}
               <div className="space-y-4">
-                <h2 className="text-2xl font-semibold text-white">Din hund</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">Din hund</h2>
                 <div>
-                  <label className="text-sm font-medium text-white/80 mb-2 block">Hund-ID</label>
+                  <label className="text-sm font-medium text-gray-700 mb-2 block">Hund-ID</label>
                   <Input
                     type="text"
                     placeholder="Ange hund-ID"
                     value={pet1Id}
                     onChange={(e) => setPet1Id(e.target.value)}
-                    className="w-full bg-white/5 text-white placeholder:text-white/60 border border-white/20 focus:border-white/30 focus:ring-0"
+                    className="w-full !bg-transparent !border-gray-300/60 !border text-gray-600 placeholder:text-gray-600 focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                   />
-                  {pet1Loading && <p className="text-xs text-white/60 mt-1">Laddar hund...</p>}
+                  {pet1Loading && <p className="text-xs text-gray-600/70 mt-1">Laddar hund...</p>}
                 </div>
                 
                 {pet1 && (
-                  <div className="p-4 bg-white/5 rounded-lg border border-white/20">
+                  <div className="p-4 bg-white/10 rounded-lg border border-gray-300/30 shadow-sm">
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-white/70">Namn:</span>
-                        <span className="text-white font-medium">{pet1.name}</span>
+                        <span className="text-gray-600/70">Namn:</span>
+                        <span className="text-gray-900 font-medium">{pet1.name}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/70">Ras:</span>
-                        <span className="text-white font-medium">{pet1.breed}</span>
+                        <span className="text-gray-600/70">Ras:</span>
+                        <span className="text-gray-900 font-medium">{pet1.breed}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/70">Kön:</span>
-                        <span className="text-white font-medium">{pet1.sex === 'male' ? 'Hane' : 'Tik'}</span>
+                        <span className="text-gray-600/70">Kön:</span>
+                        <span className="text-gray-900 font-medium">{pet1.sex === 'male' ? 'Hane' : 'Tik'}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/70">Född:</span>
-                        <span className="text-white font-medium">
+                        <span className="text-gray-600/70">Född:</span>
+                        <span className="text-gray-900 font-medium">
                           {pet1.date_born ? new Date(pet1.date_born).toLocaleDateString('sv-SE') : 'Okänt'}
                         </span>
                       </div>
                       {pet1.inbreed_rate && (
                         <div className="flex justify-between">
-                          <span className="text-white/70">Nuvarande inavel:</span>
-                          <span className="text-white font-medium">{pet1.inbreed_rate}</span>
+                          <span className="text-gray-600/70">Nuvarande inavel:</span>
+                          <span className="text-gray-900 font-medium">{pet1.inbreed_rate}</span>
                         </div>
                       )}
                     </div>
@@ -232,44 +232,44 @@ function ProvparningContent() {
 
               {/* Pet 2 */}
               <div className="space-y-4">
-                <h2 className="text-2xl font-semibold text-white">Kompatibel hund</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">Kompatibel hund</h2>
                 <div>
-                  <label className="text-sm font-medium text-white/80 mb-2 block">Hund-ID</label>
+                  <label className="text-sm font-medium text-gray-700 mb-2 block">Hund-ID</label>
                   <Input
                     type="text"
                     placeholder="Ange hund-ID"
                     value={pet2Id}
                     onChange={(e) => setPet2Id(e.target.value)}
-                    className="w-full bg-white/5 text-white placeholder:text-white/60 border border-white/20 focus:border-white/30 focus:ring-0"
+                    className="w-full !bg-transparent !border-gray-300/60 !border text-gray-600 placeholder:text-gray-600 focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                   />
-                  {pet2Loading && <p className="text-xs text-white/60 mt-1">Laddar hund...</p>}
+                  {pet2Loading && <p className="text-xs text-gray-600/70 mt-1">Laddar hund...</p>}
                 </div>
                 
                 {pet2 && (
-                  <div className="p-4 bg-white/5 rounded-lg border border-white/20">
+                  <div className="p-4 bg-white/10 rounded-lg border border-gray-300/30 shadow-sm">
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-white/70">Namn:</span>
-                        <span className="text-white font-medium">{pet2.name}</span>
+                        <span className="text-gray-600/70">Namn:</span>
+                        <span className="text-gray-900 font-medium">{pet2.name}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/70">Ras:</span>
-                        <span className="text-white font-medium">{pet2.breed}</span>
+                        <span className="text-gray-600/70">Ras:</span>
+                        <span className="text-gray-900 font-medium">{pet2.breed}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/70">Kön:</span>
-                        <span className="text-white font-medium">{pet2.sex === 'male' ? 'Hane' : 'Tik'}</span>
+                        <span className="text-gray-600/70">Kön:</span>
+                        <span className="text-gray-900 font-medium">{pet2.sex === 'male' ? 'Hane' : 'Tik'}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/70">Född:</span>
-                        <span className="text-white font-medium">
+                        <span className="text-gray-600/70">Född:</span>
+                        <span className="text-gray-900 font-medium">
                           {pet2.date_born ? new Date(pet2.date_born).toLocaleDateString('sv-SE') : 'Okänt'}
                         </span>
                       </div>
                       {pet2.inbreed_rate && (
                         <div className="flex justify-between">
-                          <span className="text-white/70">Nuvarande inavel:</span>
-                          <span className="text-white font-medium">{pet2.inbreed_rate}</span>
+                          <span className="text-gray-600/70">Nuvarande inavel:</span>
+                          <span className="text-gray-900 font-medium">{pet2.inbreed_rate}</span>
                         </div>
                       )}
                     </div>
@@ -280,24 +280,24 @@ function ProvparningContent() {
 
             {/* Results Section */}
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-white">Resultat</h2>
+              <h2 className="text-xl font-semibold text-gray-900">Resultat</h2>
               
               {/* Compatibility Status */}
               {compatibilityStatus && (
-                <div className={`p-4 rounded-lg border ${
+                <div className={`p-4 rounded-lg border shadow-sm ${
                   compatibilityStatus === 'Kompatibel' 
-                    ? 'bg-white/5 border-white/30' 
-                    : 'bg-white/5 border-white/20'
-                } text-white`}>
+                    ? 'bg-white/10 border-gray-300/50' 
+                    : 'bg-white/10 border-gray-300/30'
+                } text-gray-900`}>
                   <div className="flex items-center gap-3">
                     {compatibilityStatus === 'Kompatibel' ? (
-                      <CheckCircle className="w-5 h-5 text-green-400" />
+                      <CheckCircle className="w-5 h-5 text-green-600" />
                     ) : (
-                      <XCircle className="w-5 h-5 text-red-400" />
+                      <XCircle className="w-5 h-5 text-red-600" />
                     )}
                     <div>
-                      <h3 className="font-semibold mb-1">Kompatibilitet:</h3>
-                      <p className="text-sm text-white/80">{compatibilityStatus}</p>
+                      <h3 className="font-semibold mb-1 text-gray-900">Kompatibilitet:</h3>
+                      <p className="text-sm text-gray-700">{compatibilityStatus}</p>
                     </div>
                   </div>
                 </div>
@@ -305,12 +305,12 @@ function ProvparningContent() {
 
               {/* Error Display */}
               {error && (
-                <div className="p-4 rounded-lg border border-white/20 bg-white/5 text-white">
+                <div className="p-4 rounded-lg border border-gray-300/30 bg-white/10 text-gray-900 shadow-sm">
                   <div className="flex items-center gap-3">
-                    <AlertCircle className="w-5 h-5 text-red-400" />
+                    <AlertCircle className="w-5 h-5 text-red-600" />
                     <div>
-                      <h3 className="font-semibold mb-1">Fel:</h3>
-                      <p className="text-sm text-white/80">{error}</p>
+                      <h3 className="font-semibold mb-1 text-gray-900">Fel:</h3>
+                      <p className="text-sm text-gray-700">{error}</p>
                     </div>
                   </div>
                 </div>
@@ -327,27 +327,27 @@ function ProvparningContent() {
                 const isWarning = rateNum >= 6.25 && rateNum < 12.5;
                 const isBad = rateNum >= 12.5;
                 const borderColor = isGood
-                  ? 'border-green-400/50'
+                  ? 'border-green-500/50'
                   : isWarning
-                  ? 'border-yellow-400/50'
-                  : 'border-red-400/50';
+                  ? 'border-yellow-500/50'
+                  : 'border-red-500/50';
                 const iconColor = isGood
-                  ? 'text-green-400'
+                  ? 'text-green-600'
                   : isWarning
-                  ? 'text-yellow-400'
-                  : 'text-red-400';
+                  ? 'text-yellow-600'
+                  : 'text-red-600';
                 const label = isGood ? 'Låg (rekommenderad)' : isWarning ? 'Måttlig (varning)' : 'Hög (inte rekommenderad)';
                 return (
-                  <div className={`p-4 rounded-lg border ${borderColor} bg-white/5 text-white`}>
+                  <div className={`p-4 rounded-lg border ${borderColor} bg-white/10 text-gray-900 shadow-sm`}>
                     <div className="flex items-start gap-3">
                       <AlertCircle className={`w-5 h-5 ${iconColor} mt-0.5`} />
                       <div className="flex-1">
-                        <h3 className="font-semibold mb-2">Beräknad inavelkoefficient:</h3>
+                        <h3 className="font-semibold mb-2 text-gray-900">Beräknad inavelkoefficient:</h3>
                         <div className="flex items-baseline gap-3 mb-2">
-                          <p className="text-2xl font-bold">{inbreedingResult}</p>
-                          <span className="text-sm text-white/70">{label}</span>
+                          <p className="text-2xl font-bold text-gray-900">{inbreedingResult}</p>
+                          <span className="text-sm text-gray-600/70">{label}</span>
                         </div>
-                        <p className="text-xs text-white/70">
+                        <p className="text-xs text-gray-600/70">
                           Denna procent anger risken för genetiska problem hos avkomman.
                         </p>
                       </div>
@@ -361,7 +361,7 @@ function ProvparningContent() {
                 <Button
                   onClick={calculateInbreeding}
                   disabled={!pet1 || !pet2 || isCalculating || compatibilityStatus === 'Inkompatibel'}
-                  className="flex-1 bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
+                  className="flex-1 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
                 >
                   {isCalculating ? 'Beräknar...' : 'Beräkna inavelkoefficient'}
                 </Button>
@@ -374,7 +374,7 @@ function ProvparningContent() {
                     setCompatibilityStatus(null);
                   }}
                   variant="outline"
-                  className="bg-white/5 text-white border border-white/20 hover:bg-white/10 hover:border-white/30"
+                  className="bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
                 >
                   Rensa alla
                 </Button>
@@ -382,16 +382,16 @@ function ProvparningContent() {
             </div>
 
             {/* Information Section */}
-            <div className="p-4 rounded-lg border border-white/20 bg-white/5 text-white">
-              <h2 className="text-lg font-semibold text-white mb-3">Information om provparning</h2>
-              <p className="text-white/80 mb-4 text-sm">
+            <div className="p-4 rounded-lg border border-gray-300/30 bg-white/10 text-gray-900 shadow-sm">
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">Information om provparning</h2>
+              <p className="text-gray-700 mb-4 text-sm">
                 Provparning hjälper dig att bedöma kompatibiliteten mellan två hundar innan faktisk parning.
               </p>
-              <ul className="list-disc list-inside space-y-2 text-white/80 text-sm">
-                <li><strong className="text-white">Kompatibilitet:</strong> Hundarna måste vara av samma ras och motsatt kön</li>
-                <li><strong className="text-white">Inavelkoefficient:</strong> Visar risken för genetiska problem hos avkomman</li>
-                <li><strong className="text-white">Rekommendation:</strong> En inavelkoefficient under 6.25% anses vara säker</li>
-                <li><strong className="text-white">Varning:</strong> Högre värden kan öka risken för genetiska sjukdomar</li>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 text-sm">
+                <li><strong className="text-gray-900">Kompatibilitet:</strong> Hundarna måste vara av samma ras och motsatt kön</li>
+                <li><strong className="text-gray-900">Inavelkoefficient:</strong> Visar risken för genetiska problem hos avkomman</li>
+                <li><strong className="text-gray-900">Rekommendation:</strong> En inavelkoefficient under 6.25% anses vara säker</li>
+                <li><strong className="text-gray-900">Varning:</strong> Högre värden kan öka risken för genetiska sjukdomar</li>
               </ul>
             </div>
           </div>
@@ -408,7 +408,7 @@ export default function ProvparningPage() {
         <AppSidebar />
         <SidebarInset>
           <div className="flex h-full bg-transparent">
-            <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-xl border border-gray-100/30 bg-white/5 md:h-[calc(100vh-2rem)] p-6">
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6">
               <LoadingSpinner />
             </div>
           </div>
