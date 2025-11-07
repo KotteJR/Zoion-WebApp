@@ -185,7 +185,7 @@ export default function ProfilePage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium">First Name</label>
+                    <label className="text-sm font-medium">Förnamn</label>
                     {isEditing ? (
                       <Input
                         value={editForm.given_name}
@@ -193,11 +193,11 @@ export default function ProfilePage() {
                         className="mt-1"
                       />
                     ) : (
-                      <p className="text-sm text-muted-foreground mt-1">{currentUser?.firstName || 'Not provided'}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{currentUser?.firstName || 'Inte angivet'}</p>
                     )}
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Last Name</label>
+                    <label className="text-sm font-medium">Efternamn</label>
                     {isEditing ? (
                       <Input
                         value={editForm.family_name}
@@ -205,11 +205,11 @@ export default function ProfilePage() {
                         className="mt-1"
                       />
                     ) : (
-                      <p className="text-sm text-muted-foreground mt-1">{currentUser?.lastName || 'Not provided'}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{currentUser?.lastName || 'Inte angivet'}</p>
                     )}
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Phone</label>
+                    <label className="text-sm font-medium">Telefon</label>
                     {isEditing ? (
                       <Input
                         value={editForm.phone}
@@ -217,11 +217,11 @@ export default function ProfilePage() {
                         className="mt-1"
                       />
                     ) : (
-                      <p className="text-sm text-muted-foreground mt-1">{currentUser?.phoneNumber || 'Not provided'}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{currentUser?.phoneNumber || 'Inte angivet'}</p>
                     )}
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Address</label>
+                    <label className="text-sm font-medium">Adress</label>
                     {isEditing ? (
                       <Input
                         value={editForm.address}
@@ -229,7 +229,7 @@ export default function ProfilePage() {
                         className="mt-1"
                       />
                     ) : (
-                      <p className="text-sm text-muted-foreground mt-1">{currentUser?.address || 'Not provided'}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{currentUser?.address || 'Inte angivet'}</p>
                     )}
                   </div>
                 </div>

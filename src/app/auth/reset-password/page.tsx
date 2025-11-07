@@ -32,7 +32,7 @@ export default function ResetPasswordPage() {
       }
     } catch (err: any) {
       console.error('Reset password error:', err);
-      setError(err.message || 'Failed to send reset code. Please try again.');
+      setError(err.message || 'Kunde inte skicka återställningskod. Vänligen försök igen.');
     } finally {
       setIsLoading(false);
     }

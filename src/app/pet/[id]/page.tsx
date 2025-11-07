@@ -62,15 +62,15 @@ export default function PetProfilePage() {
         <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-transparent">
             <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto overflow-x-visible rounded-t-xl bg-transparent  p-6 text-center">
               <div className="text-6xl mb-4">🐕</div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Pet Not Found</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Hund hittades inte</h2>
               <p className="text-gray-600 text-base mb-4">
-                We couldn't find a pet with ID: {petId}
+                Vi kunde inte hitta en hund med ID: {petId}
               </p>
               {error && (
                 <p className="text-sm text-red-600 mb-4">Error: {error.message}</p>
               )}
               <Button onClick={() => router.push('/home')}>
-                Back to Home
+                Tillbaka till hem
               </Button>
             </div>
           </div>
@@ -96,13 +96,13 @@ export default function PetProfilePage() {
             <div className="flex items-center justify-between">
               <Button
                 variant="outline"
-                className="flex items-center gap-2 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
+                className="flex items-center gap-2 bg-gray-300/20 text-gray-900 border border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm"
                 onClick={() => router.back()}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                Back
+                Tillbaka
               </Button>
             </div>
 
@@ -110,7 +110,7 @@ export default function PetProfilePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:items-stretch">
               {/* Left Column - Image Gallery */}
               <div>
-                <Card className="overflow-hidden h-full flex flex-col bg-white/10 border border-gray-300/30 text-gray-900 shadow-sm">
+                <Card className="overflow-hidden h-full flex flex-col bg-gray-300/20 border border-gray-300/30 text-gray-900 shadow-sm">
                   <CardHeader className="p-0 flex-1">
                     {/* Keep a stable aspect to avoid odd crops and ensure full fit */}
                     <div className="relative h-full min-h-[260px] md:min-h-[360px] lg:min-h-[420px] bg-transparent">
@@ -159,7 +159,7 @@ export default function PetProfilePage() {
 
               {/* Right Column - Pet Info and Owner */}
               <div className="flex flex-col space-y-4">
-                <Card className="bg-white/10 border border-gray-300/30 text-gray-900 shadow-sm">
+                <Card className="bg-gray-300/20 border border-gray-300/30 text-gray-900 shadow-sm">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-6">
                       <div>
@@ -194,28 +194,28 @@ export default function PetProfilePage() {
                     {/* Details Grid */}
                     <div className="grid grid-cols-2 gap-6 mb-6">
                       <div>
-                        <p className="text-sm text-gray-600/70 mb-1">Age</p>
+                        <p className="text-sm text-gray-600/70 mb-1">Ålder</p>
                         <p className="text-base font-medium text-gray-900">{ageString}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600/70 mb-1">Sex</p>
+                        <p className="text-sm text-gray-600/70 mb-1">Kön</p>
                         <p className="text-base font-medium text-gray-900 capitalize">{pet.sex}</p>
                       </div>
                       {pet.colour && (
                         <div>
-                          <p className="text-sm text-gray-600/70 mb-1">Color</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Färg</p>
                           <p className="text-base font-medium text-gray-900">{pet.colour}</p>
                         </div>
                       )}
                       {pet.weight && (
                         <div>
-                          <p className="text-sm text-gray-600/70 mb-1">Weight</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Vikt</p>
                           <p className="text-base font-medium text-gray-900">{pet.weight} kg</p>
                         </div>
                       )}
                       {pet.inbreed_rate && (
                         <div>
-                          <p className="text-sm text-gray-600/70 mb-1">Inbreed Rate</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Inavelgrad</p>
                           <p className="text-base font-medium text-gray-900">{pet.inbreed_rate}%</p>
                         </div>
                       )}
@@ -227,19 +227,19 @@ export default function PetProfilePage() {
                       )}
                       {pet.vaccinated !== null && pet.vaccinated !== undefined && (
                         <div>
-                          <p className="text-sm text-gray-600/70 mb-1">Vaccinated</p>
-                          <p className="text-base font-medium text-gray-900">{pet.vaccinated ? 'Yes' : 'No'}</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Vaccinerad</p>
+                          <p className="text-base font-medium text-gray-900">{pet.vaccinated ? 'Ja' : 'Nej'}</p>
                         </div>
                       )}
                       {pet.date_born && (
                         <div>
-                          <p className="text-sm text-gray-600/70 mb-1">Date of Birth</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Födelsedatum</p>
                           <p className="text-base font-medium text-gray-900">{formatDateShort(pet.date_born)}</p>
                         </div>
                       )}
                       {pet.next_breeding_date && (
                         <div>
-                          <p className="text-sm text-gray-600/70 mb-1">Next Breeding Date</p>
+                          <p className="text-sm text-gray-600/70 mb-1">Nästa avelsdatum</p>
                           <p className="text-base font-medium text-gray-900">{formatDateShort(pet.next_breeding_date)}</p>
                         </div>
                       )}
@@ -251,16 +251,16 @@ export default function PetProfilePage() {
                         {pet.competitions_aggregate?.aggregate.count > 0 && (
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button variant="outline" className="flex-1 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm">
+                              <Button variant="outline" className="flex-1 bg-gray-300/20 text-gray-900 border border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm">
                                 <Trophy className="w-4 h-4 mr-2" />
-                                Trophies ({pet.competitions_aggregate.aggregate.count})
+                                Troféer ({pet.competitions_aggregate.aggregate.count})
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
                               <DialogHeader>
                                 <DialogTitle className="flex items-center gap-2 text-xl font-semibold">
                                   <Trophy className="w-5 h-5 text-yellow-600" />
-                                  {pet.name}'s Trophies
+                                  {pet.name}s troféer
                                 </DialogTitle>
                               </DialogHeader>
                               <div className="space-y-3">
@@ -272,21 +272,21 @@ export default function PetProfilePage() {
                                     </div>
                                     <div className="grid grid-cols-2 gap-2 text-sm">
                                       {competition.location && (
-                                        <div><strong>Location:</strong> {competition.location}</div>
+                                        <div><strong>Plats:</strong> {competition.location}</div>
                                       )}
                                       {competition.organization && (
-                                        <div><strong>Organization:</strong> {competition.organization}</div>
+                                        <div><strong>Organisation:</strong> {competition.organization}</div>
                                       )}
                                       {competition.type && (
-                                        <div><strong>Type:</strong> {competition.type}</div>
+                                        <div><strong>Typ:</strong> {competition.type}</div>
                                       )}
                                       {competition.value && (
-                                        <div><strong>Value:</strong> {competition.value}</div>
+                                        <div><strong>Värde:</strong> {competition.value}</div>
                                       )}
                                     </div>
                                     {competition.meaning && (
                                       <div className="mt-2 rounded-md bg-green-50 border border-green-200 p-2 text-sm text-green-800">
-                                        <strong>Result:</strong> {competition.meaning}
+                                        <strong>Resultat:</strong> {competition.meaning}
                                       </div>
                                     )}
                                   </div>
@@ -299,16 +299,16 @@ export default function PetProfilePage() {
                         {pet.medical_records_aggregate?.aggregate.count > 0 && (
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button variant="outline" className="flex-1 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm">
+                              <Button variant="outline" className="flex-1 bg-gray-300/20 text-gray-900 border border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm">
                                 <Stethoscope className="w-4 h-4 mr-2" />
-                                Medical Records ({pet.medical_records_aggregate.aggregate.count})
+                                Medicinska journaler ({pet.medical_records_aggregate.aggregate.count})
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
                               <DialogHeader>
                                 <DialogTitle className="flex items-center gap-2 text-xl font-semibold">
                                   <Stethoscope className="w-5 h-5 text-blue-700" />
-                                  {pet.name}'s Medical Records
+                                  {pet.name}s medicinska journaler
                                 </DialogTitle>
                               </DialogHeader>
                               <div className="grid grid-cols-1 gap-4">
@@ -322,7 +322,7 @@ export default function PetProfilePage() {
                                     </div>
                                     <div className="mt-3 text-sm text-gray-700">
                                       <div className="inline-flex items-center gap-2 rounded-md bg-gray-50 px-2 py-1">
-                                        <span className="text-gray-500">Veterinary:</span> {record.veterinary}
+                                        <span className="text-gray-500">Veterinär:</span> {record.veterinary}
                                       </div>
                                     </div>
                                   </div>
@@ -335,7 +335,7 @@ export default function PetProfilePage() {
                       
                       <Button
                         onClick={() => router.push(`/provparning?target=${encodeURIComponent(petId)}`)}
-                        className="bg-white/10 hover:bg-white/20 text-gray-900 border border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm flex items-center gap-2 flex-1"
+                        className="bg-gray-300/20 hover:bg-gray-300/30 text-gray-900 border border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm flex items-center gap-2 flex-1"
                       >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
@@ -348,11 +348,11 @@ export default function PetProfilePage() {
 
                 {/* Kennel Info Card */}
                 {kennel && (
-                  <Card className="bg-white/10 border border-gray-300/30 text-gray-900 shadow-sm">
+                  <Card className="bg-gray-300/20 border border-gray-300/30 text-gray-900 shadow-sm">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-2">
                         <h3 className="text-lg font-semibold text-gray-900">Kennel</h3>
-                        <Button variant="outline" className="bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm" onClick={() => router.push(`/kennel/${kennel.id}`)}>
+                        <Button variant="outline" className="bg-gray-300/20 text-gray-900 border border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm" onClick={() => router.push(`/kennel/${kennel.id}`)}>
                           Visa kennel
                         </Button>
                       </div>
@@ -392,11 +392,11 @@ export default function PetProfilePage() {
 
                 {/* Owner Info Card */}
                 {pet.owner && (
-                  <Card className="bg-white/10 border border-gray-300/30 text-gray-900 shadow-sm">
+                  <Card className="bg-gray-300/20 border border-gray-300/30 text-gray-900 shadow-sm">
                     <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Owner Information</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Ägarinformation</h3>
                       <div className="flex items-center gap-4">
-                        <div className="relative w-16 h-16 rounded-full overflow-hidden bg-white/10 border-2 border-gray-300/40">
+                        <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-300/20 border-2 border-gray-300/40">
                           {pet.owner.profile_picture ? (
                             <Image src={pet.owner.profile_picture} alt="Owner" fill className="object-cover" unoptimized />
                           ) : (
@@ -422,9 +422,9 @@ export default function PetProfilePage() {
                         <Button 
                           onClick={() => router.push(`/breeder/${pet.owner_id}`)} 
                           variant="outline"
-                          className="bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
+                          className="bg-gray-300/20 text-gray-900 border border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm"
                         >
-                          View Profile
+                          Visa profil
                         </Button>
                       </div>
                     </CardContent>

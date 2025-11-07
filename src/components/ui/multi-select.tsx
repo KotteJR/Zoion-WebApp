@@ -191,7 +191,7 @@ export function MultiSelect({
             )}
 
             {filteredOptions.length === 0 && (
-              <div className="p-4 text-center text-sm text-gray-600/70">No breeds found</div>
+              <div className="p-4 text-center text-sm text-gray-600/70">Inga raser hittades</div>
             )}
           </div>
         </div>

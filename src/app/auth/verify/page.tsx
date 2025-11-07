@@ -36,7 +36,7 @@ function VerifyContent() {
       }
     } catch (err: any) {
       console.error('Verification error:', err);
-      setError(err.message || 'Failed to verify code. Please try again.');
+      setError(err.message || 'Kunde inte verifiera kod. Vänligen försök igen.');
     } finally {
       setIsLoading(false);
     }
@@ -51,7 +51,7 @@ function VerifyContent() {
       setSuccess('Verification code resent to your email');
     } catch (err: any) {
       console.error('Resend error:', err);
-      setError(err.message || 'Failed to resend code. Please try again.');
+      setError(err.message || 'Kunde inte skicka kod igen. Vänligen försök igen.');
     }
   };
 
@@ -145,7 +145,7 @@ export default function VerifyPage() {
                   className="w-8 h-8"
                 />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Loading...</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Laddar...</h1>
             </div>
           </div>
         </div>

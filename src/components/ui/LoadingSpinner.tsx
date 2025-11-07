@@ -14,9 +14,9 @@ export default function LoadingSpinner() {
         <EmptyMedia variant="default">
           <Spinner className="text-gray-900" />
         </EmptyMedia>
-        <EmptyTitle className="text-gray-900">Fetching the good boys & girls...</EmptyTitle>
+        <EmptyTitle className="text-gray-900">Hämtar de snälla hundarna...</EmptyTitle>
         <EmptyDescription className="text-gray-600/90">
-          Hold tight! We're rounding up the pack for you.
+          Vänta lite! Vi samlar ihop flocken åt dig.
         </EmptyDescription>
       </EmptyHeader>
     </Empty>

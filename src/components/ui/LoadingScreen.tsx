@@ -17,9 +17,9 @@ export function LoadingScreen() {
 
       {/* Loading Content */}
       <div className="text-center space-y-8 max-w-md">
-        <h1 className="text-xl font-semibold text-gray-900">Processing your request</h1>
+        <h1 className="text-xl font-semibold text-gray-900">Bearbetar din förfrågan</h1>
         <p className="text-gray-600 text-base leading-relaxed">
-          Please wait while we process your request. Do not refresh the page.
+          Vänligen vänta medan vi bearbetar din förfrågan. Uppdatera inte sidan.
         </p>
         <div className="flex justify-center pt-6">
           <div className="w-8 h-8">

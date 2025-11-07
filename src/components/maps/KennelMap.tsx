@@ -68,7 +68,7 @@ export default function KennelMap({ points, height = 320 }: { points: Coord[]; h
                   }}
                   className="mt-2 px-3 py-1.5 text-xs bg-white/10 text-gray-900 border border-gray-300/30 rounded hover:bg-white/20 hover:border-gray-300/50 transition-colors cursor-pointer"
                 >
-                  View Kennel
+                  Visa kennel
                 </button>
               </div>
             </Popup>

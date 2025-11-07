@@ -83,82 +83,169 @@ a {
   }
 }
 
-/* Fluid dark green background helpers (used by layout) */
-.bg-fluid-dark {
-  /* Layered radial waves with subtle depth */
-  background:
-    radial-gradient(900px 720px at 22% 28%, rgba(11, 41, 29, 0.75), rgba(255, 255, 255, 0) 68%),
-    radial-gradient(920px 760px at 74% 22%, rgba(16, 90, 63, 0.68), rgba(255, 255, 255, 0) 70%),
-    radial-gradient(1120px 880px at 45% 112%, rgba(24, 110, 75, 0.58), rgba(255, 255, 255, 0) 78%),
-    radial-gradient(820px 620px at 18% 88%, rgba(8, 32, 23, 0.62), rgba(255, 255, 255, 0) 68%),
-    radial-gradient(760px 580px at 88% 82%, rgba(38, 129, 92, 0.55), rgba(255, 255, 255, 0) 70%),
-    radial-gradient(720px 540px at 40% 60%, rgba(134, 208, 172, 0.35), rgba(255, 255, 255, 0) 68%);
-  background-repeat: no-repeat;
-  background-size: 220% 220%, 210% 210%, 230% 230%, 200% 200%, 240% 240%, 260% 260%;
-  animation: fluid-shift-a 28s ease-in-out infinite alternate,
-             fluid-shift-b 36s ease-in-out infinite alternate-reverse,
-             fluid-depth 48s ease-in-out infinite;
-  filter: blur(0.4px) saturate(120%) contrast(118%);
-  will-change: background-position, background-size, transform;
-  position: relative;
+/* Animated gradient spheres - dark green and dark grey */
+.gradient-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
   overflow: hidden;
 }
 
-/* Primary motion: wide sweeping drift */
-@keyframes fluid-shift-a {
-  0%   { background-position: 0% 0%, 100% 0%, 50% 100%, 10% 80%, 90% 60%; }
-  50%  { background-position: 16% 12%, 82% 10%, 48% 86%, 14% 68%, 76% 48%; }
-  100% { background-position: 28% 20%, 68% 24%, 42% 72%, 22% 54%, 62% 36%; }
-}
-
-/* Secondary motion: breathing and stretching */
-@keyframes fluid-shift-b {
-  0%   { background-size: 200% 200%, 190% 190%, 210% 210%, 180% 180%, 220% 220%; }
-  50%  { background-size: 215% 215%, 205% 205%, 225% 225%, 195% 195%, 235% 235%; }
-  100% { background-size: 195% 195%, 185% 185%, 205% 205%, 175% 175%, 215% 215%; }
-}
-
-/* Depth pulse for layered parallax */
-@keyframes fluid-depth {
-  0% { filter: blur(0.4px) saturate(108%) contrast(104%); }
-  50% { filter: blur(0.6px) saturate(112%) contrast(108%); }
-  100% { filter: blur(0.4px) saturate(108%) contrast(104%); }
-}
-
-.bg-fluid-dark::before,
-.bg-fluid-dark::after {
-  content: "";
+.gradient-sphere {
   position: absolute;
-  inset: -30%;
-  background: radial-gradient(650px 650px at 50% 45%, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0) 70%);
-  mix-blend-mode: screen;
-  opacity: 0.7;
-  filter: blur(0.6px);
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+}
+
+/* Dark green sphere 1 - vibrant green only */
+.sphere-1 {
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, rgba(0, 100, 60, 0.4) 0%, rgba(0, 120, 70, 0.25) 30%, rgba(0, 80, 50, 0.12) 50%, transparent 70%);
+  top: -15%;
+  left: -15%;
+  z-index: 1;
+  animation: float-1 20s ease-in-out infinite;
+}
+
+/* Dark green sphere 2 - vibrant green only */
+.sphere-2 {
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(0, 110, 65, 0.45) 0%, rgba(0, 100, 60, 0.28) 30%, rgba(0, 80, 50, 0.14) 50%, transparent 70%);
+  bottom: -20%;
+  right: -15%;
+  z-index: 2;
+  animation: float-2 25s ease-in-out infinite;
+}
+
+/* Dark green sphere 3 - vibrant green only */
+.sphere-3 {
+  width: 35vw;
+  height: 35vw;
+  background: radial-gradient(circle, rgba(0, 120, 70, 0.35) 0%, rgba(0, 100, 60, 0.22) 30%, rgba(0, 80, 50, 0.1) 50%, transparent 70%);
+  top: 55%;
+  left: 25%;
+  z-index: 3;
+  animation: float-3 22s ease-in-out infinite;
+}
+
+/* Noise overlay - static grain (no movement) */
+.noise-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  z-index: 5;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  mix-blend-mode: multiply;
+}
+
+/* Particles container */
+.particles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
   pointer-events: none;
 }
 
-.bg-fluid-dark::before {
-  animation: depth-orbit 32s ease-in-out infinite;
+.particle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  /* No border-radius for paw icons */
 }
 
-.bg-fluid-dark::after {
-  animation: depth-orbit-2 40s ease-in-out infinite;
+/* Sphere animations - more movement with 3D depth effect */
+@keyframes float-1 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0.6;
+  }
+  25% {
+    transform: translate(35%, -25%) scale(1.3) rotate(90deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-30%, 35%) scale(0.8) rotate(180deg);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(25%, -20%) scale(1.25) rotate(270deg);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(360deg);
+    opacity: 0.6;
+  }
 }
 
-@keyframes depth-orbit {
-  0%   { transform: translate3d(-10%, -8%, 0) scale(1.08); opacity: 0.55; }
-  25%  { transform: translate3d(6%, -14%, 0) scale(1.18); opacity: 0.72; }
-  50%  { transform: translate3d(16%, 6%, 0) scale(1.1); opacity: 0.5; }
-  75%  { transform: translate3d(-6%, 14%, 0) scale(1.2); opacity: 0.68; }
-  100% { transform: translate3d(-10%, -8%, 0) scale(1.08); opacity: 0.55; }
+@keyframes float-2 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translate(-35%, 30%) scale(1.35) rotate(-90deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(30%, -35%) scale(0.75) rotate(-180deg);
+    opacity: 0.55;
+  }
+  75% {
+    transform: translate(-25%, 25%) scale(1.3) rotate(-270deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(-360deg);
+    opacity: 0.7;
+  }
 }
 
-@keyframes depth-orbit-2 {
-  0%   { transform: translate3d(12%, 14%, 0) scale(1.12); opacity: 0.5; }
-  30%  { transform: translate3d(-8%, 6%, 0) scale(1.22); opacity: 0.7; }
-  60%  { transform: translate3d(-18%, -10%, 0) scale(1.08); opacity: 0.48; }
-  90%  { transform: translate3d(8%, -16%, 0) scale(1.16); opacity: 0.62; }
-  100% { transform: translate3d(12%, 14%, 0) scale(1.12); opacity: 0.5; }
+@keyframes float-3 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0.5;
+  }
+  25% {
+    transform: translate(-25%, 35%) scale(1.2) rotate(45deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(30%, -25%) scale(0.85) rotate(90deg);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(-20%, 40%) scale(1.15) rotate(135deg);
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(180deg);
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.1;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
 }
 
 .bg-vignette {
@@ -167,11 +254,11 @@ a {
 }
 
 .bg-grain {
-  opacity: 0.05;
-  mix-blend-mode: overlay;
-  background-size: 220px 220px;
+  opacity: 0.15;
+  mix-blend-mode: multiply;
+  background-size: 200px 200px;
   animation: grain-shift 1.4s steps(6) infinite;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.8'/></svg>");
 }
 
 @keyframes grain-shift {

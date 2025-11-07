@@ -105,23 +105,23 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
 
   const getGenerationLabel = (generation: number) => {
     switch (generation) {
-      case 32: return 'Parents';
-      case 16: return 'Grandparents';
-      case 8: return 'Great-Grandparents';
-      case 4: return 'Great-Great-Grandparents';
-      case 2: return '3rd Great-Grandparents';
-      case 1: return '4th Great-Grandparents';
+      case 32: return 'Föräldrar';
+      case 16: return 'Förfäder';
+      case 8: return 'Farförfäder';
+      case 4: return 'Farfarförfäder';
+      case 2: return '3:e generationen';
+      case 1: return '4:e generationen';
       default: return `Generation ${generation}`;
     }
   };
 
   if (!parsedData || sortedGenerations.length === 0) {
     return (
-      <Card className="bg-white/10 border border-gray-300/30 text-gray-900 shadow-sm">
+      <Card className="bg-gray-300/20 border border-gray-300/30 text-gray-900 shadow-sm">
         <CardContent className="p-6">
           <div className="text-center text-gray-600/90">
             <Users className="w-12 h-12 mx-auto mb-4 text-gray-500" />
-            <p>No family tree data available for {petName}</p>
+            <p>Ingen stamtavledata tillgänglig för {petName}</p>
           </div>
         </CardContent>
       </Card>
@@ -134,12 +134,12 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
   }, 0);
 
   return (
-    <Card className="w-full bg-white/10 border border-gray-300/30 text-gray-900 shadow-sm">
+      <Card className="w-full bg-gray-300/20 border border-gray-300/30 text-gray-900 shadow-sm">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-gray-900">
             <Users className="w-5 h-5" />
-            Family Tree
+            Stamtavla
           </CardTitle>
           <Button
             variant="outline"
@@ -150,12 +150,12 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
             {showFullTree ? (
               <>
                 <ChevronUp className="w-4 h-4" />
-                Show Less
+                Visa mindre
               </>
             ) : (
               <>
                 <ChevronDown className="w-4 h-4" />
-                Show Full Tree
+                Visa full stamtavla
               </>
             )}
           </Button>
@@ -166,7 +166,7 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
         <div className="mb-8">
           <div className="flex justify-center">
             <div className="relative">
-              <div className="px-6 py-3 bg-white/10 border border-gray-300/50 text-gray-900 rounded-lg shadow-sm text-center">
+              <div className="px-6 py-3 bg-gray-300/20 border border-gray-300/50 text-gray-900 rounded-lg shadow-sm text-center">
                 <div className="font-bold text-lg">{petName}</div>
                 <div className="text-sm text-gray-600/90">{petId}</div>
               </div>
@@ -209,18 +209,18 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
                       className="relative group"
                     >
                       <div 
-                        className={`p-3 bg-white/10 border border-gray-300/30 rounded-lg transition-all text-center shadow-sm ${
+                        className={`p-3 bg-gray-300/20 border border-gray-300/30 rounded-lg transition-all text-center shadow-sm ${
                           member.code && existingDogs.has(member.code)
-                            ? 'hover:border-gray-400/60 hover:shadow-md cursor-pointer hover:bg-white/20' 
+                            ? 'hover:border-gray-400/60 hover:shadow-md cursor-pointer hover:bg-gray-300/30' 
                             : 'opacity-75'
                         }`}
                         onClick={() => handleDogClick(member)}
                         title={
                           member.code && existingDogs.has(member.code)
-                            ? `Click to view ${member.name}'s profile`
+                            ? `Klicka för att visa ${member.name}s profil`
                             : member.code 
-                              ? `${member.name} - Not in database`
-                              : `${member.name} - No ID available`
+                              ? `${member.name} - Inte i databasen`
+                              : `${member.name} - Inget ID tillgängligt`
                         }
                       >
                         <div className={`w-10 h-10 mx-auto mb-2 rounded-full flex items-center justify-center font-semibold ${
@@ -240,7 +240,7 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
                         )}
                         {member.code && existingDogs.has(member.code) && (
                           <div className="text-xs text-gray-700 mt-1 font-medium">
-                            View Profile
+                            Visa profil
                           </div>
                         )}
                       </div>
@@ -262,12 +262,12 @@ export default function FamilyTree({ familyTreeData, petName, petId }: FamilyTre
         {/* Summary */}
         <div className="mt-6 pt-6 border-t border-gray-300/30 text-center text-sm text-gray-600/90">
           {showFullTree ? (
-            <p>Showing complete family tree with {totalMembers} ancestors across {displayGenerations.length} generations</p>
+            <p>Visar komplett stamtavla med {totalMembers} förfäder över {displayGenerations.length} generationer</p>
           ) : (
             <p>
-              Showing {totalMembers} ancestors across {displayGenerations.length} generations.
+              Visar {totalMembers} förfäder över {displayGenerations.length} generationer.
               {sortedGenerations.length > 4 && (
-                <> Click "Show Full Tree" to see all {sortedGenerations.length} generations.</>
+                <> Klicka "Visa full stamtavla" för att se alla {sortedGenerations.length} generationer.</>
               )}
             </p>
           )}

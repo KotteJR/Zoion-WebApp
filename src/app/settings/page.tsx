@@ -12,27 +12,27 @@ export default function SettingsPage() {
   const menuItems = [
     {
       id: 'privacy',
-      title: 'Privacy Policy',
+      title: 'Integritetspolicy',
       icon: Shield,
-      description: 'How we collect, use, and protect your data',
+      description: 'Hur vi samlar in, använder och skyddar dina data',
     },
     {
       id: 'terms',
-      title: 'Terms & Conditions',
+      title: 'Villkor & Regler',
       icon: FileText,
-      description: 'Terms of service and user agreement',
+      description: 'Användarvillkor och avtal',
     },
     {
       id: 'report',
-      title: 'Report a Problem',
+      title: 'Rapportera ett problem',
       icon: Flag,
-      description: 'Report bugs, issues, or inappropriate content',
+      description: 'Rapportera buggar, problem eller olämpligt innehåll',
     },
     {
       id: 'about',
-      title: 'About',
+      title: 'Om',
       icon: Info,
-      description: 'Learn more about Zoion',
+      description: 'Läs mer om Zoion',
     },
   ];
 
@@ -41,39 +41,39 @@ export default function SettingsPage() {
       case 'privacy':
         return (
           <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-gray-900">Privacy Policy</h3>
+            <h3 className="text-2xl font-semibold text-gray-900">Integritetspolicy</h3>
             <div className="space-y-6 text-sm text-gray-700">
-              <p className="text-gray-600/70">Last updated: {new Date().toLocaleDateString()}</p>
+              <p className="text-gray-600/70">Senast uppdaterad: {new Date().toLocaleDateString('sv-SE')}</p>
               
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Information We Collect</h4>
-                <p className="mb-2 text-gray-700">We collect information you provide directly to us, such as when you create an account, add pet information, or contact us for support. This may include:</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Information vi samlar in</h4>
+                <p className="mb-2 text-gray-700">Vi samlar in information som du tillhandahåller direkt till oss, till exempel när du skapar ett konto, lägger till husdjursinformation eller kontaktar oss för support. Detta kan inkludera:</p>
                 <ul className="list-disc list-inside mt-2 space-y-1 ml-2 text-gray-700">
-                  <li>Name, email address, and contact information</li>
-                  <li>Pet information including photos, medical records, and breeding history</li>
-                  <li>Communication preferences and support requests</li>
+                  <li>Namn, e-postadress och kontaktinformation</li>
+                  <li>Husdjursinformation inklusive foton, medicinska journaler och avelshistorik</li>
+                  <li>Kommunikationspreferenser och supportförfrågningar</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">How We Use Your Information</h4>
-                <p className="mb-2 text-gray-700">We use the information we collect to:</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Hur vi använder din information</h4>
+                <p className="mb-2 text-gray-700">Vi använder den information vi samlar in för att:</p>
                 <ul className="list-disc list-inside mt-2 space-y-1 ml-2 text-gray-700">
-                  <li>Provide and maintain our services</li>
-                  <li>Process transactions and send related information</li>
-                  <li>Send technical notices and support messages</li>
-                  <li>Respond to your comments and questions</li>
+                  <li>Leverera och underhålla våra tjänster</li>
+                  <li>Bearbeta transaktioner och skicka relaterad information</li>
+                  <li>Skicka tekniska meddelanden och supportmeddelanden</li>
+                  <li>Svara på dina kommentarer och frågor</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Data Security</h4>
-                <p className="text-gray-700">We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Datasäkerhet</h4>
+                <p className="text-gray-700">Vi implementerar lämpliga säkerhetsåtgärder för att skydda din personliga information mot obehörig åtkomst, ändring, avslöjande eller förstörelse.</p>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Contact Us</h4>
-                <p className="text-gray-700">If you have any questions about this Privacy Policy, please contact us at privacy@zoion.com</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Kontakta oss</h4>
+                <p className="text-gray-700">Om du har några frågor om denna integritetspolicy, vänligen kontakta oss på privacy@zoion.com</p>
               </div>
             </div>
           </div>
@@ -82,44 +82,44 @@ export default function SettingsPage() {
       case 'terms':
         return (
           <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-gray-900">Terms & Conditions</h3>
+            <h3 className="text-2xl font-semibold text-gray-900">Villkor & Regler</h3>
             <div className="space-y-6 text-sm text-gray-700">
-              <p className="text-gray-600/70">Last updated: {new Date().toLocaleDateString()}</p>
+              <p className="text-gray-600/70">Senast uppdaterad: {new Date().toLocaleDateString('sv-SE')}</p>
               
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Acceptance of Terms</h4>
-                <p className="text-gray-700">By accessing and using Zoion, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Godkännande av villkor</h4>
+                <p className="text-gray-700">Genom att komma åt och använda Zoion accepterar och godkänner du att vara bunden av villkoren och bestämmelserna i detta avtal.</p>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Use License</h4>
-                <p className="text-gray-700">Permission is granted to temporarily download one copy of Zoion for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title.</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Användningslicens</h4>
+                <p className="text-gray-700">Tillstånd beviljas att tillfälligt ladda ner en kopia av Zoion endast för personlig, icke-kommersiell tillfällig visning. Detta är en beviljande av en licens, inte en överföring av äganderätt.</p>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">User Responsibilities</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">Användaransvar</h4>
                 <ul className="list-disc list-inside space-y-1 ml-2 text-gray-700">
-                  <li>Provide accurate and complete information about your pets</li>
-                  <li>Respect other users and maintain appropriate conduct</li>
-                  <li>Not use the service for illegal or unauthorized purposes</li>
-                  <li>Maintain the security of your account credentials</li>
+                  <li>Lämna korrekt och komplett information om dina husdjur</li>
+                  <li>Respektera andra användare och upprätthålla lämpligt uppförande</li>
+                  <li>Inte använda tjänsten för olagliga eller obehöriga ändamål</li>
+                  <li>Upprätthålla säkerheten för dina kontouppgifter</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Prohibited Uses</h4>
-                <p className="mb-2 text-gray-700">You may not use our service:</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Förbjudna användningar</h4>
+                <p className="mb-2 text-gray-700">Du får inte använda vår tjänst:</p>
                 <ul className="list-disc list-inside mt-2 space-y-1 ml-2 text-gray-700">
-                  <li>For any unlawful purpose or to solicit others to perform unlawful acts</li>
-                  <li>To violate any international, federal, provincial, or state regulations, rules, laws, or local ordinances</li>
-                  <li>To infringe upon or violate our intellectual property rights or the intellectual property rights of others</li>
-                  <li>To harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate</li>
+                  <li>För något olagligt ändamål eller för att uppmana andra att utföra olagliga handlingar</li>
+                  <li>För att bryta mot internationella, federala, provinsiella eller statliga regler, lagar eller lokala förordningar</li>
+                  <li>För att kränka eller bryta mot våra immateriella rättigheter eller andras immateriella rättigheter</li>
+                  <li>För att trakassera, missbruka, förolämpa, skada, förtala, förtala, förringa, skrämma eller diskriminera</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Disclaimer</h4>
-                <p className="text-gray-700">The information on this service is provided on an "as is" basis. To the fullest extent permitted by law, this Company excludes all representations, warranties, conditions and terms relating to our service.</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Friskrivning</h4>
+                <p className="text-gray-700">Informationen på denna tjänst tillhandahålls "som den är". I den utsträckning som lagen tillåter, utesluter detta företag alla representationer, garantier, villkor och termer relaterade till vår tjänst.</p>
               </div>
             </div>
           </div>
@@ -128,48 +128,48 @@ export default function SettingsPage() {
       case 'report':
         return (
           <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-gray-900">Report a Problem</h3>
+            <h3 className="text-2xl font-semibold text-gray-900">Rapportera ett problem</h3>
             <div className="space-y-6 text-sm text-gray-700">
-              <p className="text-gray-700">We appreciate your feedback and want to help resolve any issues you encounter.</p>
+              <p className="text-gray-700">Vi uppskattar din feedback och vill hjälpa till att lösa eventuella problem du stöter på.</p>
               
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">What to Report</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">Vad att rapportera</h4>
                 <ul className="list-disc list-inside space-y-1 ml-2 text-gray-700">
-                  <li>Technical bugs or app crashes</li>
-                  <li>Inappropriate content or behavior</li>
-                  <li>Security concerns</li>
-                  <li>Feature requests or improvements</li>
-                  <li>Account or payment issues</li>
+                  <li>Tekniska buggar eller appkrascher</li>
+                  <li>Olämpligt innehåll eller beteende</li>
+                  <li>Säkerhetsproblem</li>
+                  <li>Funktionsförfrågningar eller förbättringar</li>
+                  <li>Konto- eller betalningsproblem</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">How to Report</h4>
-                <p className="mb-2 text-gray-700">Please include the following information when reporting:</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Hur man rapporterar</h4>
+                <p className="mb-2 text-gray-700">Vänligen inkludera följande information när du rapporterar:</p>
                 <ul className="list-disc list-inside mt-2 space-y-1 ml-2 text-gray-700">
-                  <li>Detailed description of the issue</li>
-                  <li>Steps to reproduce the problem (if applicable)</li>
-                  <li>Device and browser information</li>
-                  <li>Screenshots or error messages</li>
-                  <li>Your contact information for follow-up</li>
+                  <li>Detaljerad beskrivning av problemet</li>
+                  <li>Steg för att återskapa problemet (om tillämpligt)</li>
+                  <li>Enhet och webbläsarinformation</li>
+                  <li>Skärmdumpar eller felmeddelanden</li>
+                  <li>Din kontaktinformation för uppföljning</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Contact Methods</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">Kontaktmetoder</h4>
                 <div className="space-y-2 text-gray-700">
-                  <p><strong className="text-gray-900">Email:</strong> support@zoion.com</p>
-                  <p><strong className="text-gray-900">Response Time:</strong> We typically respond within 24-48 hours</p>
-                  <p><strong className="text-gray-900">Priority:</strong> Security issues are addressed immediately</p>
+                  <p><strong className="text-gray-900">E-post:</strong> support@zoion.com</p>
+                  <p><strong className="text-gray-900">Svarstid:</strong> Vi svarar vanligtvis inom 24-48 timmar</p>
+                  <p><strong className="text-gray-900">Prioritet:</strong> Säkerhetsproblem hanteras omedelbart</p>
                 </div>
               </div>
 
               <div className="pt-4">
                 <Button
-                  onClick={() => window.open('mailto:support@zoion.com?subject=Problem Report', '_blank')}
-                  className="bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
+                  onClick={() => window.open('mailto:support@zoion.com?subject=Problemrapport', '_blank')}
+                  className="bg-gray-300/20 text-gray-900 border border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm"
                 >
-                  Send Report via Email
+                  Skicka rapport via e-post
                 </Button>
               </div>
             </div>
@@ -179,53 +179,53 @@ export default function SettingsPage() {
       case 'about':
         return (
           <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-gray-900">About Zoion</h3>
+            <h3 className="text-2xl font-semibold text-gray-900">Om Zoion</h3>
             <div className="space-y-6 text-sm text-gray-700">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Our Mission</h4>
-                <p className="text-gray-700">Zoion is a comprehensive platform designed to connect responsible pet breeders and owners, facilitating healthy breeding practices and pet management through advanced technology and community support.</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Vårt uppdrag</h4>
+                <p className="text-gray-700">Zoion är en omfattande plattform designad för att koppla samman ansvarsfulla husdjursuppfödare och ägare, underlätta hälsosamma avelspraktiker och husdjurshantering genom avancerad teknik och gemenskapssupport.</p>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Version Information</h4>
-                <div className="bg-white/10 p-4 rounded-lg border border-gray-300/30 shadow-sm">
+                <h4 className="font-semibold text-gray-900 mb-2">Versionsinformation</h4>
+                <div className="bg-gray-300/20 p-4 rounded-lg border border-gray-300/30 shadow-sm">
                   <div className="space-y-2 text-gray-700">
                     <p><strong className="text-gray-900">Version:</strong> 1.0.0</p>
                     <p><strong className="text-gray-900">Build:</strong> 2024.1.0</p>
-                    <p><strong className="text-gray-900">Platform:</strong> Web Application</p>
-                    <p><strong className="text-gray-900">Last Updated:</strong> {new Date().toLocaleDateString()}</p>
+                    <p><strong className="text-gray-900">Plattform:</strong> Webbapplikation</p>
+                    <p><strong className="text-gray-900">Senast uppdaterad:</strong> {new Date().toLocaleDateString('sv-SE')}</p>
                   </div>
                 </div>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Key Features</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">Huvudfunktioner</h4>
                 <ul className="list-disc list-inside space-y-1 ml-2 text-gray-700">
-                  <li>AI-powered pet search and matching</li>
-                  <li>Advanced filtering and breeding compatibility</li>
-                  <li>Pet profile management with medical records</li>
-                  <li>Community features and breeder connections</li>
-                  <li>Favorites and personalized recommendations</li>
+                  <li>AI-driven husdjursökning och matchning</li>
+                  <li>Avancerad filtrering och avelskompatibilitet</li>
+                  <li>Husdjursprofilhantering med medicinska journaler</li>
+                  <li>Gemenskapsfunktioner och uppfödaranlutningar</li>
+                  <li>Favoriter och personliga rekommendationer</li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Technology Stack</h4>
-                <p className="text-gray-700">Built with modern web technologies including Next.js, React, TypeScript, and GraphQL for optimal performance and user experience.</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Teknologistack</h4>
+                <p className="text-gray-700">Byggd med moderna webbtekniker inklusive Next.js, React, TypeScript och GraphQL för optimal prestanda och användarupplevelse.</p>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Contact Information</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">Kontaktinformation</h4>
                 <div className="space-y-1 text-gray-700">
-                  <p><strong className="text-gray-900">Website:</strong> www.zoion.com</p>
-                  <p><strong className="text-gray-900">Email:</strong> info@zoion.com</p>
+                  <p><strong className="text-gray-900">Webbplats:</strong> www.zoion.com</p>
+                  <p><strong className="text-gray-900">E-post:</strong> info@zoion.com</p>
                   <p><strong className="text-gray-900">Support:</strong> support@zoion.com</p>
                 </div>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Copyright</h4>
-                <p className="text-gray-700">© 2024 Zoion. All rights reserved. This application and its contents are protected by copyright and other intellectual property laws.</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Upphovsrätt</h4>
+                <p className="text-gray-700">© 2024 Zoion. Alla rättigheter förbehållna. Denna applikation och dess innehåll skyddas av upphovsrätt och andra immateriella rättigheter.</p>
               </div>
             </div>
           </div>
@@ -240,7 +240,7 @@ export default function SettingsPage() {
                 <button
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
-                  className="p-4 rounded-lg border border-gray-300/30 bg-white/10 text-gray-900 text-left hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm transition-all cursor-pointer shadow-sm"
+                  className="p-4 rounded-lg border border-gray-300/30 bg-gray-300/20 text-gray-900 text-left hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm transition-all cursor-pointer shadow-sm"
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <Icon className="w-5 h-5 text-gray-900" />
@@ -267,16 +267,16 @@ export default function SettingsPage() {
                   variant="outline"
                   size="sm"
                   onClick={() => setActiveSection(null)}
-                  className="flex items-center gap-2 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
+                  className="flex items-center gap-2 bg-gray-300/20 text-gray-900 border border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm"
                 >
                   <ChevronLeft className="w-4 h-4" />
-                  Back
+                  Tillbaka
                 </Button>
               )}
               <div className="flex flex-col gap-2">
-                <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Settings</h2>
+                <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Inställningar</h2>
                 <p className="text-sm text-gray-600/90">
-                  {activeSection ? 'View details and information' : 'Manage your preferences and app information'}
+                  {activeSection ? 'Visa detaljer och information' : 'Hantera dina preferenser och appinformation'}
                 </p>
               </div>
             </div>

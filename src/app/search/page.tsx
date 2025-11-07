@@ -110,8 +110,8 @@ export default function SearchPage() {
                     onClick={() => setSelectedSex(selectedSex === 'male' ? null : 'male')}
                     className={`justify-start ${
                       selectedSex === 'male' 
-                        ? 'bg-white/10 text-gray-900 border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm' 
-                        : 'bg-white/10 text-gray-900 border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm'
+                        ? 'bg-gray-300/20 text-gray-900 border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm' 
+                        : 'bg-gray-300/20 text-gray-900 border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                     }`}
                   >
                     <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,8 +124,8 @@ export default function SearchPage() {
                     onClick={() => setSelectedSex(selectedSex === 'female' ? null : 'female')}
                     className={`justify-start ${
                       selectedSex === 'female' 
-                        ? 'bg-white/10 text-gray-900 border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm' 
-                        : 'bg-white/10 text-gray-900 border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm'
+                        ? 'bg-gray-300/20 text-gray-900 border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm' 
+                        : 'bg-gray-300/20 text-gray-900 border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                     }`}
                   >
                     <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

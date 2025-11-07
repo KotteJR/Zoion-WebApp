@@ -24,9 +24,9 @@ export function DataTable({ data }: { data?: any }) {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td className="px-4 py-4" colSpan={4}>Loading...</td></tr>
+                <tr><td className="px-4 py-4" colSpan={4}>Laddar...</td></tr>
               ) : pets.length === 0 ? (
-                <tr><td className="px-4 py-4" colSpan={4}>No pets found</td></tr>
+                <tr><td className="px-4 py-4" colSpan={4}>Inga hundar hittades</td></tr>
               ) : (
                 pets.map((p: any) => (
                   <tr key={p.id} className="border-t">

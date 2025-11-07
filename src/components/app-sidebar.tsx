@@ -224,7 +224,7 @@ export function AppSidebar() {
   // Desktop: Floating sidebar (always visible)
   return (
     <aside
-      className="fixed left-4 top-4 bottom-4 z-50 w-16 rounded-xl overflow-hidden border shadow-lg shadow-gray-800/10 border-gray-300/30 bg-gray-300/15"
+      className="fixed left-4 top-4 bottom-4 z-50 w-16 rounded-xl overflow-hidden border shadow-lg shadow-gray-800/15 border-gray-300/40 bg-gray-300/25"
     >
       {sidebarContentDesktop}
     </aside>

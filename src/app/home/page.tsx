@@ -670,11 +670,11 @@ export default function HomePage() {
         type: 'assistant',
         content: finalPets.length > 0 
           ? (filters.petId 
-              ? `Found pet with ID ${filters.petId}:`
-              : `First ${finalPets.length} pets matching your criteria:`)
+              ? `Hittade hund med ID ${filters.petId}:`
+              : `Första ${finalPets.length} hundarna som matchar dina kriterier:`)
           : (filters.petId 
-              ? `No pet found with ID ${filters.petId}.`
-              : `No pets found matching your criteria.`),
+              ? `Ingen hund hittades med ID ${filters.petId}.`
+              : `Inga hundar hittades som matchar dina kriterier.`),
         pets: finalPets,
         filters: filters,
         timestamp: new Date(),
@@ -798,7 +798,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Search Input */}
-                <div className="w-full max-w-2xl mb-20 relative bg-transparent">
+                <div className="w-full max-w-2xl mb-20 relative bg-gray-300/10">
                   {/* Fluid gradient shadow behind search box */}
                   <div className="relative z-10">
                     <Input
@@ -806,7 +806,7 @@ export default function HomePage() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="!bg-transparent !border-gray-300/60  !border h-10 pl-4 pr-16 text-sm text-gray-600 placeholder:text-gray-600 rounded-full focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
+                      className="!bg-gray-300/5 !border-gray-300/60  !border h-10 pl-4 pr-16 text-sm text-gray-600 placeholder:text-gray-600 rounded-full focus:!bg-gray-300/10 focus:!border-gray-300/60 focus:shadow-gray-300/20 focus:shadow-md !outline-none !ring-0 !ring-offset-0 focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0"
                       disabled={isSearching || searchLoading}
                     />
                     <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
@@ -833,7 +833,7 @@ export default function HomePage() {
                           setSearchQuery(example.query);
                           handleSearch();
                         }}
-                        className="p-3 md:p-4 rounded-xl bg-white/10 shadow-md hover:shadow-gray-600/25 border border-gray-300/30 text-left transition-all duration-200 relative overflow-hidden"
+                        className="p-3 md:p-4 rounded-xl shadow-md hover:shadow-gray-600/25 border border-gray-300/40 bg-gray-200/25 text-left transition-all duration-200 relative overflow-hidden"
                       >
                         {/* Flowy animated background inside each card */}
                         <div className="relative z-10">
@@ -851,19 +851,19 @@ export default function HomePage() {
               </div>
             ) : (
               // Conversation view
-              <div className="flex flex-col flex-1 p-4">
+              <div className="flex flex-col flex-1 p-4 pb-6 md:pb-4">
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto space-y-4 mb-6">
+                <div className="flex-1 overflow-y-auto space-y-4 mb-6 md:mb-6 pb-4">
                   {conversation.map((message) => (
                     <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-2xl ${message.type === 'user' ? 'ml-12' : 'mr-12'}`}>
+                      <div className={`max-w-2xl w-full ${message.type === 'user' ? 'ml-2 md:ml-12' : 'mr-2 md:mr-12'}`}>
                         {message.type === 'user' ? (
-                          <div className="bg-gray-300/10 text-gray-900 px-4 py-2 rounded-xl rounded-br-md border border-gray-300/30 shadow-sm">
+                          <div className="bg-gray-300/20 text-gray-900 px-4 py-2 rounded-xl rounded-br-md border border-gray-300/30 shadow-sm">
                             <p>{message.content}</p>
                           </div>
                         ) : (
                           <div className="space-y-4">
-                            <div className="bg-gray-300/20 text-gray-900 px-4 py-2 rounded-xl rounded-bl-md border border-gray-300/30 shadow-sm">
+                            <div className="bg-gray-300/40 text-gray-900 px-4 py-2 rounded-xl rounded-bl-md border border-gray-300/30 shadow-sm">
                               <p>{message.content}</p>
                             </div>
                             {message.kennelCoords && message.kennelCoords.length > 0 && (
@@ -881,7 +881,7 @@ export default function HomePage() {
                                     <Button 
                                       onClick={() => handleSeeMore(message.filters!)}
                                       variant="outline"
-                                      className="flex items-center gap-2 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
+                                      className="flex items-center gap-2 bg-gray-300/20 text-gray-900 border border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm"
                                     >
                                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -909,7 +909,7 @@ export default function HomePage() {
                   
                   {(isSearching || searchLoading) && (
                     <div className="flex justify-start">
-                      <div className="max-w-3xl mr-12">
+                      <div className="max-w-3xl w-full mr-2 md:mr-12">
                         <div className="bg-gray-300/10 text-gray-900 px-4 py-2 rounded-2xl rounded-bl-md border border-gray-300/30 shadow-sm">
                           <div className="flex items-center gap-3">
                             <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin" />
@@ -924,7 +924,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Bottom Search Input */}
-                <div className="bottom pt-4">
+                <div className="bottom pt-4 pb-4 md:pb-0">
                   <div className="relative">
                     <Input
                       placeholder="Fråga vad som helst"

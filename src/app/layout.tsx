@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
+import AnimatedBackground from '@/components/background/AnimatedBackground';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -25,21 +26,26 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full overflow-hidden">
       <body className={`${dmSans.variable} h-full overflow-hidden`}>
-        {/* Global light, fluid background */}
+        {/* Global animated background */}
         <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-          {/* Base soft white */}
+          {/* Base white */}
           <div className="absolute inset-0" style={{ backgroundColor: '#ffffff' }} />
 
-          {/* moving fluid highlights */}
-          <div className="absolute inset-0 bg-fluid-dark" />
+          {/* Gradient spheres - fewer, cleaner green spheres */}
+          <div className="absolute inset-0 gradient-background">
+            <div className="gradient-sphere sphere-1"></div>
+            <div className="gradient-sphere sphere-2"></div>
+            <div className="gradient-sphere sphere-3"></div>
+          </div>
 
-          {/* soft edge vignette */}
-          <div className="absolute inset-0 bg-vignette pointer-events-none" />
+          {/* Noise overlay */}
+          <div className="noise-overlay"></div>
 
-          {/* subtle film grain */}
-          <div className="absolute inset-0 bg-grain pointer-events-none" />
+          {/* Particles container */}
+          <div id="particles-container" className="particles-container"></div>
         </div>
 
+        <AnimatedBackground />
 
         <Providers>{children}</Providers>
       </body>

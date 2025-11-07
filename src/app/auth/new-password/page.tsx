@@ -45,7 +45,7 @@ function NewPasswordContent() {
       router.push('/auth/login');
     } catch (err: any) {
       console.error('Confirm reset password error:', err);
-      setError(err.message || 'Failed to reset password. Please try again.');
+      setError(err.message || 'Kunde inte återställa lösenord. Vänligen försök igen.');
     } finally {
       setIsLoading(false);
     }
@@ -150,7 +150,7 @@ export default function NewPasswordPage() {
                   className="w-8 h-8"
                 />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Loading...</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Laddar...</h1>
             </div>
           </div>
         </div>

@@ -63,7 +63,7 @@ export default function RegisterPage() {
       }
     } catch (err: any) {
       console.error('Registration error:', err);
-      setError(err.message || 'Failed to register. Please try again.');
+      setError(err.message || 'Kunde inte registrera. Vänligen försök igen.');
     } finally {
       setIsLoading(false);
     }
@@ -93,7 +93,7 @@ export default function RegisterPage() {
               <Input
                 type="text"
                 name="firstName"
-                placeholder="First name"
+                placeholder="Förnamn"
                 value={formData.firstName}
                 onChange={handleChange}
                 required

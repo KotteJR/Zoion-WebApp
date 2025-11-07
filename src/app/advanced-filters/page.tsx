@@ -564,8 +564,8 @@ function AdvancedFiltersContent() {
                           className={cn(
                             'px-3 py-1.5 rounded border text-sm transition-colors text-gray-900',
                             selectedSex === opt.key
-                              ? 'bg-white/10 border-gray-300/50 shadow-sm'
-                              : 'bg-white/10 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
+                              ? 'bg-gray-300/20 border-gray-300/50 shadow-sm'
+                              : 'bg-gray-300/20 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                           )}
                           type="button"
                         >
@@ -633,8 +633,8 @@ function AdvancedFiltersContent() {
                           className={cn(
                             'px-3 py-1.5 rounded border text-sm transition-colors text-gray-900',
                             vaccinated === opt.key
-                              ? 'bg-white/10 border-gray-300/50 shadow-sm'
-                              : 'bg-white/10 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
+                              ? 'bg-gray-300/20 border-gray-300/50 shadow-sm'
+                              : 'bg-gray-300/20 border-gray-300/30 hover:border-gray-300/50 hover:shadow-sm'
                           )}
                           type="button"
                         >
@@ -817,7 +817,7 @@ function AdvancedFiltersContent() {
                 <Button
                   onClick={handleSearch}
                   disabled={searchLoading}
-                  className="flex-1 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm h-10"
+                  className="flex-1 bg-gray-300/20 text-gray-900 border border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm h-10"
                 >
                   {searchLoading ? 'Söker...' : 'Visa resultat'}
                 </Button>
@@ -825,7 +825,7 @@ function AdvancedFiltersContent() {
                   onClick={clearFilters}
                   variant="ghost"
                   disabled={searchLoading}
-                  className="bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm h-10"
+                  className="bg-gray-300/20 text-gray-900 border border-gray-300/30 hover:bg-gray-300/30 hover:border-gray-300/50 hover:shadow-sm h-10"
                 >
                   Rensa
                 </Button>

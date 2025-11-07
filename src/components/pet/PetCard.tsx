@@ -44,7 +44,7 @@ export default function PetCard({ pet, onFavoriteChange }: PetCardProps) {
 
   return (
     <div onClick={handleCardClick} className="block cursor-pointer">
-      <Card className="overflow-hidden transition shadow-sm hover:shadow-md hover:shadow-gray-400/15 border border-gray-300/30 text-gray-900 bg-white/10">
+      <Card className="overflow-hidden transition shadow-sm hover:shadow-md hover:shadow-gray-400/15 border border-gray-300/30 text-gray-900 bg-gray-300/20">
         <CardHeader className="p-0">
           <div className="relative h-48 bg-transparent">
             {/* Image as background - behind everything */}
@@ -72,7 +72,7 @@ export default function PetCard({ pet, onFavoriteChange }: PetCardProps) {
             )}
 
             {/* White gradient with blur from bottom to 1/4 of image */}
-            <div className="absolute bottom-0 left-0 right-0 h-1/4 z-10 bg-gradient-to-t from-white/60 via-white/20 to-transparent " />
+            <div className="absolute bottom-0 left-0 right-0 h-1/4 z-10" />
 
             {/* Gender Badge - on top */}
             {pet.sex && (
