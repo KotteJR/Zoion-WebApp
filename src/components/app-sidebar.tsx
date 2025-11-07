@@ -182,8 +182,8 @@ export function AppSidebar() {
             className={cn(
               "flex items-center justify-center h-10 w-10 rounded-xl transition-colors",
               isActive(item.url)
-                ? "bg-gray-100/15 text-white"
-                : "text-white/50 hover:bg-gray-100/10 hover:text-white/60"
+                ? "bg-gray-500/10 text-gray-800"
+                : "text-gray-700 hover:bg-gray-900/10 hover:text-gray-900"
             )}
                     >
                       {item.icon}
@@ -201,8 +201,8 @@ export function AppSidebar() {
             className={cn(
               "flex items-center justify-center h-10 w-10 rounded-lg transition-colors",
               isActive(item.url)
-                ? "bg-gray-100/15 text-white"
-                : "text-white/50 hover:bg-gray-100/10 hover:text-white/60"
+                ? "bg-gray-500/10 text-gray-800"
+                : "text-gray-700 hover:bg-gray-900/10 hover:text-gray-900"
             )}
           >
                       {item.icon}
@@ -212,10 +212,10 @@ export function AppSidebar() {
     </div>
   );
 
-  // Mobile: Header at top
+  // Mobile: Card at top
   if (isMobile) {
     return (
-      <header className="fixed top-0 left-0 right-0 z-50 h-16 border-b border-white/20 bg-white/5 backdrop-blur-sm">
+      <header className="fixed top-4 left-4 right-4 z-50 h-16 rounded-xl overflow-hidden border shadow-lg shadow-gray-800/10 border-gray-300/30 bg-gray-300/15">
         {sidebarContentMobile}
       </header>
     );
@@ -237,7 +237,7 @@ export function SidebarInset({ children, className }: { children: React.ReactNod
   return (
     <main className={cn(
       "flex-1",
-      isMobile ? "pt-16" : "md:ml-24 md:mt-4 md:mb-4 md:mr-4",
+      isMobile ? "pt-24" : "md:ml-24 md:mt-4 md:mb-4 md:mr-4",
       className
     )}>
       {children}

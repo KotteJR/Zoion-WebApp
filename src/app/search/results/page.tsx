@@ -51,17 +51,17 @@ export default function SearchResultsPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-transparent">
-          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-t-xl bg-white p-6 mt-4">
+        <div className="flex h-full bg-transparent">
+          <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6">
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-2">
-                <h2 className="text-2xl font-semibold tracking-tight">Search Results</h2>
-                <p className="text-sm text-muted-foreground">Found {pets.length} pet(s) matching your criteria</p>
+                <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Search Results</h2>
+                <p className="text-sm text-gray-600/90">Found {pets.length} pet(s) matching your criteria</p>
               </div>
               <Button 
                 onClick={() => router.push('/search')} 
                 variant="outline"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -79,8 +79,8 @@ export default function SearchResultsPage() {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-lg font-medium">No pets found matching your criteria.</p>
-                <p className="text-sm text-muted-foreground">Try adjusting your search filters.</p>
+                <p className="text-lg font-medium text-gray-900">No pets found matching your criteria.</p>
+                <p className="text-sm text-gray-600/90">Try adjusting your search filters.</p>
               </div>
             )}
           </div>

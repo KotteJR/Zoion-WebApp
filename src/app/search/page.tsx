@@ -93,22 +93,26 @@ export default function SearchPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-      <div className="flex h-screen flex-col p-6 pt-6 pb-0 bg-transparent">
-        <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-t-xl bg-white p-6 mt-4">
+      <div className="flex h-full bg-transparent">
+        <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-visible rounded-xl h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] p-6">
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-semibold tracking-tight">Search</h2>
-              <p className="text-sm text-muted-foreground">Find the perfect breeding partner for your pet</p>
+              <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Search</h2>
+              <p className="text-sm text-gray-600/90">Find the perfect breeding partner for your pet</p>
             </div>
 
             <div className="grid gap-6">
               {/* Sex Selection */}
               <div className="grid gap-3">
-                <label className="text-sm font-medium">Sex</label>
+                <label className="text-sm font-medium text-gray-900">Sex</label>
                 <div className="grid grid-cols-2 gap-2">
                   <Button
                     variant={selectedSex === 'male' ? 'default' : 'outline'}
                     onClick={() => setSelectedSex(selectedSex === 'male' ? null : 'male')}
-                    className="justify-start"
+                    className={`justify-start ${
+                      selectedSex === 'male' 
+                        ? 'bg-white/10 text-gray-900 border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm' 
+                        : 'bg-white/10 text-gray-900 border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm'
+                    }`}
                   >
                     <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
@@ -118,7 +122,11 @@ export default function SearchPage() {
                   <Button
                     variant={selectedSex === 'female' ? 'default' : 'outline'}
                     onClick={() => setSelectedSex(selectedSex === 'female' ? null : 'female')}
-                    className="justify-start"
+                    className={`justify-start ${
+                      selectedSex === 'female' 
+                        ? 'bg-white/10 text-gray-900 border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm' 
+                        : 'bg-white/10 text-gray-900 border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm'
+                    }`}
                   >
                     <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
@@ -131,22 +139,26 @@ export default function SearchPage() {
               {/* Breed Selection */}
               <div className="grid gap-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium">Breeds</label>
+                  <label className="text-sm font-medium text-gray-900">Breeds</label>
                   {selectedBreeds.length > 0 && (
-                    <span className="text-sm text-muted-foreground">{selectedBreeds.length} selected</span>
+                    <span className="text-sm text-gray-600/90">{selectedBreeds.length} selected</span>
                   )}
                 </div>
                 {breedsLoading ? (
                   <LoadingSpinner />
                 ) : (
-                  <div className="grid max-h-[300px] grid-cols-2 gap-2 overflow-auto rounded-md border p-3 md:grid-cols-3 lg:grid-cols-4">
+                  <div className="grid max-h-[300px] grid-cols-2 gap-2 overflow-auto rounded-md border border-gray-300/30 bg-white/10 p-3 md:grid-cols-3 lg:grid-cols-4">
                     {breeds.map((breed) => (
                       <Button
                         key={breed.id}
                         variant={selectedBreeds.includes(breed.name) ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => toggleBreed(breed.name)}
-                        className="justify-start text-xs"
+                        className={`justify-start text-xs ${
+                          selectedBreeds.includes(breed.name)
+                            ? 'bg-white/20 text-gray-900 border-gray-300/50 hover:bg-white/30'
+                            : 'bg-white/10 text-gray-900 border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm'
+                        }`}
                       >
                         {breed.name}
                       </Button>
@@ -157,38 +169,38 @@ export default function SearchPage() {
 
               {/* Additional Filters */}
               <div className="grid gap-3">
-                <label className="text-sm font-medium">Additional Filters</label>
+                <label className="text-sm font-medium text-gray-900">Additional Filters</label>
                 <div className="grid gap-3">
-                  <label className="flex items-center gap-2 rounded-md border p-3 hover:bg-accent">
+                  <label className="flex items-center gap-2 rounded-md border border-gray-300/30 bg-white/10 p-3 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm transition-all cursor-pointer">
                     <input
                       type="checkbox"
                       checked={readyToBreed}
                       onChange={(e) => setReadyToBreed(e.target.checked)}
                       className="h-4 w-4 rounded border-gray-300"
                     />
-                    <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    <span className="text-sm font-medium text-gray-900 leading-none">
                       Ready to Breed
                     </span>
                   </label>
-                  <label className="flex items-center gap-2 rounded-md border p-3 hover:bg-accent">
+                  <label className="flex items-center gap-2 rounded-md border border-gray-300/30 bg-white/10 p-3 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm transition-all cursor-pointer">
                     <input
                       type="checkbox"
                       checked={pregnant}
                       onChange={(e) => setPregnant(e.target.checked)}
                       className="h-4 w-4 rounded border-gray-300"
                     />
-                    <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    <span className="text-sm font-medium text-gray-900 leading-none">
                       Pregnant
                     </span>
                   </label>
-                  <label className="flex items-center gap-2 rounded-md border p-3 hover:bg-accent">
+                  <label className="flex items-center gap-2 rounded-md border border-gray-300/30 bg-white/10 p-3 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm transition-all cursor-pointer">
                     <input
                       type="checkbox"
                       checked={hasFrozenSperm}
                       onChange={(e) => setHasFrozenSperm(e.target.checked)}
                       className="h-4 w-4 rounded border-gray-300"
                     />
-                    <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    <span className="text-sm font-medium text-gray-900 leading-none">
                       Has Frozen Sperm
                     </span>
                   </label>
@@ -196,11 +208,19 @@ export default function SearchPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-2 border-t pt-4">
-                <Button onClick={handleReset} variant="outline" className="flex-1">
+              <div className="flex gap-2 border-t border-gray-300/30 pt-4">
+                <Button 
+                  onClick={handleReset} 
+                  variant="outline" 
+                  className="flex-1 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
+                >
                   Reset
                 </Button>
-                <Button onClick={handleSearch} disabled={searchLoading} className="flex-1">
+                <Button 
+                  onClick={handleSearch} 
+                  disabled={searchLoading} 
+                  className="flex-1 bg-white/10 text-gray-900 border border-gray-300/30 hover:bg-white/20 hover:border-gray-300/50 hover:shadow-sm"
+                >
                   {searchLoading ? 'Searching...' : 'Search'}
                 </Button>
               </div>
